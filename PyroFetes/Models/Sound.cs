@@ -9,19 +9,19 @@ public class Sound
     [Required, MaxLength(120)]
     public string Name { get; set; } = null!;
 
-    [MaxLength(60)]
+    [Required, MaxLength(60)]
     public string? Type { get; set; }
 
-    [MaxLength(120)]
+    [Required, MaxLength(120)]
     public string? Artist { get; set; }
 
-    [Range(0, int.MaxValue)]
+    [Required, Range(0, int.MaxValue)]
     public int? Duration { get; set; }
 
-    [MaxLength(40)]
+    [Required, MaxLength(40)]
     public string? Kind { get; set; }
 
-    [MaxLength(40)]
+    [Required, MaxLength(40)]
     public string? Format { get; set; }
 
     public DateTime? CreationDate { get; set; }
