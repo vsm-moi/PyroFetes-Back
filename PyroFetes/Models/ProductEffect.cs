@@ -6,10 +6,10 @@ namespace API.Models;
 [PrimaryKey(nameof(ProductId), nameof(EffectId))]
 public class ProductEffect
 {
-    public Product? Product { get; set; }
+    [Required] public Product? Product { get; set; }
     [Required] public int ProductId { get; set; }
 
-    public Effect? Effect { get; set; }
+    [Required] public Effect? Effect { get; set; }
     [Required] public int EffectId { get; set; }
 
 }

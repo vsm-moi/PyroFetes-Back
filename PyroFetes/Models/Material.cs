@@ -1,13 +1,14 @@
-﻿using API.Class;
+﻿using System.ComponentModel.DataAnnotations;
+using API.Class;
 
 namespace API.Models;
 
 public class Material
 {
-    public int Id {get; set;}
-    public string Name {get; set;}
-    public int Quantity {get; set;}
+    [Key] public int Id {get; set;}
+    [Required, MaxLength(100)] public string Name {get; set;}
+    [Required] public int Quantity {get; set;}
     
-    public int WarehouseId {get; set;}
-    public Warehouse Warehouse {get; set;}
+    [Required] public int WarehouseId {get; set;}
+    [Required] public Warehouse Warehouse {get; set;}
 }

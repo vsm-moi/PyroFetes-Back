@@ -1,31 +1,32 @@
-﻿using API.Class;
+﻿using System.ComponentModel.DataAnnotations;
+using API.Class;
 
 namespace API.Models
 {
     public class Product
     {
-        public int Id { get; set; }
-        public int References { get; set; }
-        public string Name { get; set; }
-        public decimal Duration {get; set;} 
-        public decimal Caliber { get; set; }
-        public int ApprovalNumber { get; set; }
-        public decimal Weight { get; set; }
-        public decimal Nec { get; set; }
-        public decimal SellingPrice { get; set; }
-        public string Image { get; set; }
-        public string Link { get; set; }
+        [Key] public int Id { get; set; }
+        [Required] public int References { get; set; }
+        [Required, MaxLength(100)] public string Name { get; set; }
+        [Required] public decimal Duration {get; set;} 
+        [Required] public decimal Caliber { get; set; }
+        [Required] public int ApprovalNumber { get; set; }
+        [Required] public decimal Weight { get; set; }
+        [Required] public decimal Nec { get; set; }
+        [Required] public decimal SellingPrice { get; set; }
+        [Required] public string Image { get; set; }
+        [Required] public string Link { get; set; }
 
         // Relations
-        public int ClassificationId { get; set; }
-        public Classification Classification { get; set; }
+        [Required] public int ClassificationId { get; set; }
+        [Required] public Classification Classification { get; set; }
 
-        public int ProductCategoryId { get; set; }
-        public ProductCategory ProductCategory { get; set; }
+        [Required] public int ProductCategoryId { get; set; }
+        [Required] public ProductCategory ProductCategory { get; set; }
 
-        public List<Brand> Brands { get; set; }
+        [Required] public List<Brand> Brands { get; set; }
         
-        public List<Movement> Movements { get; set; }
+        [Required] public List<Movement> Movements { get; set; }
         
     }
 }

@@ -7,11 +7,11 @@ namespace API.Models;
 [PrimaryKey(nameof(SupplierId), nameof(ProductId))]
 public class Price
 {
-    public decimal Label  { get; set; }
+    [Required] public decimal Label  { get; set; }
     
-    public int SupplierId { get; set; }
+    [Required] public int SupplierId { get; set; }
     [Required] public Supplier Supplier { get; set; }
 
-    public int ProductId { get; set; }
+    [Required] public int ProductId { get; set; }
     [Required] public Product Product { get; set; }
 }

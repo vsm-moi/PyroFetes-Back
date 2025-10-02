@@ -1,10 +1,11 @@
-﻿using API.Class;
+﻿using System.ComponentModel.DataAnnotations;
+using API.Class;
 
 namespace API.Models;
 
 public class Color
 {
-    public int Id  { get; set; }
-    public string Label  { get; set; }
+    [Key] public int Id  { get; set; }
+    [Required] public string Label  { get; set; }
     
 }

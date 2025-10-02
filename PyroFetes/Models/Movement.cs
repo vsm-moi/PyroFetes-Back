@@ -1,21 +1,22 @@
-﻿using API.Class;
+﻿using System.ComponentModel.DataAnnotations;
+using API.Class;
 
 namespace API.Models;
 
 public class Movement
 {
-    public int  Id  { get; set; }
-    public DateTime Date  { get; set; }
-    public DateTime Start {get; set;}
-    public DateTime Arrival {get; set;}
-    public int Quantity {get; set;}
+    [Key] public int  Id  { get; set; }
+    [Required] public DateTime Date  { get; set; }
+    [Required] public DateTime Start {get; set;}
+    [Required] public DateTime Arrival {get; set;}
+    [Required] public int Quantity {get; set;}
     
-    public int ProductId {get; set;}
-    public Product Product {get; set;}
+    [Required] public int ProductId {get; set;}
+    [Required] public Product Product {get; set;}
     
-    public int? sourceWarehouse {get; set;}
-    public Warehouse SourceWarehouse {get; set;}
+    [Required] public int? sourceWarehouse {get; set;}
+    [Required] public Warehouse SourceWarehouse {get; set;}
     
-    public int? destinationWarehouse {get; set;}
-    public Warehouse DestinationWarehouse {get; set;}
+    [Required] public int? destinationWarehouse {get; set;}
+    [Required] public Warehouse DestinationWarehouse {get; set;}
 }

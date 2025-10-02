@@ -1,15 +1,16 @@
-﻿using API.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using API.Models;
 
 namespace API.Class;
 
 public class Supplier
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string PhoneNumber { get; set; }
-    public string Adress { get; set; }
-    public int ZipCode { get; set; }
-    public string City { get; set; }
+    [Key] public int Id { get; set; }
+    [Required, MaxLength(100)] public string Name { get; set; }
+    [Required] public string Email { get; set; }
+    [Required] public string PhoneNumber { get; set; }
+    [Required] public string Adress { get; set; }
+    [Required] public int ZipCode { get; set; }
+    [Required] public string City { get; set; }
     
 }

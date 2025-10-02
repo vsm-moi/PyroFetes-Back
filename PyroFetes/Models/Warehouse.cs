@@ -1,22 +1,23 @@
-﻿using API.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using API.Models;
 
 namespace API.Class;
 
 public class Warehouse
 {
-    public int Id {get; set;}
-    public string Name {get; set;}
-    public int MaxWeight {get; set;}
-    public int Current {get; set;}
-    public int MinWeight {get; set;}
-    public string Adress { get; set; }
-    public int ZipCode { get; set; }
-    public string City { get; set; }
+    [Key] public int Id {get; set;}
+    [Required, MaxLength(100)] public string Name {get; set;}
+    [Required] public int MaxWeight {get; set;}
+    [Required] public int Current {get; set;}
+    [Required] public int MinWeight {get; set;}
+    [Required] public string Adress { get; set; }
+    [Required] public int ZipCode { get; set; }
+    [Required] public string City { get; set; }
     
     
-    public List<Material> Materials {get; set;}
+    [Required] public List<Material> Materials {get; set;}
     
     
-    public List<Movement> MovementsSource { get; set; }
-    public List<Movement> MovementsDestination { get; set; }
+    [Required] public List<Movement> MovementsSource { get; set; }
+    [Required] public List<Movement> MovementsDestination { get; set; }
 }
