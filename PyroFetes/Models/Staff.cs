@@ -12,10 +12,10 @@ public class Staff
     [Required, MaxLength(60)]
     public string LastName { get; set; } = null!;
 
-    [MaxLength(100)]
+    [Required, MaxLength(100)]
     public string? Profession { get; set; }
 
-    [EmailAddress, MaxLength(120)]
+    [Required, MaxLength(120)]
     public string? Email { get; set; }
 
     public ICollection<Show> Shows { get; set; } = new List<Show>();
