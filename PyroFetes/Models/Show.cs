@@ -6,6 +6,9 @@ public class Show
 {
     [Key] public int Id { get; set; }
 
+    [Required]
+    public string? Name { get; set; }
+
     [Required, MaxLength(120)]
     public string? Place { get; set; }
 
