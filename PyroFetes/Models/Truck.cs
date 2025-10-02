@@ -12,10 +12,10 @@ public class Truck
     [Range(0, double.MaxValue)]
     public double? MaxExplosiveCapacity { get; set; }
 
-    [MaxLength(80)]
+    [Required, MaxLength(80)]
     public string? Sizes { get; set; }
 
-    [MaxLength(40)]
+    [Required, MaxLength(40)]
     public string? Statut { get; set; }
 
     [Required]
