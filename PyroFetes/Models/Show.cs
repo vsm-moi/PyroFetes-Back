@@ -6,14 +6,14 @@ public class Show
 {
     [Key] public int Id { get; set; }
 
-    [MaxLength(120)]
+    [Required, MaxLength(120)]
     public string? Place { get; set; }
 
     [MaxLength(500)]
     public string? Description { get; set; }
 
     // Lien (chemin/URL/nom de fichier) vers le plan d’implémentation pyrotechnique
-    [MaxLength(500)]
+    [Required, MaxLength(500)]
     public string? PyrotechnicImplementationPlan { get; set; }
 
     public DateTime? Date { get; set; }
