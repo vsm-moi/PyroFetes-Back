@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using PyroFetes.Models;
 
-namespace API.Models
+namespace PyroFetes.Models
 {
     public class Product
     {

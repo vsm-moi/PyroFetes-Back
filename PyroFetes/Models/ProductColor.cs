@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using API.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace PyroFetes.Models;
