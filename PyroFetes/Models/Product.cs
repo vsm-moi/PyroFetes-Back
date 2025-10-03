@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using API.Class;
+using PyroFetes.Models;
 
 namespace API.Models
 {

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+using API.Models;
 
-namespace API.Models;
+namespace PyroFetes.Models;
 
 [PrimaryKey(nameof(ProductId), nameof(EffectId))]
 public class ProductEffect

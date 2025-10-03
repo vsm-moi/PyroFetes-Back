@@ -1,15 +1,15 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using API.Class;
+using API.Models;
 
-namespace API.Models;
+namespace PyroFetes.Models;
 
 public class WarehouseProduct
 {
     [Key] public int Quantity { get; set; }
     
     [Required] public int ProductId { get; set; }
-    [Required] public Product Product { get; set; }
+    [Required] public Product? Product { get; set; }
     
     [Required] public int WarehouseId { get; set; }
-    [Required] public Warehouse Warehouse { get; set; }
+    [Required] public Warehouse? Warehouse { get; set; }
 }

@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Models;
+namespace PyroFetes.Models;
 
 [PrimaryKey(nameof(ProductId), nameof(ColorId))]
 public class ProductColor
