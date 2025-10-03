@@ -15,6 +15,7 @@ namespace PyroFetes.Models
         [Required] public decimal SellingPrice { get; set; }
         [Required] public string? Image { get; set; }
         [Required] public string? Link { get; set; }
+        [Required] public int MinimalQuantity { get; set; }
 
         // Relations
         [Required] public int ClassificationId { get; set; }
