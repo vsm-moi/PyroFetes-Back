@@ -9,6 +9,6 @@ public class Provider
     
     //Relations
     
-    public int ProviderID { get; set; }
+    public int ProviderId { get; set; }
     public ProviderType? ProviderType { get; set; }
 }
