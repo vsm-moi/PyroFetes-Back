@@ -13,7 +13,7 @@ public class Movement
     [Required] public int ProductId {get; set;}
     [Required] public Product? Product {get; set;}
     
-    [Required] public int? SourceWarehouseId {get; set;}
+    public int? SourceWarehouseId {get; set;}
     public Warehouse? SourceWarehouse {get; set;}
     
     public int? DestinationWarehouseId {get; set;}
