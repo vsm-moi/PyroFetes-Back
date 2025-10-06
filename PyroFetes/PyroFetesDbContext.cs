@@ -66,5 +66,18 @@ public class PyroFetesDbContext : DbContext
     // Models customization
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Relation SourceWarehouse
+        modelBuilder.Entity<Movement>()
+            .HasOne(m => m.SourceWarehouse)
+            .WithMany(w => w.MovementsSource)
+            .HasForeignKey(m => m.SourceWarehouseId)
+            .OnDelete(DeleteBehavior.Restrict); // empêche la suppression en cascade
+
+        // Relation DestinationWarehouse
+        modelBuilder.Entity<Movement>()
+            .HasOne(m => m.DestinationWarehouse)
+            .WithMany(w => w.MovementsDestination)
+            .HasForeignKey(m => m.DestinationWarehouseId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
