@@ -14,9 +14,9 @@ public class Warehouse
     [Required] public string? City { get; set; }
     
     
-    [Required] public List<Material>? Materials {get; set;}
+    public List<Material>? Materials {get; set;}
     
     
-    [Required] public List<Movement>? MovementsSource { get; set; }
-    [Required] public List<Movement>? MovementsDestination { get; set; }
+    public List<Movement>? MovementsSource { get; set; }
+    public List<Movement>? MovementsDestination { get; set; }
 }

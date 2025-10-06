@@ -14,8 +14,8 @@ public class Movement
     [Required] public Product? Product {get; set;}
     
     [Required] public int? SourceWarehouseId {get; set;}
-    [Required] public Warehouse? SourceWarehouse {get; set;}
+    public Warehouse? SourceWarehouse {get; set;}
     
-    [Required] public int? DestinationWarehouseId {get; set;}
-    [Required] public Warehouse? DestinationWarehouse {get; set;}
+    public int? DestinationWarehouseId {get; set;}
+    public Warehouse? DestinationWarehouse {get; set;}
 }
