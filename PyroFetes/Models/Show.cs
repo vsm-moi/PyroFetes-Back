@@ -10,11 +10,15 @@ public class Show
     [MaxLength(500)] public string? Description { get; set; }
     
     // Link (path/URL/file name) to the pyrotechnic implementation plan
-    [Required, MaxLength(500)]
-    public string? PyrotechnicImplementationPlan { get; set; }
-
-    public DateTime? Date { get; set; }
+    [Required, MaxLength(500)] public string? PyrotechnicImplementationPlan { get; set; }
+    
+    public DateOnly? Date { get; set; }
+    
+    [Required] public int CityId { get; set; }
+    public City? City { get; set; }
+    
     public ICollection<Staff>? Staff { get; set; }
     public ICollection<Truck>? Trucks { get; set; }
-    public ICollection<SoundTimecode>? SoundCues { get; set; }
+    
+    public List<SoundTimecode>? SoundTimecodes { get; set; }
 }

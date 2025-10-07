@@ -13,4 +13,3 @@ public class ProductDelivery
     public Product? Product { get; set; }
     public DeliveryNote? DeliveryNote { get; set; }
 }
-    

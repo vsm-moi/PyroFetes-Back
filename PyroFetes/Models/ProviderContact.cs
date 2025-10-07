@@ -6,7 +6,7 @@ namespace PyroFetes.Models;
 public class ProviderContact
 {
     public int ProviderId { get; set; }
-    public Provider? Provider { get; set; }
+    public ServiceProvider? Provider { get; set; }
     public int ContactId { get; set; }
     public Contact? Contact { get; set; }
 }
