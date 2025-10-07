@@ -57,7 +57,7 @@ public class PyroFetesDbContext : DbContext
             "Server=romaric-thibault.fr;" + 
             "Database=PyroFetes;" + 
             "User Id=pyrofetes;" +
-            "Password=Onto9-Cage-Afflicted;" +
+            "Password=Crablike8-Fringe-Swimmable;" +
             "TrustServerCertificate=true;";
 
         optionsBuilder.UseSqlServer(connectionString);
@@ -66,18 +66,28 @@ public class PyroFetesDbContext : DbContext
     // Models customization
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Relation SourceWarehouse
         modelBuilder.Entity<Movement>()
             .HasOne(m => m.SourceWarehouse)
             .WithMany(w => w.MovementsSource)
             .HasForeignKey(m => m.SourceWarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        // Relation DestinationWarehouse
+        
         modelBuilder.Entity<Movement>()
             .HasOne(m => m.DestinationWarehouse)
             .WithMany(w => w.MovementsDestination)
             .HasForeignKey(m => m.DestinationWarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<CustomerContact>()
+            .HasOne(cc => cc.Customer)
+            .WithMany(c => c.CustomerContacts)
+            .HasForeignKey(cc => cc.CustomerId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder.Entity<CustomerContact>()
+            .HasOne(cc => cc.Contact)
+            .WithMany(c => c.CustomerContacts)
+            .HasForeignKey(cc => cc.ContactId)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

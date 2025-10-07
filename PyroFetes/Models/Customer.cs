@@ -13,4 +13,6 @@ public class Customer
     
     public int ContactId { get; set; }
     public Contact? Contact { get; set; }
+    
+    public List<CustomerContact>? CustomerContacts { get; set; }
 }

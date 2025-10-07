@@ -16,4 +16,6 @@ public class Contact
     
     public int CommunicationId { get; set; }
     public Communication? Communication { get; set; }
+    
+    public List<CustomerContact>? CustomerContacts { get; set; }
 }
