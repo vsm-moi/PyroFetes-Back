@@ -11,9 +11,9 @@ public class Movement
     [Required] public int Quantity {get; set;}
     
     public List<Product>? Products { get; set; }
+   
     public int? SourceWarehouseId {get; set;}
     public Warehouse? SourceWarehouse {get; set;}
-    
     public int? DestinationWarehouseId {get; set;}
     public Warehouse? DestinationWarehouse {get; set;}
 }
