@@ -71,7 +71,7 @@ public class PyroFetesDbContext : DbContext
             .HasOne(m => m.SourceWarehouse)
             .WithMany(w => w.MovementsSource)
             .HasForeignKey(m => m.SourceWarehouseId)
-            .OnDelete(DeleteBehavior.Restrict); // empêche la suppression en cascade
+            .OnDelete(DeleteBehavior.Restrict);
 
         // Relation DestinationWarehouse
         modelBuilder.Entity<Movement>()
