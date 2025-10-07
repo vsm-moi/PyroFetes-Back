@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace PyroFetes.Models;
@@ -5,8 +6,8 @@ namespace PyroFetes.Models;
 [PrimaryKey(nameof(ContactId), nameof(StaffId))]
 public class StaffContact
 {
-    public int StaffId { get; set; }
+    [Required] public int StaffId { get; set; }
     public Staff? Staff { get; set; }
-    public int ContactId { get; set; }
+    [Required] public int ContactId { get; set; }
     public Contact? Contact { get; set; }
 }

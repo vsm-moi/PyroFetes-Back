@@ -18,4 +18,5 @@ public class Contact
     [Required] public int CustomerId { get; set; }
     
     public List<Communication>? Communications { get; set; }
+    public List<StaffContact>? StaffContacts { get; set; }
 }

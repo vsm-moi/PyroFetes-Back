@@ -8,6 +8,6 @@ public class ServiceProvider
     [Required] public decimal Price { get; set; }
     
     //Relations
-    public int ProviderTypeId { get; set; }
+    [Required] public int ProviderTypeId { get; set; }
     public ProviderType? ProviderType { get; set; }
 }

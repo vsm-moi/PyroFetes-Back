@@ -13,4 +13,8 @@ public class Staff
     [Required] public DateOnly F4T2ExpirationDate { get; set; }
     
     public List<ShowStaff>? ShowStaffs { get; set; }
+    public List<ExperienceLevel>? ExperienceLevels { get; set; }
+    public List<StaffAvailability>? StaffAvailabilities { get; set; }
+    public List<StaffHistoryOfApproval>? StaffHistoryOfApprovals { get; set; }
+    public List<StaffContact>? StaffContacts { get; set; }
 }
