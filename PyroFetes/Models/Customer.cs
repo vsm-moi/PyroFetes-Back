@@ -7,7 +7,7 @@ public class Customer
     [Key] public int Id { get; set; }
     [Required] public string? Note { get; set; }
     
-    //Les relations
+    //Relations
     public int CustomerTypeId { get; set; }
     public CustomerType? CustomerType { get; set; }
     

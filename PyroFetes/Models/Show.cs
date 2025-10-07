@@ -9,7 +9,7 @@ public class Show
     [Required, MaxLength(120)] public string? Place { get; set; }
     [MaxLength(500)] public string? Description { get; set; }
     
-    // Lien (chemin/URL/nom de fichier) vers le plan d’implémentation pyrotechnique
+    // Link (path/URL/file name) to the pyrotechnic implementation plan
     [Required, MaxLength(500)]
     public string? PyrotechnicImplementationPlan { get; set; }
 

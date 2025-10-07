@@ -14,7 +14,6 @@ public class Contact
     [Required] public string? City { get; set; }
     [Required] public string? Role { get; set; }
     
-    //RELATIONS DE CON LA
     public int CommunicationId { get; set; }
     public Communication? Communication { get; set; }
 }
