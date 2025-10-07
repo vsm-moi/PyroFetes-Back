@@ -79,6 +79,9 @@ public class PyroFetesDbContext : DbContext
             .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<CustomerContact>()
+            .HasKey(cc => new { cc.ContactId, cc.CustomerId });
+
+        modelBuilder.Entity<CustomerContact>()
             .HasOne(cc => cc.Customer)
             .WithMany(c => c.CustomerContacts)
             .HasForeignKey(cc => cc.CustomerId)
