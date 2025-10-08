@@ -9,5 +9,8 @@ public class Material
     [Required] public int Quantity {get; set;}
     
     [Required] public int WarehouseId {get; set;}
-    [Required] public Warehouse? Warehouse {get; set;}
+    public Warehouse? Warehouse {get; set;}
+    
+    public List<ShowMaterial>? ShowMaterials {get; set;}
+    public List<MaterialWarehouse>? MaterialWarehouses {get; set;}
 }

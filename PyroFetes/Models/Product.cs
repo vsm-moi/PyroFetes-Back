@@ -36,6 +36,7 @@ namespace PyroFetes.Models
         public List<Price>? Prices { get; set; }
         public List<QuotationProduct>? QuotationProducts { get; set; }
         public List<WarehouseProduct>? WarehouseProducts { get; set; }
+        public List<ProductTimecode>? ProductTimecodes { get; set; }
         
         
     }

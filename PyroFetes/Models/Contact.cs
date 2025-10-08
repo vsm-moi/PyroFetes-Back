@@ -19,4 +19,5 @@ public class Contact
     
     public List<Communication>? Communications { get; set; }
     public List<StaffContact>? StaffContacts { get; set; }
+    public List<ContactServiceProvider>? ContactServiceProviders { get; set; }
 }

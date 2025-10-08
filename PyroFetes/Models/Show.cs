@@ -19,4 +19,7 @@ public class Show
     public List<ShowStaff>? ShowStaffs { get; set; }
     public List<ShowTruck>? ShowTrucks { get; set; }
     public List<SoundTimecode>? SoundTimecodes { get; set; }
+    public List<ProductTimecode>? ProductTimecodes { get; set; }
+    public List<Contract>? Contracts { get; set; }
+    public List<ShowMaterial>? ShowMaterials { get; set; }
 }

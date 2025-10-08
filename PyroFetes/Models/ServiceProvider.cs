@@ -10,4 +10,7 @@ public class ServiceProvider
     //Relations
     [Required] public int ProviderTypeId { get; set; }
     public ProviderType? ProviderType { get; set; }
+    
+    public List<Contract>? Contracts { get; set; }
+    public List<ContactServiceProvider>? ContactServiceProviders { get; set; }
 }

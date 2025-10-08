@@ -12,4 +12,5 @@ public class Customer
     public CustomerType? CustomerType { get; set; }
     
     public List<Contact>? Contacts { get; set; }
+    public List<Quotation>? Quotations { get; set; }
 }

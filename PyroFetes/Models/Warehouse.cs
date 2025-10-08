@@ -15,8 +15,7 @@ public class Warehouse
     
     public List<WarehouseProduct>? WarehouseProducts { get; set; }
     
-    
-    public List<Material>? Materials {get; set;}
+    public List<MaterialWarehouse>? MaterialWarehouses {get; set;}
     public List<Movement>? MovementsSource { get; set; }
     public List<Movement>? MovementsDestination { get; set; }
 }
