@@ -5,5 +5,7 @@ namespace PyroFetes.Models;
 public class ProviderType
 {
     [Key]   public int Id { get; set; }
-    [Required] public string? Label { get; set; }
+    [Required, MaxLength(100)] public string? Label { get; set; }
+    
+    public List<ServiceProvider>? ServiceProviders { get; set; }
 }

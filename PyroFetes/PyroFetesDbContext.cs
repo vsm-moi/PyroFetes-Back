@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
+using ServiceProvider = PyroFetes.Models.ServiceProvider;
 
 namespace PyroFetes;
 
@@ -13,7 +14,6 @@ public class PyroFetesDbContext : DbContext
     public DbSet<Communication> Communications { get; set; }
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<Customer> Customers { get; set; }
-    public DbSet<CustomerContact> CustomerContacts { get; set; }
     public DbSet<CustomerType> CustomerTypes { get; set; }
     public DbSet<Deliverer> Deliverers { get; set; }
     public DbSet<DeliveryNote> DeliveryNotes { get; set; }
@@ -28,7 +28,7 @@ public class PyroFetesDbContext : DbContext
     public DbSet<ProductColor> ProductColors { get; set; }
     public DbSet<ProductDelivery> ProductDeliveries { get; set; }
     public DbSet<ProductEffect> ProductEffects { get; set; }
-    public DbSet<Provider> Providers { get; set; }
+    public DbSet<ServiceProvider> Providers { get; set; }
     public DbSet<ProviderContact> ProviderContacts { get; set; }
     public DbSet<ProviderType> ProviderTypes { get; set; }
     public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
@@ -57,7 +57,7 @@ public class PyroFetesDbContext : DbContext
             "Server=romaric-thibault.fr;" + 
             "Database=PyroFetes;" + 
             "User Id=pyrofetes;" +
-            "Password=Onto9-Cage-Afflicted;" +
+            "Password=Crablike8-Fringe-Swimmable;" +
             "TrustServerCertificate=true;";
 
         optionsBuilder.UseSqlServer(connectionString);
@@ -66,5 +66,28 @@ public class PyroFetesDbContext : DbContext
     // Models customization
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Movement>()
+            .HasOne(m => m.SourceWarehouse)
+            .WithMany(w => w.MovementsSource)
+            .HasForeignKey(m => m.SourceWarehouseId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Movement>()
+            .HasOne(m => m.DestinationWarehouse)
+            .WithMany(w => w.MovementsDestination)
+            .HasForeignKey(m => m.DestinationWarehouseId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<MaterialWarehouse>()
+            .HasOne(mw => mw.Material)
+            .WithMany(m => m.MaterialWarehouses)
+            .HasForeignKey(mw => mw.MaterialId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<MaterialWarehouse>()
+            .HasOne(mw => mw.Warehouse)
+            .WithMany(w => w.MaterialWarehouses)
+            .HasForeignKey(mw => mw.WarehouseId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

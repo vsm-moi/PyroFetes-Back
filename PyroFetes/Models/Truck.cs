@@ -6,9 +6,9 @@ public class Truck
 {
     [Key] public int Id { get; set; }
     [Required, MaxLength(40)] public string Type { get; set; } = null!;
-    [Range(0, double.MaxValue)] public double? MaxExplosiveCapacity { get; set; }
+    [Required] public double? MaxExplosiveCapacity { get; set; }
     [Required, MaxLength(80)] public string? Sizes { get; set; }
     [Required, MaxLength(40)] public string? Status { get; set; }
-    [Required] public int ShowId { get; set; }
-    public Show? Show { get; set; }
+    
+    public List<ShowTruck>? ShowTrucks { get; set; }
 }

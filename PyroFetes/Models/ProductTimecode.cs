@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PyroFetes.Models;
 
-[PrimaryKey(nameof(ShowId), nameof(SoundId))]
-public class SoundTimecode
+[PrimaryKey(nameof(ProductId), nameof(ShowId))]
+public class ProductTimecode
 {
-    [Required] public int ShowId { get; set; }
+    public Product? Product { get; set; }
+    [Required] public int ProductId { get; set; }
+    
     public Show? Show { get; set; }
-    [Required] public int SoundId { get; set; }
-    public Sound? Sound { get; set; }
+    [Required] public int ShowId { get; set; }
     
     [Required] public decimal Start { get; set; }
     [Required] public decimal End { get; set; }

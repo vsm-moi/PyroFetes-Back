@@ -14,19 +14,29 @@ namespace PyroFetes.Models
         [Required] public decimal Nec { get; set; }
         [Required] public decimal SellingPrice { get; set; }
         [Required] public string? Image { get; set; }
-        [Required] public string? Link { get; set; }
+        [Required, MaxLength(200)] public string? Link { get; set; }
         [Required] public int MinimalQuantity { get; set; }
 
         // Relations
         [Required] public int ClassificationId { get; set; }
-        [Required] public Classification? Classification { get; set; }
+        public Classification? Classification { get; set; }
 
         [Required] public int ProductCategoryId { get; set; }
-        [Required] public ProductCategory? ProductCategory { get; set; }
-
-        [Required] public List<Brand>? Brands { get; set; }
+        public ProductCategory? ProductCategory { get; set; }
         
-        [Required] public List<Movement>? Movements { get; set; }
+        [Required] public int MovementId {get; set;}
+        public Movement? Movement {get; set;}
+
+        public List<ProductDelivery>? ProductDeliveries { get; set; }
+        public List<Brand>? Brands { get; set; }
+        public List<ProductEffect>? ProductEffects { get; set; }
+        public List<ProductColor>? ProductColors { get; set; }
+        public List<PurchaseProduct>? PurchaseProducts { get; set; }
+        public List<Price>? Prices { get; set; }
+        public List<QuotationProduct>? QuotationProducts { get; set; }
+        public List<WarehouseProduct>? WarehouseProducts { get; set; }
+        public List<ProductTimecode>? ProductTimecodes { get; set; }
+        
         
     }
 }

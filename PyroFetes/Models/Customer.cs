@@ -5,12 +5,12 @@ namespace PyroFetes.Models;
 public class Customer
 {
     [Key] public int Id { get; set; }
-    [Required] public string? Note { get; set; }
+    [Required, MaxLength(200)] public string? Note { get; set; }
     
-    //Les relations
-    public int CustomerTypeId { get; set; }
+    //Relations
+    [Required] public int CustomerTypeId { get; set; }
     public CustomerType? CustomerType { get; set; }
     
-    public int ContactId { get; set; }
-    public Contact? Contact { get; set; }
+    public List<Contact>? Contacts { get; set; }
+    public List<Quotation>? Quotations { get; set; }
 }
