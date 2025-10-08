@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace PyroFetes.Models;
 
+[PrimaryKey(nameof(MaterialId), nameof(WarehouseId))]
 public class MaterialWarehouse
 {
     [Required] public int MaterialId { get; set; }

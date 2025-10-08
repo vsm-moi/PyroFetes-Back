@@ -30,9 +30,8 @@ namespace PyroFetes.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AvailabilityDate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateOnly>("AvailabilityDate")
+                        .HasColumnType("date");
 
                     b.Property<DateOnly>("DeliveryDate")
                         .HasColumnType("date");
@@ -71,6 +70,27 @@ namespace PyroFetes.Migrations
                     b.ToTable("Brands");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("City");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.Classification", b =>
                 {
                     b.Property<int>("Id")
@@ -81,7 +101,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Label")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -98,7 +119,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Label")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -115,17 +137,25 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Calling")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("ContactId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Meeting")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
 
                     b.ToTable("Communications");
                 });
@@ -140,18 +170,21 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("CommunicationId")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -165,21 +198,56 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ZipCode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CommunicationId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ContactServiceProvider", b =>
+                {
+                    b.Property<int>("ContactId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceProviderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ContactId", "ServiceProviderId");
+
+                    b.HasIndex("ServiceProviderId");
+
+                    b.ToTable("ContactServiceProvider");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Contract", b =>
+                {
+                    b.Property<int>("ShowId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ServiceProviderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TermsAndConditions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ShowId", "ServiceProviderId");
+
+                    b.HasIndex("ServiceProviderId");
+
+                    b.ToTable("Contract");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Customer", b =>
@@ -190,38 +258,19 @@ namespace PyroFetes.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ContactId")
-                        .HasColumnType("int");
-
                     b.Property<int>("CustomerTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Note")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ContactId");
 
                     b.HasIndex("CustomerTypeId");
 
                     b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("PyroFetes.Models.CustomerContact", b =>
-                {
-                    b.Property<int>("ContactId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ContactId", "CustomerId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("CustomerContacts");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.CustomerType", b =>
@@ -232,8 +281,10 @@ namespace PyroFetes.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -250,7 +301,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Transporter")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -279,7 +331,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("TrackingNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -298,7 +351,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Label")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
 
@@ -315,9 +369,15 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Label")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StaffId");
 
                     b.ToTable("ExperienceLevels");
                 });
@@ -367,6 +427,21 @@ namespace PyroFetes.Migrations
                     b.ToTable("Materials");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.MaterialWarehouse", b =>
+                {
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MaterialId", "WarehouseId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("MaterialWarehouse");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.Movement", b =>
                 {
                     b.Property<int>("Id")
@@ -384,9 +459,6 @@ namespace PyroFetes.Migrations
                     b.Property<int?>("DestinationWarehouseId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -399,8 +471,6 @@ namespace PyroFetes.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DestinationWarehouseId");
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("SourceWarehouseId");
 
@@ -451,9 +521,13 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Link")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<int>("MinimalQuantity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MovementId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -480,6 +554,8 @@ namespace PyroFetes.Migrations
 
                     b.HasIndex("ClassificationId");
 
+                    b.HasIndex("MovementId");
+
                     b.HasIndex("ProductCategoryId");
 
                     b.ToTable("Products");
@@ -495,7 +571,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Label")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -550,28 +627,25 @@ namespace PyroFetes.Migrations
                     b.ToTable("ProductEffects");
                 });
 
-            modelBuilder.Entity("PyroFetes.Models.Provider", b =>
+            modelBuilder.Entity("PyroFetes.Models.ProductTimecode", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<int>("ShowId")
+                        .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("End")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProviderId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Start")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("ProviderTypeId")
-                        .HasColumnType("int");
+                    b.HasKey("ProductId", "ShowId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("ShowId");
 
-                    b.HasIndex("ProviderTypeId");
-
-                    b.ToTable("Providers");
+                    b.ToTable("ProductTimecode");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.ProviderContact", b =>
@@ -599,7 +673,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Label")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -616,7 +691,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("PurchaseConditions")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.HasKey("Id");
 
@@ -651,13 +727,20 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("ConditionsSale")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Quotations");
                 });
@@ -678,6 +761,27 @@ namespace PyroFetes.Migrations
                     b.HasIndex("QuotationId");
 
                     b.ToTable("QuotationProducts");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ServiceProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ProviderTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProviderTypeId");
+
+                    b.ToTable("Providers");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Setting", b =>
@@ -709,8 +813,11 @@ namespace PyroFetes.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly?>("Date")
+                        .HasColumnType("date");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -718,7 +825,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Place")
                         .IsRequired()
@@ -732,7 +840,54 @@ namespace PyroFetes.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CityId");
+
                     b.ToTable("Shows");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ShowMaterial", b =>
+                {
+                    b.Property<int>("ShowId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShowId", "MaterialId");
+
+                    b.HasIndex("MaterialId");
+
+                    b.ToTable("ShowMaterial");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ShowStaff", b =>
+                {
+                    b.Property<int>("StaffId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShowId")
+                        .HasColumnType("int");
+
+                    b.HasKey("StaffId", "ShowId");
+
+                    b.HasIndex("ShowId");
+
+                    b.ToTable("ShowStaff");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ShowTruck", b =>
+                {
+                    b.Property<int>("ShowId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TruckId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ShowId", "TruckId");
+
+                    b.HasIndex("TruckId");
+
+                    b.ToTable("ShowTruck");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Sound", b =>
@@ -795,8 +950,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(60)
-                        .HasColumnType("nvarchar(60)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -805,27 +960,19 @@ namespace PyroFetes.Migrations
 
             modelBuilder.Entity("PyroFetes.Models.SoundTimecode", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("End")
-                        .HasColumnType("int");
-
                     b.Property<int>("ShowId")
                         .HasColumnType("int");
 
                     b.Property<int>("SoundId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Start")
-                        .HasColumnType("int");
+                    b.Property<decimal>("End")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id");
+                    b.Property<decimal>("Start")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasIndex("ShowId");
+                    b.HasKey("ShowId", "SoundId");
 
                     b.HasIndex("SoundId");
 
@@ -850,7 +997,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("F4T2NumberApproval")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -927,18 +1075,21 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("DeliveryDelay")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -947,7 +1098,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("ZipCode")
                         .HasColumnType("int");
@@ -966,10 +1118,8 @@ namespace PyroFetes.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<double?>("MaxExplosiveCapacity")
+                        .IsRequired()
                         .HasColumnType("float");
-
-                    b.Property<int>("ShowId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Sizes")
                         .IsRequired()
@@ -988,8 +1138,6 @@ namespace PyroFetes.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ShowId");
-
                     b.ToTable("Trucks");
                 });
 
@@ -1003,11 +1151,13 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Fonction")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1016,11 +1166,13 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Salt")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -1037,11 +1189,13 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("Current")
                         .HasColumnType("int");
@@ -1067,40 +1221,20 @@ namespace PyroFetes.Migrations
 
             modelBuilder.Entity("PyroFetes.Models.WarehouseProduct", b =>
                 {
-                    b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Quantity"));
-
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("WarehouseId")
                         .HasColumnType("int");
 
-                    b.HasKey("Quantity");
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ProductId");
+                    b.HasKey("ProductId", "WarehouseId");
 
                     b.HasIndex("WarehouseId");
 
                     b.ToTable("WarehouseProducts");
-                });
-
-            modelBuilder.Entity("ShowStaff", b =>
-                {
-                    b.Property<int>("ShowsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ShowsId", "StaffId");
-
-                    b.HasIndex("StaffId");
-
-                    b.ToTable("ShowStaff");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Brand", b =>
@@ -1114,53 +1248,75 @@ namespace PyroFetes.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("PyroFetes.Models.Contact", b =>
-                {
-                    b.HasOne("PyroFetes.Models.Communication", "Communication")
-                        .WithMany()
-                        .HasForeignKey("CommunicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Communication");
-                });
-
-            modelBuilder.Entity("PyroFetes.Models.Customer", b =>
+            modelBuilder.Entity("PyroFetes.Models.Communication", b =>
                 {
                     b.HasOne("PyroFetes.Models.Contact", "Contact")
-                        .WithMany()
+                        .WithMany("Communications")
                         .HasForeignKey("ContactId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Contact");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Contact", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Customer", "Customer")
+                        .WithMany("Contacts")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ContactServiceProvider", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Contact", "Contact")
+                        .WithMany("ContactServiceProviders")
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PyroFetes.Models.ServiceProvider", "ServiceProvider")
+                        .WithMany("ContactServiceProviders")
+                        .HasForeignKey("ServiceProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contact");
+
+                    b.Navigation("ServiceProvider");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Contract", b =>
+                {
+                    b.HasOne("PyroFetes.Models.ServiceProvider", "ServiceProvider")
+                        .WithMany("Contracts")
+                        .HasForeignKey("ServiceProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PyroFetes.Models.Show", "Show")
+                        .WithMany("Contracts")
+                        .HasForeignKey("ShowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ServiceProvider");
+
+                    b.Navigation("Show");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Customer", b =>
+                {
                     b.HasOne("PyroFetes.Models.CustomerType", "CustomerType")
                         .WithMany("Customers")
                         .HasForeignKey("CustomerTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Contact");
-
                     b.Navigation("CustomerType");
-                });
-
-            modelBuilder.Entity("PyroFetes.Models.CustomerContact", b =>
-                {
-                    b.HasOne("PyroFetes.Models.Contact", "Contact")
-                        .WithMany("CustomerContacts")
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("PyroFetes.Models.Customer", "Customer")
-                        .WithMany("CustomerContacts")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Contact");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.DeliveryNote", b =>
@@ -1174,13 +1330,43 @@ namespace PyroFetes.Migrations
                     b.Navigation("Deliverer");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.ExperienceLevel", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Staff", "Staff")
+                        .WithMany("ExperienceLevels")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Staff");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.Material", b =>
                 {
                     b.HasOne("PyroFetes.Models.Warehouse", "Warehouse")
-                        .WithMany("Materials")
+                        .WithMany()
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.MaterialWarehouse", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Material", "Material")
+                        .WithMany("MaterialWarehouses")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("PyroFetes.Models.Warehouse", "Warehouse")
+                        .WithMany("MaterialWarehouses")
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Material");
 
                     b.Navigation("Warehouse");
                 });
@@ -1192,12 +1378,6 @@ namespace PyroFetes.Migrations
                         .HasForeignKey("DestinationWarehouseId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("PyroFetes.Models.Product", "Product")
-                        .WithMany("Movements")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("PyroFetes.Models.Warehouse", "SourceWarehouse")
                         .WithMany("MovementsSource")
                         .HasForeignKey("SourceWarehouseId")
@@ -1205,21 +1385,19 @@ namespace PyroFetes.Migrations
 
                     b.Navigation("DestinationWarehouse");
 
-                    b.Navigation("Product");
-
                     b.Navigation("SourceWarehouse");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Price", b =>
                 {
                     b.HasOne("PyroFetes.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("Prices")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Supplier", "Supplier")
-                        .WithMany()
+                        .WithMany("Prices")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1237,6 +1415,12 @@ namespace PyroFetes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PyroFetes.Models.Movement", "Movement")
+                        .WithMany("Products")
+                        .HasForeignKey("MovementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PyroFetes.Models.ProductCategory", "ProductCategory")
                         .WithMany("Products")
                         .HasForeignKey("ProductCategoryId")
@@ -1245,19 +1429,21 @@ namespace PyroFetes.Migrations
 
                     b.Navigation("Classification");
 
+                    b.Navigation("Movement");
+
                     b.Navigation("ProductCategory");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.ProductColor", b =>
                 {
                     b.HasOne("PyroFetes.Models.Color", "Color")
-                        .WithMany()
+                        .WithMany("ProductColors")
                         .HasForeignKey("ColorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductColors")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1270,13 +1456,13 @@ namespace PyroFetes.Migrations
             modelBuilder.Entity("PyroFetes.Models.ProductDelivery", b =>
                 {
                     b.HasOne("PyroFetes.Models.DeliveryNote", "DeliveryNote")
-                        .WithMany()
+                        .WithMany("ProductDeliveries")
                         .HasForeignKey("DeliveryNoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductDeliveries")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1289,13 +1475,13 @@ namespace PyroFetes.Migrations
             modelBuilder.Entity("PyroFetes.Models.ProductEffect", b =>
                 {
                     b.HasOne("PyroFetes.Models.Effect", "Effect")
-                        .WithMany()
+                        .WithMany("ProductEffects")
                         .HasForeignKey("EffectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ProductEffects")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1305,13 +1491,23 @@ namespace PyroFetes.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("PyroFetes.Models.Provider", b =>
+            modelBuilder.Entity("PyroFetes.Models.ProductTimecode", b =>
                 {
-                    b.HasOne("PyroFetes.Models.ProviderType", "ProviderType")
-                        .WithMany()
-                        .HasForeignKey("ProviderTypeId");
+                    b.HasOne("PyroFetes.Models.Product", "Product")
+                        .WithMany("ProductTimecodes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ProviderType");
+                    b.HasOne("PyroFetes.Models.Show", "Show")
+                        .WithMany("ProductTimecodes")
+                        .HasForeignKey("ShowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Show");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.ProviderContact", b =>
@@ -1322,7 +1518,7 @@ namespace PyroFetes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PyroFetes.Models.Provider", "Provider")
+                    b.HasOne("PyroFetes.Models.ServiceProvider", "Provider")
                         .WithMany()
                         .HasForeignKey("ProviderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1336,13 +1532,13 @@ namespace PyroFetes.Migrations
             modelBuilder.Entity("PyroFetes.Models.PurchaseProduct", b =>
                 {
                     b.HasOne("PyroFetes.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("PurchaseProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.PurchaseOrder", "PurchaseOrder")
-                        .WithMany()
+                        .WithMany("PurchaseProducts")
                         .HasForeignKey("PurchaseOrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1352,16 +1548,27 @@ namespace PyroFetes.Migrations
                     b.Navigation("PurchaseOrder");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.Quotation", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Customer", "Customer")
+                        .WithMany("Quotations")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.QuotationProduct", b =>
                 {
                     b.HasOne("PyroFetes.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("QuotationProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Quotation", "Quotation")
-                        .WithMany()
+                        .WithMany("QuotationProducts")
                         .HasForeignKey("QuotationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1371,27 +1578,106 @@ namespace PyroFetes.Migrations
                     b.Navigation("Quotation");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.ServiceProvider", b =>
+                {
+                    b.HasOne("PyroFetes.Models.ProviderType", "ProviderType")
+                        .WithMany("ServiceProviders")
+                        .HasForeignKey("ProviderTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProviderType");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Show", b =>
+                {
+                    b.HasOne("PyroFetes.Models.City", "City")
+                        .WithMany("Shows")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ShowMaterial", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Material", "Material")
+                        .WithMany("ShowMaterials")
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PyroFetes.Models.Show", "Show")
+                        .WithMany("ShowMaterials")
+                        .HasForeignKey("ShowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Material");
+
+                    b.Navigation("Show");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ShowStaff", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Show", "Show")
+                        .WithMany("ShowStaffs")
+                        .HasForeignKey("ShowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PyroFetes.Models.Staff", "Staff")
+                        .WithMany("ShowStaffs")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Show");
+
+                    b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ShowTruck", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Show", "Show")
+                        .WithMany("ShowTrucks")
+                        .HasForeignKey("ShowId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PyroFetes.Models.Truck", "Truck")
+                        .WithMany("ShowTrucks")
+                        .HasForeignKey("TruckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Show");
+
+                    b.Navigation("Truck");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.Sound", b =>
                 {
-                    b.HasOne("PyroFetes.Models.SoundCategory", "Category")
+                    b.HasOne("PyroFetes.Models.SoundCategory", "SoundCategory")
                         .WithMany("Sounds")
                         .HasForeignKey("SoundCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("SoundCategory");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.SoundTimecode", b =>
                 {
                     b.HasOne("PyroFetes.Models.Show", "Show")
-                        .WithMany("SoundCues")
+                        .WithMany("SoundTimecodes")
                         .HasForeignKey("ShowId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Sound", "Sound")
-                        .WithMany("ShowPlacements")
+                        .WithMany("SoundTimecodes")
                         .HasForeignKey("SoundId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1404,13 +1690,13 @@ namespace PyroFetes.Migrations
             modelBuilder.Entity("PyroFetes.Models.StaffAvailability", b =>
                 {
                     b.HasOne("PyroFetes.Models.Availability", "Availability")
-                        .WithMany()
+                        .WithMany("StaffAvailabilities")
                         .HasForeignKey("AvailabilityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("StaffAvailabilities")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1423,13 +1709,13 @@ namespace PyroFetes.Migrations
             modelBuilder.Entity("PyroFetes.Models.StaffContact", b =>
                 {
                     b.HasOne("PyroFetes.Models.Contact", "Contact")
-                        .WithMany()
+                        .WithMany("StaffContacts")
                         .HasForeignKey("ContactId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("StaffContacts")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1442,13 +1728,13 @@ namespace PyroFetes.Migrations
             modelBuilder.Entity("PyroFetes.Models.StaffHistoryOfApproval", b =>
                 {
                     b.HasOne("PyroFetes.Models.HistoryOfApproval", "HistoryOfApproval")
-                        .WithMany()
+                        .WithMany("StaffHistoryOfApprovals")
                         .HasForeignKey("HistoryOfApprovalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Staff", "Staff")
-                        .WithMany()
+                        .WithMany("StaffHistoryOfApprovals")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1458,27 +1744,16 @@ namespace PyroFetes.Migrations
                     b.Navigation("Staff");
                 });
 
-            modelBuilder.Entity("PyroFetes.Models.Truck", b =>
-                {
-                    b.HasOne("PyroFetes.Models.Show", "Show")
-                        .WithMany("Trucks")
-                        .HasForeignKey("ShowId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Show");
-                });
-
             modelBuilder.Entity("PyroFetes.Models.WarehouseProduct", b =>
                 {
                     b.HasOne("PyroFetes.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("WarehouseProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PyroFetes.Models.Warehouse", "Warehouse")
-                        .WithMany()
+                        .WithMany("WarehouseProducts")
                         .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1488,19 +1763,14 @@ namespace PyroFetes.Migrations
                     b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("ShowStaff", b =>
+            modelBuilder.Entity("PyroFetes.Models.Availability", b =>
                 {
-                    b.HasOne("PyroFetes.Models.Show", null)
-                        .WithMany()
-                        .HasForeignKey("ShowsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("StaffAvailabilities");
+                });
 
-                    b.HasOne("PyroFetes.Models.Staff", null)
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+            modelBuilder.Entity("PyroFetes.Models.City", b =>
+                {
+                    b.Navigation("Shows");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Classification", b =>
@@ -1508,14 +1778,25 @@ namespace PyroFetes.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.Color", b =>
+                {
+                    b.Navigation("ProductColors");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.Contact", b =>
                 {
-                    b.Navigation("CustomerContacts");
+                    b.Navigation("Communications");
+
+                    b.Navigation("ContactServiceProviders");
+
+                    b.Navigation("StaffContacts");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Customer", b =>
                 {
-                    b.Navigation("CustomerContacts");
+                    b.Navigation("Contacts");
+
+                    b.Navigation("Quotations");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.CustomerType", b =>
@@ -1528,11 +1809,52 @@ namespace PyroFetes.Migrations
                     b.Navigation("DeliveryNotes");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.DeliveryNote", b =>
+                {
+                    b.Navigation("ProductDeliveries");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Effect", b =>
+                {
+                    b.Navigation("ProductEffects");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.HistoryOfApproval", b =>
+                {
+                    b.Navigation("StaffHistoryOfApprovals");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Material", b =>
+                {
+                    b.Navigation("MaterialWarehouses");
+
+                    b.Navigation("ShowMaterials");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Movement", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.Product", b =>
                 {
                     b.Navigation("Brands");
 
-                    b.Navigation("Movements");
+                    b.Navigation("Prices");
+
+                    b.Navigation("ProductColors");
+
+                    b.Navigation("ProductDeliveries");
+
+                    b.Navigation("ProductEffects");
+
+                    b.Navigation("ProductTimecodes");
+
+                    b.Navigation("PurchaseProducts");
+
+                    b.Navigation("QuotationProducts");
+
+                    b.Navigation("WarehouseProducts");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.ProductCategory", b =>
@@ -1540,16 +1862,46 @@ namespace PyroFetes.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.ProviderType", b =>
+                {
+                    b.Navigation("ServiceProviders");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.PurchaseOrder", b =>
+                {
+                    b.Navigation("PurchaseProducts");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Quotation", b =>
+                {
+                    b.Navigation("QuotationProducts");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.ServiceProvider", b =>
+                {
+                    b.Navigation("ContactServiceProviders");
+
+                    b.Navigation("Contracts");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.Show", b =>
                 {
-                    b.Navigation("SoundCues");
+                    b.Navigation("Contracts");
 
-                    b.Navigation("Trucks");
+                    b.Navigation("ProductTimecodes");
+
+                    b.Navigation("ShowMaterials");
+
+                    b.Navigation("ShowStaffs");
+
+                    b.Navigation("ShowTrucks");
+
+                    b.Navigation("SoundTimecodes");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Sound", b =>
                 {
-                    b.Navigation("ShowPlacements");
+                    b.Navigation("SoundTimecodes");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.SoundCategory", b =>
@@ -1557,13 +1909,38 @@ namespace PyroFetes.Migrations
                     b.Navigation("Sounds");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.Staff", b =>
+                {
+                    b.Navigation("ExperienceLevels");
+
+                    b.Navigation("ShowStaffs");
+
+                    b.Navigation("StaffAvailabilities");
+
+                    b.Navigation("StaffContacts");
+
+                    b.Navigation("StaffHistoryOfApprovals");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Supplier", b =>
+                {
+                    b.Navigation("Prices");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.Truck", b =>
+                {
+                    b.Navigation("ShowTrucks");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.Warehouse", b =>
                 {
-                    b.Navigation("Materials");
+                    b.Navigation("MaterialWarehouses");
 
                     b.Navigation("MovementsDestination");
 
                     b.Navigation("MovementsSource");
+
+                    b.Navigation("WarehouseProducts");
                 });
 #pragma warning restore 612, 618
         }

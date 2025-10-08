@@ -77,5 +77,17 @@ public class PyroFetesDbContext : DbContext
             .WithMany(w => w.MovementsDestination)
             .HasForeignKey(m => m.DestinationWarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<MaterialWarehouse>()
+            .HasOne(mw => mw.Material)
+            .WithMany(m => m.MaterialWarehouses)
+            .HasForeignKey(mw => mw.MaterialId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<MaterialWarehouse>()
+            .HasOne(mw => mw.Warehouse)
+            .WithMany(w => w.MaterialWarehouses)
+            .HasForeignKey(mw => mw.WarehouseId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
