@@ -29,7 +29,6 @@ namespace PyroFetes.Models
 
         public List<ProductDelivery>? ProductDeliveries { get; set; }
         public List<Brand>? Brands { get; set; }
-        public List<Movement>? Movements { get; set; }
         public List<ProductEffect>? ProductEffects { get; set; }
         public List<ProductColor>? ProductColors { get; set; }
         public List<PurchaseProduct>? PurchaseProducts { get; set; }
