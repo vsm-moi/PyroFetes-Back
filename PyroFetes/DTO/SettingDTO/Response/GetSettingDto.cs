@@ -1,4 +1,4 @@
-namespace PyroFetes.DTO.Setting.Response;
+namespace PyroFetes.DTO.SettingDTO.Response;
 
 public class GetSettingDto
 {

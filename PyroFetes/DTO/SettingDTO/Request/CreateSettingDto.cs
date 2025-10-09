@@ -1,4 +1,4 @@
-namespace PyroFetes.DTO.Setting.Request;
+namespace PyroFetes.DTO.SettingDTO.Request;
 
 public class CreateSettingDto
 {
