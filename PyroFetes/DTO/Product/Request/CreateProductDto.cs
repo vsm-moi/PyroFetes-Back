@@ -9,7 +9,6 @@ public class CreateProductDto
     public int ApprovalNumber { get; set; }
     public decimal Weight { get; set; }
     public decimal Nec { get; set; }
-    public decimal SellingPrice { get; set; }
     public string? Image { get; set; }
     public string? Link { get; set; }
     public int MinimalQuantity { get; set; }
