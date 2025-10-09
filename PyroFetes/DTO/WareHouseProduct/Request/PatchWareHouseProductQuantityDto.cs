@@ -1,4 +1,4 @@
-namespace PyroFetes.DTO.PurchaseProduct.Request;
+namespace PyroFetes.DTO.WareHouseProduct.Request;
 
 public class PatchWareHouseProductQuantityDto
 {

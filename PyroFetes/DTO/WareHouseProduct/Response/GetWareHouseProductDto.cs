@@ -1,6 +1,6 @@
-namespace PyroFetes.DTO.PurchaseProduct.Request;
+namespace PyroFetes.DTO.WareHouseProduct.Response;
 
-public class UpdateWareHouseProductDto
+public class GetWareHouseProductDto
 {
     public int Id { get; set; }
     public int Quantity { get; set; }

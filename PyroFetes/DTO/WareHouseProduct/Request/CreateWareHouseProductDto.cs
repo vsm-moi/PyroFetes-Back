@@ -1,10 +1,7 @@
-using PyroFetes.Models;
+namespace PyroFetes.DTO.WareHouseProduct.Request;
 
-namespace PyroFetes.DTO.PurchaseProduct.Response;
-
-public class GetWareHouseProductDto
+public class CreateWareHouseProductDto
 {
-    public int Id { get; set; }
     public int Quantity { get; set; }
     
     public int WareHouseId { get; set; }
