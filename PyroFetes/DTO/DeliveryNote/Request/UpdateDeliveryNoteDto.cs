@@ -11,5 +11,4 @@ public class UpdateDeliveryNoteDto
     public int DeliverId { get; set; }
     public string? DeliverTransporter { get; set; }
     
-    public List<GetProductDeliveryDto>  Products { get; set; }
 }

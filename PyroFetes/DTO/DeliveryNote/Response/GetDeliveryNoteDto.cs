@@ -1,3 +1,5 @@
+using PyroFetes.DTO.ProductDelivery.Response;
+
 namespace PyroFetes.DTO.DeliveryNote.Response;
 
 public class GetDeliveryNoteDto
