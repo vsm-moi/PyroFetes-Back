@@ -1,4 +1,4 @@
-namespace PyroFetes.DTO.Deliver.Request;
+namespace PyroFetes.DTO.Deliverer.Request;
 
 public class CreateDelivererDto
 {

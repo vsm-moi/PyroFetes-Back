@@ -1,6 +1,6 @@
 using PyroFetes.DTO.DeliveryNote.Response;
 
-namespace PyroFetes.DTO.Deliver.Response;
+namespace PyroFetes.DTO.Deliverer.Response;
 
 public class GetDelivererDto
 {
