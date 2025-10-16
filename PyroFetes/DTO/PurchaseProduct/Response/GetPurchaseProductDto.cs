@@ -3,7 +3,7 @@ namespace PyroFetes.DTO.PurchaseProduct.Response;
 public class GetPurchaseProductDto
 {
     public int ProductId { get; set; }
-    public int ProductReferences { get; set; }
+    public string? ProductReferences { get; set; }
     public string? ProductName { get; set; }
     public decimal ProductDuration {get; set;} 
     public decimal ProductCaliber { get; set; }
