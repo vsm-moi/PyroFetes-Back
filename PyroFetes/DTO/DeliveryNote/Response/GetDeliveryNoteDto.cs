@@ -13,5 +13,5 @@ public class GetDeliveryNoteDto
     public int DelivererId { get; set; }
     public string? DelivererTransporter { get; set; }
     
-    public List<GetProductDeliveryDto>  Products { get; set; }
+    public List<GetProductDeliveryDto>?  Products { get; set; }
 }

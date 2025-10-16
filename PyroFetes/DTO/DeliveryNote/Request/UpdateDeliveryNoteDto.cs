@@ -9,5 +9,4 @@ public class UpdateDeliveryNoteDto
     public DateOnly? RealDeliveryDate { get; set; }
     
     public int DelivererId { get; set; }
-    
 }
