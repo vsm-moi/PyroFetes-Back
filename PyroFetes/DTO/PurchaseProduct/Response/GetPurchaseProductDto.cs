@@ -2,9 +2,6 @@ namespace PyroFetes.DTO.PurchaseProduct.Response;
 
 public class GetPurchaseProductDto
 {
-    public int Id { get; set; }
-    public int Quantity { get; set; } 
-    
     public int ProductId { get; set; }
     public int ProductReferences { get; set; }
     public string? ProductName { get; set; }
@@ -18,7 +15,8 @@ public class GetPurchaseProductDto
     public string? ProductLink { get; set; }
     public int ProductMinimalQuantity { get; set; }
     
-    
     public int PurchaseOrderId { get; set; }
     public string? PurchaseOrderPurchaseConditions { get; set; }
+    
+    public int Quantity { get; set; }
 }
