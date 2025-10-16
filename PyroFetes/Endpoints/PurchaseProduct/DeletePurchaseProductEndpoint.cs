@@ -3,37 +3,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PyroFetes.Endpoints.PurchaseProduct;
 
-public class DeletePurchaseOrderRequest
+public class DeletePurchaseProductRequest
 {
-    public int Id { get; set; }
+    public int ProductId { get; set; }
+    public int PurchaseOrderId { get; set; }
 }
 
-public class DeletePurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint<DeletePurchaseOrderRequest>
+public class DeletePurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint<DeletePurchaseProductRequest>
 {
     public override void Configure()
     {
-        Delete("/api/purchaseOrders/{Id}", x => new {x.Id});
+        Delete("/api/purchaseProducts/{ProductId}/{PurchaseOrderId}", x => new {x.ProductId, x.PurchaseOrderId});
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(DeletePurchaseOrderRequest req, CancellationToken ct)
+    public override async Task HandleAsync(DeletePurchaseProductRequest req, CancellationToken ct)
     {
-        var purchaseOrder = await database.PurchaseOrders
-            .Include(po => po.PurchaseProducts)
-            .SingleOrDefaultAsync(po => po.Id == req.Id, ct);
+        var purchaseProduct = await database.PurchaseProducts
+            .SingleOrDefaultAsync(po => po.ProductId == req.ProductId && po.PurchaseOrderId == req.PurchaseOrderId, ct);
 
-        if (purchaseOrder == null)
+        if (purchaseProduct == null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
         
-        if (purchaseOrder.PurchaseProducts != null && purchaseOrder.PurchaseProducts.Any())
-        {
-            database.PurchaseProducts.RemoveRange(purchaseOrder.PurchaseProducts);
-        }
-        
-        database.PurchaseOrders.Remove(purchaseOrder); 
+        database.PurchaseProducts.Remove(purchaseProduct); 
         await database.SaveChangesAsync(ct);
         
         await Send.NoContentAsync(ct);
