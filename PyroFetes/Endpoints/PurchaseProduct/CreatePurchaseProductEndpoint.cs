@@ -5,8 +5,7 @@ using PyroFetes.DTO.PurchaseProduct.Response;
 
 namespace PyroFetes.Endpoints.PurchaseProduct;
 
-public class CreatePurchaseProductEndpoint(PyroFetesDbContext database)
-    : Endpoint<CreatePurchaseProductDto, GetPurchaseProductDto>
+public class CreatePurchaseProductEndpoint(PyroFetesDbContext database) : Endpoint<CreatePurchaseProductDto, GetPurchaseProductDto>
 {
     public override void Configure()
     {
