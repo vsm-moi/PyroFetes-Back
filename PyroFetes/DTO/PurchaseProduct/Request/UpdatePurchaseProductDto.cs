@@ -2,10 +2,11 @@ namespace PyroFetes.DTO.PurchaseProduct.Request;
 
 public class UpdatePurchaseProductDto
 {
-    public int Id { get; set; }
+    public int ProductId { get; set; }
+    public int PurchaseOrderId { get; set; }
+    
     public int Quantity { get; set; } 
     
-    public int ProductId { get; set; }
     public int ProductReferences { get; set; }
     public string? ProductName { get; set; }
     public decimal ProductDuration {get; set;} 
@@ -17,7 +18,5 @@ public class UpdatePurchaseProductDto
     public string? ProductLink { get; set; }
     public int ProductMinimalQuantity { get; set; }
     
-    
-    public int PurchaseOrderId { get; set; }
     public string? PurchaseOrderPurchaseConditions { get; set; }
 }
