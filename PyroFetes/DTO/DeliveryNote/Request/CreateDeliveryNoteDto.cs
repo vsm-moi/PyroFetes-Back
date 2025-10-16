@@ -8,5 +8,4 @@ public class CreateDeliveryNoteDto
     public DateOnly RealDeliveryDate { get; set; }
     
     public int DelivererId { get; set; }
-    
 }
