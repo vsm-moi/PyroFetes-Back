@@ -7,7 +7,7 @@ using PyroFetes.DTO.PurchaseProduct.Response;
 
 namespace PyroFetes.Endpoints.PurchaseOrder;
 
-public class PatchPurchaseProductQuantityEndpoint(PyroFetesDbContext database) : Endpoint<PatchPurchaseOrderPurchaseConditionsDto, GetPurchaseOrderDto>
+public class PatchPurchaseOrderPurchaseConditionsEndpoint(PyroFetesDbContext database) : Endpoint<PatchPurchaseOrderPurchaseConditionsDto, GetPurchaseOrderDto>
 {
     public override void Configure()
     {

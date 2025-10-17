@@ -2,7 +2,6 @@ namespace PyroFetes.DTO.QuotationProduct.Response;
 
 public class GetQuotationProductDto
 {
-    public int Id { get; set; }
     public int Quantity { get; set; }
     
     public int QuotationId { get; set; }
@@ -10,7 +9,7 @@ public class GetQuotationProductDto
     public string? QuotationConditionsSale { get; set; }
     
     public int ProductId { get; set; }
-    public int ProductReferences { get; set; }
+    public string? ProductReferences { get; set; }
     public string? ProductName { get; set; }
     public decimal ProductDuration {get; set;} 
     public decimal ProductCaliber { get; set; }
