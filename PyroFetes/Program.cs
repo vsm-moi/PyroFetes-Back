@@ -1,18 +1,26 @@
-var builder = WebApplication.CreateBuilder(args);
+using PyroFetes;
+using FastEndpoints;
+using FastEndpoints.Swagger;
+using FastEndpoints.Security;
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-var app = builder.Build();
+// On ajoute ici FastEndpoints, un framework REPR et Swagger aux services disponibles dans le projet
+builder.Services
+    .AddAuthenticationJwtBearer(s => s.SigningKey = "ThisIsASuperSecretJwtKeyThatIsAtLeast32CharsLong")
+    .AddAuthorization()
+    .AddFastEndpoints()
+    .SwaggerDocument();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// On ajoute ici la configuration de la base de données
+builder.Services.AddDbContext<PyroFetesDbContext>();
+
+// On construit l'application en lui donnant vie
+WebApplication app = builder.Build();
+app.UseAuthentication()
+    .UseAuthorization()
+    .UseFastEndpoints()
+    .UseSwaggerGen();
 
 app.UseHttpsRedirection();
 

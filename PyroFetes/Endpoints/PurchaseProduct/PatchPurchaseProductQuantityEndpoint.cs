@@ -9,7 +9,7 @@ public class PatchPurchaseProductQuantityEndpoint(PyroFetesDbContext database) :
 {
     public override void Configure()
     {
-        Patch("/api/purchaseProducts/{ProductId}/{PurchaseOrderId}/Quantity", x => new { x.ProductId, x.PurchaseOrderId });
+        Patch("/api/purchaseProducts/{@ProductId}/{@PurchaseOrderId}/Quantity", x => new { x.ProductId, x.PurchaseOrderId });
         AllowAnonymous();
     }
 

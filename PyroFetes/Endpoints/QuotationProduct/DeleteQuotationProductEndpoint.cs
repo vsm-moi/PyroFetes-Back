@@ -13,7 +13,7 @@ public class DeleteQuotationProductEndpoint(PyroFetesDbContext database) : Endpo
 {
     public override void Configure()
     {
-        Delete("/api/quotationProduct/{ProductId}/{QuotationId}", x => new {x.ProductId, x.QuotationId});
+        Delete("/api/quotationProduct/{@ProductId}/{@QuotationId}", x => new {x.ProductId, x.QuotationId});
         AllowAnonymous();
     }
 

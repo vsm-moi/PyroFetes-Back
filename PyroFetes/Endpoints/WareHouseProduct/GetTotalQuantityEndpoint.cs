@@ -13,13 +13,13 @@ public class GetTotalQuantityEndpoint(PyroFetesDbContext database) : Endpoint<Ge
 {
     public override void Configure()
     {
-        Get("/api/wareHouseProduct/{ProductId}", x => new { x.ProductId });
+        Get("/api/wareHouseProduct/{@ProductId}", x => new { x.ProductId });
         AllowAnonymous();
     }
     
     public override async Task HandleAsync(GetTotalQuantityRequest req, CancellationToken ct)
     {
-        bool exists = await database.WarehouseProducts
+        var exists = await database.WarehouseProducts
             .AnyAsync(wp => wp.ProductId == req.ProductId, ct);
 
         if (!exists)

@@ -11,7 +11,7 @@ public class PatchPurchaseOrderPurchaseConditionsEndpoint(PyroFetesDbContext dat
 {
     public override void Configure()
     {
-        Patch("/api/purchaseOrders/{Id}/PurchaseConditions", x => new { x.Id });
+        Patch("/api/purchaseOrders/{@Id}/PurchaseConditions", x => new { x.Id });
         AllowAnonymous();
     }
 

@@ -12,7 +12,7 @@ public class DeletePurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint
 {
     public override void Configure()
     {
-        Delete("/api/purchaseOrders/{Id}", x => new {x.Id});
+        Delete("/api/purchaseOrders/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

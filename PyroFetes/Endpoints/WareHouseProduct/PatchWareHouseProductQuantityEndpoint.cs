@@ -11,7 +11,7 @@ public class PatchWareHouseProductQuantityEndpoint(PyroFetesDbContext database) 
 {
     public override void Configure()
     {
-        Patch("/api/wareHouseProduct/{ProductId}/{WareHouseId}/Quantity", x => new { x.ProductId, x.WareHouseId });
+        Patch("/api/wareHouseProduct/{@ProductId}/{@WareHouseId}/Quantity", x => new { x.ProductId, x.WareHouseId });
         AllowAnonymous();
     }
 

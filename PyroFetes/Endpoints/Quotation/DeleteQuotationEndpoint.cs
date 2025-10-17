@@ -12,7 +12,7 @@ public class DeleteQuotationEndpoint(PyroFetesDbContext database) : Endpoint<Del
 {
     public override void Configure()
     {
-        Delete("/api/quotations/{Id}", x => new {x.Id});
+        Delete("/api/quotations/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

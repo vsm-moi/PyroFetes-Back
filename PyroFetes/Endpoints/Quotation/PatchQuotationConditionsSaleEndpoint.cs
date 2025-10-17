@@ -13,7 +13,7 @@ public class PatchQuotationConditionsSaleEndpoint(PyroFetesDbContext database) :
 {
     public override void Configure()
     {
-        Patch("/api/quotations/{Id}/ConditionsSale", x => new { x.Id });
+        Patch("/api/quotations/{@Id}/ConditionsSale", x => new { x.Id });
         AllowAnonymous();
     }
 
