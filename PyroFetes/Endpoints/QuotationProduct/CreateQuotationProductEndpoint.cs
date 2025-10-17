@@ -1,11 +1,9 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
-using PyroFetes.DTO.PurchaseProduct.Request;
-using PyroFetes.DTO.PurchaseProduct.Response;
 using PyroFetes.DTO.QuotationProduct.Request;
 using PyroFetes.DTO.QuotationProduct.Response;
 
-namespace PyroFetes.Endpoints.QuoationProduct;
+namespace PyroFetes.Endpoints.QuotationProduct;
 
 public class CreateQuotationProductEndpoint(PyroFetesDbContext database) : Endpoint<CreateQuotationProductDto, GetQuotationProductDto>
 {

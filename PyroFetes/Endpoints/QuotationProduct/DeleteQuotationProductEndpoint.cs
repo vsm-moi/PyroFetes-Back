@@ -1,7 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 
-namespace PyroFetes.Endpoints.QuoationProduct;
+namespace PyroFetes.Endpoints.QuotationProduct;
 
 public class DeleteQuotationProductRequest
 {

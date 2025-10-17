@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.QuotationProduct.Request;
 using PyroFetes.DTO.QuotationProduct.Response;
 
-namespace PyroFetes.Endpoints.QuoationProduct;
+namespace PyroFetes.Endpoints.QuotationProduct;
 
 public class PatchQuotationProductQuantityEndpoint(PyroFetesDbContext database) : Endpoint<PatchQuotationProductQuantityDto, GetQuotationProductDto>
 {
