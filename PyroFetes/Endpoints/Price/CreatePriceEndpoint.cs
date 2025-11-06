@@ -15,22 +15,7 @@ public class CreatePriceEndpoint(PyroFetesDbContext database) : Endpoint<CreateP
 
     public override async Task HandleAsync(CreatePriceDto req, CancellationToken ct)
     {
-        var price = await database.Prices.SingleOrDefaultAsync(p => p.ProductId == req.ProductId && p.SupplierId == req.SupplierId, ct);
-        if (price == null)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-        
         var supplier = await database.Suppliers.FirstOrDefaultAsync(s => s.Id == req.SupplierId, ct);
-        
-        var product = await database.Products.SingleOrDefaultAsync(p => p.Id == req.ProductId, ct);
-        if (product == null)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-        
         if (supplier == null)
         {
             supplier = new Models.Supplier()
@@ -48,14 +33,12 @@ public class CreatePriceEndpoint(PyroFetesDbContext database) : Endpoint<CreateP
             await database.SaveChangesAsync(ct);
         }
         
-        var priceAdded = new Models.Price()
+        var product = await database.Products.SingleOrDefaultAsync(p => p.Reference == req.ProductReferences, ct);
+        if (product != null)
         {
-            SellingPrice = price.SellingPrice,
-            SupplierId = supplier.Id,
-            ProductId = product.Id,
-        };
-        database.Prices.Add(priceAdded);
-        await database.SaveChangesAsync(ct);
+            await Send.NotFoundAsync(ct);
+            return;
+        }
         
         var productAdded = new Models.Product()
         {
@@ -73,9 +56,44 @@ public class CreatePriceEndpoint(PyroFetesDbContext database) : Endpoint<CreateP
         database.Products.Add(productAdded);
         await database.SaveChangesAsync(ct);
         
+        var price = await database.Prices.SingleOrDefaultAsync(p => p.ProductId == req.ProductId && p.SupplierId == req.SupplierId, ct);
+        if (price != null)
+        {
+            await Send.NotFoundAsync(ct);
+            return;
+        }
+        
+        var priceAdded = new Models.Price()
+        {
+            SellingPrice = req.SellingPrice,
+            SupplierId = supplier.Id,
+            ProductId = productAdded.Id,
+        };
+        database.Prices.Add(priceAdded);
+        await database.SaveChangesAsync(ct);
+        
         var responseDto = new GetPriceDto()
         {
-            
+            SellingPrice = priceAdded.SellingPrice,
+            SupplierId = supplier.Id,
+            ProductId = productAdded.Id,
+            SupplierName = supplier.Name,
+            SupplierEmail = supplier.Email,
+            SupplierPhone = supplier.Phone,
+            SupplierAddress = supplier.Address,
+            SupplierCity = supplier.City,
+            SupplierZipCode = supplier.ZipCode,
+            SupplierDeliveryDelay = supplier.DeliveryDelay,
+            ProductReferences = productAdded.Reference,
+            ProductName = productAdded.Name,
+            ProductDuration = productAdded.Duration,
+            ProductCaliber = productAdded.Caliber,
+            ProductApprovalNumber = productAdded.ApprovalNumber,
+            ProductWeight = productAdded.Weight,
+            ProductNec = productAdded.Nec,
+            ProductImage = productAdded.Image,
+            ProductLink = productAdded.Link,
+            ProductMinimalQuantity = productAdded.MinimalQuantity
         };
 
         await Send.OkAsync(responseDto, ct);
