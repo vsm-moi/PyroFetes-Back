@@ -12,7 +12,7 @@ public class DeleteDelivererEndpoint(PyroFetesDbContext database) : Endpoint<Del
 {
     public override void Configure()
     {
-        Delete("api/deliverers/{id}", x=>new {x.DelivererId});
+        Delete("api/deliverers/{@id}", x=>new {x.DelivererId});
         AllowAnonymous();
 
     }

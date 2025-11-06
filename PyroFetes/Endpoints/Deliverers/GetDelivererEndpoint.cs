@@ -14,7 +14,7 @@ public class GetDelivererEndpoint(PyroFetesDbContext database) : Endpoint<GetDel
 {
     public override void Configure()
     {
-        Get("api/deliverers/{id}", x=>new {x.DelivererId});
+        Get("api/deliverers/{@id}", x=>new {x.DelivererId});
         AllowAnonymous();
 
     }

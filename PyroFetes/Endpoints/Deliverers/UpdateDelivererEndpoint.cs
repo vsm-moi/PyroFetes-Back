@@ -10,7 +10,7 @@ public class UpdateDelivererEndpoint(PyroFetesDbContext database) : Endpoint<Upd
 {
     public override void Configure()
     {
-        Put("api/deliverers/{id}", x=>new {x.Id});
+        Put("api/deliverers/{@id}", x=>new {x.Id});
         AllowAnonymous();
 
     }
