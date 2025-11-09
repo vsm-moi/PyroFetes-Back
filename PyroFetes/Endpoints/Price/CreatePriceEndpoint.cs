@@ -15,6 +15,7 @@ public class CreatePriceEndpoint(PyroFetesDbContext database) : Endpoint<CreateP
 
     public override async Task HandleAsync(CreatePriceDto req, CancellationToken ct)
     {
+        // Gestion du fournisseur
         var supplier = await database.Suppliers.FirstOrDefaultAsync(s => s.Id == req.SupplierId, ct);
         if (supplier == null)
         {
@@ -27,56 +28,58 @@ public class CreatePriceEndpoint(PyroFetesDbContext database) : Endpoint<CreateP
                 City = req.SupplierCity,
                 ZipCode = req.SupplierZipCode,
                 DeliveryDelay = req.SupplierDeliveryDelay
-
             };
             database.Suppliers.Add(supplier);
             await database.SaveChangesAsync(ct);
         }
-        
-        var product = await database.Products.SingleOrDefaultAsync(p => p.Reference == req.ProductReferences, ct);
-        if (product != null)
+
+        // Gestion du produit
+        var product = await database.Products.SingleOrDefaultAsync(p => p.Id == req.ProductId, ct);
+        if (product == null)
         {
-            await Send.NotFoundAsync(ct);
+            product = new Models.Product()
+            {
+                Reference = req.ProductReferences,
+                Name = req.ProductName,
+                Duration = req.ProductDuration,
+                Caliber = req.ProductCaliber,
+                ApprovalNumber = req.ProductApprovalNumber,
+                Weight = req.ProductWeight,
+                Nec = req.ProductNec,
+                Image = req.ProductImage,
+                Link = req.ProductLink,
+                MinimalQuantity = req.ProductMinimalQuantity
+            };
+            database.Products.Add(product);
+            await database.SaveChangesAsync(ct);
+        }
+
+        // Vérifie si le prix existe déjà pour ce fournisseur et produit
+        var existingPrice = await database.Prices
+            .SingleOrDefaultAsync(p => p.ProductId == product.Id && p.SupplierId == supplier.Id, ct);
+
+        if (existingPrice != null)
+        {
+            await Send.ConflictAsync("Le fournisseur a déjà un prix pour ce produit.", ct);
             return;
         }
-        
-        var productAdded = new Models.Product()
-        {
-            Reference = req.ProductReferences,
-            Name = req.ProductName,
-            Duration = req.ProductDuration,
-            Caliber = req.ProductCaliber,
-            ApprovalNumber = req.ProductApprovalNumber,
-            Weight = req.ProductWeight,
-            Nec = req.ProductNec,
-            Image = req.ProductImage,
-            Link = req.ProductLink,
-            MinimalQuantity = req.ProductMinimalQuantity
-        };
-        database.Products.Add(productAdded);
-        await database.SaveChangesAsync(ct);
-        
-        var price = await database.Prices.SingleOrDefaultAsync(p => p.ProductId == req.ProductId && p.SupplierId == req.SupplierId, ct);
-        if (price != null)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-        
+
+        // Création du prix
         var priceAdded = new Models.Price()
         {
             SellingPrice = req.SellingPrice,
             SupplierId = supplier.Id,
-            ProductId = productAdded.Id,
+            ProductId = product.Id
         };
         database.Prices.Add(priceAdded);
         await database.SaveChangesAsync(ct);
-        
+
+        // Création du DTO de réponse
         var responseDto = new GetPriceDto()
         {
             SellingPrice = priceAdded.SellingPrice,
             SupplierId = supplier.Id,
-            ProductId = productAdded.Id,
+            ProductId = product.Id,
             SupplierName = supplier.Name,
             SupplierEmail = supplier.Email,
             SupplierPhone = supplier.Phone,
@@ -84,16 +87,16 @@ public class CreatePriceEndpoint(PyroFetesDbContext database) : Endpoint<CreateP
             SupplierCity = supplier.City,
             SupplierZipCode = supplier.ZipCode,
             SupplierDeliveryDelay = supplier.DeliveryDelay,
-            ProductReferences = productAdded.Reference,
-            ProductName = productAdded.Name,
-            ProductDuration = productAdded.Duration,
-            ProductCaliber = productAdded.Caliber,
-            ProductApprovalNumber = productAdded.ApprovalNumber,
-            ProductWeight = productAdded.Weight,
-            ProductNec = productAdded.Nec,
-            ProductImage = productAdded.Image,
-            ProductLink = productAdded.Link,
-            ProductMinimalQuantity = productAdded.MinimalQuantity
+            ProductReferences = product.Reference,
+            ProductName = product.Name,
+            ProductDuration = product.Duration,
+            ProductCaliber = product.Caliber,
+            ProductApprovalNumber = product.ApprovalNumber,
+            ProductWeight = product.Weight,
+            ProductNec = product.Nec,
+            ProductImage = product.Image,
+            ProductLink = product.Link,
+            ProductMinimalQuantity = product.MinimalQuantity
         };
 
         await Send.OkAsync(responseDto, ct);
