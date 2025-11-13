@@ -10,7 +10,9 @@ public class GetDelivererRequest
     public int DelivererId { get; set; }
 }
 
-public class GetDelivererEndpoint(PyroFetesDbContext database) : Endpoint<GetDelivererRequest, GetDelivererDto>
+public class GetDelivererEndpoint(
+    PyroFetesDbContext database,
+    AutoMapper.IMapper mapper) : Endpoint<GetDelivererRequest, GetDelivererDto>
 {
     public override void Configure()
     {
@@ -29,11 +31,7 @@ public class GetDelivererEndpoint(PyroFetesDbContext database) : Endpoint<GetDel
             return;
         }
 
-        await Send.OkAsync(new GetDelivererDto()
-        {
-            Id = deliverer.Id,
-            Transporter = deliverer.Transporter,
-        }, ct);
+        await Send.OkAsync(mapper.Map<GetDelivererDto>(deliverer), ct);
     }
 
 }

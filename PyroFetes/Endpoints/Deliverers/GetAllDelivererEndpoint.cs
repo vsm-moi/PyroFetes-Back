@@ -1,8 +1,7 @@
+using AutoMapper.QueryableExtensions;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using PyroFetes.DTO.Deliverer.Response;
-using PyroFetes.Models;
 
 namespace PyroFetes.Endpoints.Deliverers;
 

@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoMapper" Version="15.1.0" />
+        <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="9.3.1" />
+        <PackageReference Include="AutoMapper" Version="15.0.1" />
+        <PackageReference Include="AutoMapper.Collection" Version="11.0.0" />
         <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="FastEndpoints" Version="7.0.1" />
         <PackageReference Include="FastEndpoints.Security" Version="7.0.1" />
@@ -20,6 +22,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.20" />
         <PackageReference Include="PasswordGenerator" Version="2.1.0" />
+        <PackageReference Include="Plainquire.Page" Version="6.5.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
     </ItemGroup>
 

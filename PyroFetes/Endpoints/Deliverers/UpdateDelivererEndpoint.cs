@@ -6,7 +6,9 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Endpoints.Deliverers;
 
-public class UpdateDelivererEndpoint(PyroFetesDbContext database) : Endpoint<UpdateDelivererDto, GetDelivererDto>
+public class UpdateDelivererEndpoint(
+    PyroFetesDbContext database,
+    AutoMapper.IMapper mapper) : Endpoint<UpdateDelivererDto, GetDelivererDto>
 {
     public override void Configure()
     {
@@ -29,11 +31,7 @@ public class UpdateDelivererEndpoint(PyroFetesDbContext database) : Endpoint<Upd
         
         await database.SaveChangesAsync(ct);
 
-        await Send.OkAsync(new GetDelivererDto()
-        {
-            Id = deliverer.Id,
-            Transporter = deliverer.Transporter,
-        }, ct);
+        await Send.OkAsync(mapper.Map<GetDelivererDto>(deliverer), ct);
     }
 
 }

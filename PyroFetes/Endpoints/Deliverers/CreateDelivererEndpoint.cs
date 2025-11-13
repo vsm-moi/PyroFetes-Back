@@ -5,7 +5,9 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Endpoints.Deliverers;
 
-public class CreateDelivererEndpoint(PyroFetesDbContext database) : Endpoint<CreateDelivererDto, GetDelivererDto>
+public class CreateDelivererEndpoint(
+    PyroFetesDbContext database,
+    AutoMapper.IMapper mapper) : Endpoint<CreateDelivererDto, GetDelivererDto>
 {
     public override void Configure()
     {
@@ -20,15 +22,11 @@ public class CreateDelivererEndpoint(PyroFetesDbContext database) : Endpoint<Cre
         {
             Transporter = req.Transporter,
         };
-        
+
         database.Deliverers.Add(newDeliverer);
-        
+
         await database.SaveChangesAsync(ct);
 
-        await Send.OkAsync(new GetDelivererDto()
-        {
-            Id = newDeliverer.Id,
-            Transporter = req.Transporter,
-        },ct);
+        await Send.OkAsync(mapper.Map<GetDelivererDto>(newDeliverer), ct);
     }
 }
