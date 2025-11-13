@@ -7,7 +7,7 @@ using PyroFetes.Repositories;
 namespace PyroFetes.Endpoints.Deliverers;
 
 public class CreateDelivererEndpoint(
-    DeliverersRepository deliverersRepository,
+    DeliverersRepository deliverersRepository, 
     AutoMapper.IMapper mapper) : Endpoint<CreateDelivererDto, GetDelivererDto>
 {
     public override void Configure()
