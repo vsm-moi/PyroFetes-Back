@@ -1,7 +1,8 @@
-﻿using PyroFetes.DTO.SettingDTO.Request;
+﻿using FastEndpoints;
+using PyroFetes.DTO.SettingDTO.Request;
 using PyroFetes.DTO.SettingDTO.Response;
-using FastEndpoints;
-namespace PyroFetes.Endpoints.Setting;
+
+namespace PyroFetes.Endpoints.SettingEndpoints;
 
 public class CreateSettingEndpoint(PyroFetesDbContext database) : Endpoint<CreateSettingDto, GetSettingDto>
 {

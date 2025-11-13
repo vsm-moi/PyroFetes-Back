@@ -2,7 +2,7 @@ namespace PyroFetes.DTO.Product.Request;
 
 public class CreateProductDto
 {
-    public int References { get; set; }
+    public string? References { get; set; }
     public string? Name { get; set; }
     public decimal Duration {get; set;} 
     public decimal Caliber { get; set; }

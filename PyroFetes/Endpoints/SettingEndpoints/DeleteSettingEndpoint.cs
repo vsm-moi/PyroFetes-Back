@@ -1,7 +1,7 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 
-namespace PyroFetes.Endpoints.Setting;
+namespace PyroFetes.Endpoints.SettingEndpoints;
 
 public class DeleteSettingRequest
 {

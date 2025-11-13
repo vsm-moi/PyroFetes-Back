@@ -3,16 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.SettingDTO.Request;
 using PyroFetes.DTO.SettingDTO.Response;
 
-namespace PyroFetes.Endpoints.Setting;
+namespace PyroFetes.Endpoints.SettingEndpoints;
 
-public class PatchSettingElectronicSignatureEndpoint(PyroFetesDbContext database) : Endpoint<PatchSettingElectronicSignatureDto, GetSettingDto>
+public class PatchSettingLogoEndpoint(PyroFetesDbContext database) : Endpoint<PatchSettingLogoDto, GetSettingDto>
 {
     public override void Configure()
     {
-        Get("/api/setting/{@Id}/ElectronicSignature", x => new {x.Id});
+        Get("/api/setting/{@Id}/Logo", x => new {x.Id});
     }
     
-    public override async Task HandleAsync(PatchSettingElectronicSignatureDto req, CancellationToken ct)
+    public override async Task HandleAsync(PatchSettingLogoDto req, CancellationToken ct)
     {
         var setting = await database.Settings.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
 
@@ -22,7 +22,7 @@ public class PatchSettingElectronicSignatureEndpoint(PyroFetesDbContext database
             return;
         }
 
-        setting.ElectronicSignature = req.ElectronicSignature;
+        setting.Logo = req.Logo;
         await database.SaveChangesAsync(ct);
 
         GetSettingDto responseDto = new()

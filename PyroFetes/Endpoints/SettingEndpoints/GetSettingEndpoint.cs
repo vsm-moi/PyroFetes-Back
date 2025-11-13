@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.SettingDTO.Response;
 
-namespace PyroFetes.Endpoints.Setting;
+namespace PyroFetes.Endpoints.SettingEndpoints;
 
 public class GetSettingRequest
 {

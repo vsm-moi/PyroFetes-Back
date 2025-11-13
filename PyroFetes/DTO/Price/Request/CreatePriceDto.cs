@@ -4,7 +4,7 @@ public class CreatePriceDto
 {
     public decimal SellingPrice { get; set; }
     
-    public int SupplierId { get; set; }
+    public int? SupplierId { get; set; }
     public string? SupplierName { get; set; }
     public string? SupplierEmail { get; set; }
     public string? SupplierPhone { get; set; }
@@ -13,8 +13,8 @@ public class CreatePriceDto
     public string? SupplierCity { get; set; }
     public int SupplierDeliveryDelay { get; set; }
     
-    public int ProductId { get; set; }
-    public int ProductReferences { get; set; }
+    public int? ProductId { get; set; }
+    public string? ProductReferences { get; set; }
     public string? ProductName { get; set; }
     public decimal ProductDuration {get; set;} 
     public decimal ProductCaliber { get; set; }
