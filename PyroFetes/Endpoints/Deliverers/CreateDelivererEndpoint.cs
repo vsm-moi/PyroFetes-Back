@@ -2,11 +2,12 @@ using FastEndpoints;
 using PyroFetes.DTO.Deliverer.Request;
 using PyroFetes.DTO.Deliverer.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Deliverers;
 
 public class CreateDelivererEndpoint(
-    PyroFetesDbContext database,
+    DeliverersRepository deliverersRepository,
     AutoMapper.IMapper mapper) : Endpoint<CreateDelivererDto, GetDelivererDto>
 {
     public override void Configure()
@@ -23,9 +24,7 @@ public class CreateDelivererEndpoint(
             Transporter = req.Transporter,
         };
 
-        database.Deliverers.Add(newDeliverer);
-
-        await database.SaveChangesAsync(ct);
+        await deliverersRepository.AddAsync(newDeliverer, ct);
 
         await Send.OkAsync(mapper.Map<GetDelivererDto>(newDeliverer), ct);
     }

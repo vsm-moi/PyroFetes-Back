@@ -2,6 +2,8 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Deliverer.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Deliverers;
 
 namespace PyroFetes.Endpoints.Deliverers;
 
@@ -11,7 +13,7 @@ public class GetDelivererRequest
 }
 
 public class GetDelivererEndpoint(
-    PyroFetesDbContext database,
+    DeliverersRepository deliverersRepository,
     AutoMapper.IMapper mapper) : Endpoint<GetDelivererRequest, GetDelivererDto>
 {
     public override void Configure()
@@ -23,7 +25,7 @@ public class GetDelivererEndpoint(
 
     public override async Task HandleAsync(GetDelivererRequest req, CancellationToken ct)
     {
-        Deliverer? deliverer = await database.Deliverers.SingleOrDefaultAsync(x=>x.Id == req.DelivererId, ct);
+        Deliverer? deliverer = await deliverersRepository.FirstOrDefaultAsync(new GetDelivererByIdSpec(req.DelivererId), ct);
 
         if (deliverer == null)
         {

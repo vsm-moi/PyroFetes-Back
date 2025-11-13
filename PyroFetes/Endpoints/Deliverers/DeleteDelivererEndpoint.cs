@@ -1,6 +1,7 @@
 using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Deliverers;
 
 namespace PyroFetes.Endpoints.Deliverers;
 
@@ -8,7 +9,7 @@ public class DeleteDelivererRequest
 {
     public int DelivererId { get; set; }
 }
-public class DeleteDelivererEndpoint(PyroFetesDbContext database) : Endpoint<DeleteDelivererRequest>
+public class DeleteDelivererEndpoint(DeliverersRepository deliverersRepository) : Endpoint<DeleteDelivererRequest>
 {
     public override void Configure()
     {
@@ -19,7 +20,7 @@ public class DeleteDelivererEndpoint(PyroFetesDbContext database) : Endpoint<Del
 
     public override async Task HandleAsync(DeleteDelivererRequest req, CancellationToken ct)
     {
-        Deliverer? deliverer = await database.Deliverers.SingleOrDefaultAsync(x=>x.Id == req.DelivererId, ct);
+        Deliverer? deliverer = await deliverersRepository.FirstOrDefaultAsync(new GetDelivererByIdSpec(req.DelivererId), ct);
 
         if (deliverer == null)
         {
@@ -27,9 +28,7 @@ public class DeleteDelivererEndpoint(PyroFetesDbContext database) : Endpoint<Del
             return;
         }
         
-        database.Remove(deliverer);
-        
-        await database.SaveChangesAsync(ct);
+        await deliverersRepository.DeleteAsync(deliverer, ct);
 
         await Send.OkAsync(ct);
     }
