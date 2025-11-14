@@ -1,0 +1,20 @@
+using FastEndpoints;
+using PyroFetes.DTO.DeliveryNote.Response;
+using PyroFetes.Repositories;
+
+namespace PyroFetes.Endpoints.DeliveryNotes;
+
+public class GetAllDeliveryNoteEndpoint(DeliveryNotesRepository deliveryNotesRepository) : EndpointWithoutRequest<List<GetDeliveryNoteDto>>
+{
+    public override void Configure()
+    {
+        Get("api/deliveryNotes");
+        AllowAnonymous();
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        await Send.OkAsync(await deliveryNotesRepository.ProjectToListAsync<GetDeliveryNoteDto>(ct), ct);
+    }
+    
+}
