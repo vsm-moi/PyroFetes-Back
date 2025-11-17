@@ -2,8 +2,9 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Price.Request;
 using PyroFetes.DTO.Price.Response;
+using PyroFetes.Models;
 
-namespace PyroFetes.Endpoints.Price;
+namespace PyroFetes.Endpoints.Prices;
 
 public class PatchPriceEndpoint(PyroFetesDbContext database) : Endpoint<PatchPriceSellingPriceDto, GetPriceDto>
 {
@@ -15,7 +16,7 @@ public class PatchPriceEndpoint(PyroFetesDbContext database) : Endpoint<PatchPri
 
     public override async Task HandleAsync(PatchPriceSellingPriceDto req, CancellationToken ct)
     {
-        var price = await database.Prices.SingleOrDefaultAsync(p => p.ProductId == req.ProductId && p.SupplierId == req.SupplierId, ct);
+        Price? price = await database.Prices.SingleOrDefaultAsync(p => p.ProductId == req.ProductId && p.SupplierId == req.SupplierId, ct);
         if (price == null)
         {
             await Send.NotFoundAsync(ct);

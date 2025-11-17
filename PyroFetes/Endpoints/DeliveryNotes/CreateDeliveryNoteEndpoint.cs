@@ -45,7 +45,7 @@ public class CreateDeliveryNoteEndpoint(
 
         foreach (var productQuantity in req.ProductQuantities!)
         {
-            Models.Product? product =
+            Product? product =
                 await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(productQuantity.Key), ct);
             if (product != null)
             {

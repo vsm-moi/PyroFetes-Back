@@ -2,8 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Request;
 using PyroFetes.DTO.Product.Response;
+using PyroFetes.Models;
 
-namespace PyroFetes.Endpoints.Product;
+namespace PyroFetes.Endpoints.Products;
 
 public class UpdateProductEndpoint(PyroFetesDbContext database) : Endpoint<UpdateProductDto, GetProductDto>
 {
@@ -14,7 +15,7 @@ public class UpdateProductEndpoint(PyroFetesDbContext database) : Endpoint<Updat
 
     public override async Task HandleAsync(UpdateProductDto req, CancellationToken ct)
     {
-        var product = await database.Products.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        Product? product = await database.Products.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
         
         if (product == null)
         {

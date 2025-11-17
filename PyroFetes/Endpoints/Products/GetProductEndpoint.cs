@@ -1,9 +1,9 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Response;
-using PyroFetes.DTO.PurchaseProduct.Response;
+using PyroFetes.Models;
 
-namespace PyroFetes.Endpoints.Product;
+namespace PyroFetes.Endpoints.Products;
 
 public class GetProductRequest
 {
@@ -19,7 +19,7 @@ public class GetProductEndpoint(PyroFetesDbContext database) : Endpoint<GetProdu
 
     public override async Task HandleAsync(GetProductRequest req, CancellationToken ct)
     {
-        var product = await database.Products
+        Product? product = await database.Products
             .SingleOrDefaultAsync(x => x.Id == req.Id, ct);
 
         if (product == null)

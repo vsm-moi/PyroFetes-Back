@@ -14,7 +14,6 @@ public class CreateDelivererEndpoint(
     {
         Post("api/deliverers");
         AllowAnonymous();
-
     }
 
     public override async Task HandleAsync(CreateDelivererDto req, CancellationToken ct)

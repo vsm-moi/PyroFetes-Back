@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Request;
 using PyroFetes.DTO.Product.Response;
-using PyroFetes.DTO.PurchaseProduct.Response;
+using PyroFetes.Models;
 
-namespace PyroFetes.Endpoints.Product;
+namespace PyroFetes.Endpoints.Products;
 
 public class PatchProductMinimalStockEndpoint(PyroFetesDbContext database)
     : Endpoint<PatchProductMinimalStockDto, GetProductDto>
@@ -17,7 +17,7 @@ public class PatchProductMinimalStockEndpoint(PyroFetesDbContext database)
 
     public override async Task HandleAsync(PatchProductMinimalStockDto req, CancellationToken ct)
     {
-        var product = await database.Products.SingleOrDefaultAsync(po => po.Id == req.Id, ct);
+        Product? product = await database.Products.SingleOrDefaultAsync(po => po.Id == req.Id, ct);
         if (product == null)
         {
             await Send.NotFoundAsync(ct);

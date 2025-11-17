@@ -1,7 +1,8 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using PyroFetes.Models;
 
-namespace PyroFetes.Endpoints.QuotationProduct;
+namespace PyroFetes.Endpoints.Prices;
 
 public class DeletePriceRequest
 {
@@ -19,7 +20,7 @@ public class DeletePriceEndpoint(PyroFetesDbContext database) : Endpoint<DeleteP
 
     public override async Task HandleAsync(DeletePriceRequest req, CancellationToken ct)
     {
-        var price = await database.Prices
+        Price? price = await database.Prices
             .SingleOrDefaultAsync(p => p.ProductId == req.ProductId && p.SupplierId == req.SupplierId, ct);
 
         if (price == null)

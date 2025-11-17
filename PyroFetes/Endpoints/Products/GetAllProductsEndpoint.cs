@@ -1,9 +1,9 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Response;
-using PyroFetes.DTO.PurchaseProduct.Response;
+using PyroFetes.Models;
 
-namespace PyroFetes.Endpoints.Product;
+namespace PyroFetes.Endpoints.Products;
 
 public class GetAllProductsEndpoint(PyroFetesDbContext database) : EndpointWithoutRequest<List<GetProductDto>>
 {
@@ -14,7 +14,7 @@ public class GetAllProductsEndpoint(PyroFetesDbContext database) : EndpointWitho
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var product = await database.Products
+        List<GetProductDto> product = await database.Products
             .Select(product => new GetProductDto()
             {
                 Id = product.Id,

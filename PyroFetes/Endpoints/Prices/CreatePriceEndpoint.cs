@@ -1,6 +1,7 @@
 using FastEndpoints;
 using PyroFetes.DTO.Price.Request;
 using PyroFetes.DTO.Price.Response;
+using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Prices;
 using PyroFetes.Specifications.Products;
@@ -23,10 +24,10 @@ public class CreatePriceEndpoint(
     public override async Task HandleAsync(CreatePriceDto req, CancellationToken ct)
     {
         // Gestion du fournisseur
-        var supplier = await suppliersRepository.FirstOrDefaultAsync(new GetSupplierByIdSpec(req.SupplierId), ct);
+        Supplier? supplier = await suppliersRepository.FirstOrDefaultAsync(new GetSupplierByIdSpec(req.SupplierId), ct);
         if (supplier == null)
         {
-            supplier = new Models.Supplier()
+            supplier = new Supplier()
             {
                 Name = req.SupplierName,
                 Email = req.SupplierEmail,
@@ -40,10 +41,10 @@ public class CreatePriceEndpoint(
         }
 
         // Gestion du produit
-        var product = await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(req.ProductId), ct);
+        Product? product = await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(req.ProductId), ct);
         if (product == null)
         {
-            product = new Models.Product()
+            product = new Product()
             {
                 Reference = req.ProductReferences,
                 Name = req.ProductName,
@@ -60,7 +61,7 @@ public class CreatePriceEndpoint(
         }
 
         // Vérifie si le prix existe déjà pour ce fournisseur et produit
-        var existingPrice = await pricesRepository.FirstOrDefaultAsync(new GetPriceByProductIdAndSupplierIdSpec(req.ProductId, req.SupplierId), ct);
+        Price? existingPrice = await pricesRepository.FirstOrDefaultAsync(new GetPriceByProductIdAndSupplierIdSpec(req.ProductId, req.SupplierId), ct);
 
         if (existingPrice != null)
         {
@@ -69,7 +70,7 @@ public class CreatePriceEndpoint(
         }
 
         // Création du prix
-        var priceAdded = new Models.Price()
+        var priceAdded = new Price()
         {
             SellingPrice = req.SellingPrice,
             SupplierId = supplier.Id,
