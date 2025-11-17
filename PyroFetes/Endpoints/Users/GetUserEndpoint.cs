@@ -15,6 +15,7 @@ public class GetUserEndpoint(PyroFetesDbContext database) : Endpoint<GetUserRequ
     public override void Configure()
     {
         Get("/api/users/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(GetUserRequest req, CancellationToken ct)

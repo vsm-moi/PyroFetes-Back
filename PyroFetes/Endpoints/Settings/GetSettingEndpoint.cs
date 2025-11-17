@@ -15,6 +15,7 @@ public class GetSettingEndpoint(PyroFetesDbContext database) : Endpoint<GetSetti
     public override void Configure()
     {
         Get("/api/setting/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
     
     public override async Task HandleAsync(GetSettingRequest req, CancellationToken ct)

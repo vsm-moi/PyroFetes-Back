@@ -15,6 +15,7 @@ public class GetProductEndpoint(PyroFetesDbContext database) : Endpoint<GetProdu
     public override void Configure()
     {
         Get("/api/products/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(GetProductRequest req, CancellationToken ct)

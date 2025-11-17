@@ -10,7 +10,8 @@ public class PatchSettingLogoEndpoint(PyroFetesDbContext database) : Endpoint<Pa
 {
     public override void Configure()
     {
-        Get("/api/setting/{@Id}/Logo", x => new {x.Id});
+        Patch("/api/setting/{@Id}/Logo", x => new {x.Id});
+        AllowAnonymous();
     }
     
     public override async Task HandleAsync(PatchSettingLogoDto req, CancellationToken ct)

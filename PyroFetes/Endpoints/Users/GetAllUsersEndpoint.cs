@@ -9,6 +9,7 @@ public class GetAllUsersEndpoint(PyroFetesDbContext database) : EndpointWithoutR
     public override void Configure()
     {
         Get("/api/users");
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CancellationToken ct)

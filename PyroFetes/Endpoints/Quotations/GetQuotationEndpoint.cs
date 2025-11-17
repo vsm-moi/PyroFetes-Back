@@ -16,6 +16,7 @@ public class GetQuotationEndpoint(PyroFetesDbContext database) : Endpoint<GetQuo
     public override void Configure()
     {
         Get("/api/quotations/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(GetQuotationRequest req, CancellationToken ct)

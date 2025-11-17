@@ -10,6 +10,7 @@ public class CreateSettingEndpoint(PyroFetesDbContext database) : Endpoint<Creat
     public override void Configure()
     {
         Post("/api/setting");
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CreateSettingDto req, CancellationToken ct)

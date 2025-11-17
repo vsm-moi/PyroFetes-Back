@@ -10,6 +10,7 @@ public class CreateSupplierEndpoint(PyroFetesDbContext database) : Endpoint<Crea
     public override void Configure()
     {
         Post("/api/suppliers");
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CreateSupplierDto req, CancellationToken ct)

@@ -18,6 +18,7 @@ public class CreateDeliveryNoteEndpoint(
     public override void Configure()
     {
         Post("/api/DeliveryNote");
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CreateDeliveryNoteDto req, CancellationToken ct)

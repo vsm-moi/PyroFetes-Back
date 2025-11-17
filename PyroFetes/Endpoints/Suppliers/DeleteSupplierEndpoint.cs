@@ -14,6 +14,7 @@ public class DeleteSupplierEndpoint(PyroFetesDbContext database) : Endpoint<Dele
     public override void Configure()
     {
         Delete("/api/suppliers/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
     
     public override async Task HandleAsync(DeleteSupplierRequest req, CancellationToken ct)
