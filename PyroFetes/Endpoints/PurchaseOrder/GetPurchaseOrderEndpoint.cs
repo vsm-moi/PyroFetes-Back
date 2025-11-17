@@ -15,6 +15,7 @@ public class GetPurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint<Ge
     public override void Configure()
     {
         Get("/api/purchaseOrders/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(GetPurchaseOrderRequest req, CancellationToken ct)

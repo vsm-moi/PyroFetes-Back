@@ -10,6 +10,7 @@ public class GetAllSuppliersEndpoint(PyroFetesDbContext database) : EndpointWith
     public override void Configure()
     {
         Get("/api/suppliers");
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(CancellationToken ct)

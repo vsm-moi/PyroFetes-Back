@@ -10,6 +10,7 @@ public class PatchSettingElectronicSignatureEndpoint(PyroFetesDbContext database
     public override void Configure()
     {
         Get("/api/setting/{@Id}/ElectronicSignature", x => new {x.Id});
+        AllowAnonymous();
     }
     
     public override async Task HandleAsync(PatchSettingElectronicSignatureDto req, CancellationToken ct)

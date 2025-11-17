@@ -13,6 +13,7 @@ public class DeleteSettingEndpoint(PyroFetesDbContext database) : Endpoint<Delet
     public override void Configure()
     {
         Delete("/api/setting/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
     
     public override async Task HandleAsync(DeleteSettingRequest req, CancellationToken ct)

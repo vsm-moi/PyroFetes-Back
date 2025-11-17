@@ -10,6 +10,7 @@ public class PatchSupplierDeleveryDelayEndpoint(PyroFetesDbContext database) : E
     public override void Configure()
     {
         Get("/api/supplier/{@Id}/DeleveryDalay", x => new {x.Id});
+        AllowAnonymous();
     }
     
     public override async Task HandleAsync(PatchSupplierDeliveryDelayDto req, CancellationToken ct)

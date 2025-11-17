@@ -10,6 +10,7 @@ public class UpdateProductEndpoint(PyroFetesDbContext database) : Endpoint<Updat
     public override void Configure()
     {
         Put("/api/products/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(UpdateProductDto req, CancellationToken ct)

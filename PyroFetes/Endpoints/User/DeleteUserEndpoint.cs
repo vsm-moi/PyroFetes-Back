@@ -13,6 +13,7 @@ public class DeleteUserEndpoint(PyroFetesDbContext database) : Endpoint<DeleteUs
     public override void Configure()
     {
         Delete("/api/users/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(DeleteUserRequest req, CancellationToken ct)

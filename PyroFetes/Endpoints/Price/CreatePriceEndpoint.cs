@@ -60,7 +60,7 @@ public class CreatePriceEndpoint(PyroFetesDbContext database) : Endpoint<CreateP
 
         if (existingPrice != null)
         {
-            await Send.ConflictAsync("Le fournisseur a déjà un prix pour ce produit.", ct);
+            await Send.NotFoundAsync(ct); //"Le fournisseur a déjà un prix pour ce produit.", 
             return;
         }
 

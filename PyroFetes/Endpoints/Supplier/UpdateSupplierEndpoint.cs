@@ -10,6 +10,7 @@ public class UpdateSupplierEndpoint(PyroFetesDbContext database) : Endpoint<Upda
     public override void Configure()
     {
         Put("/api/suppliers/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(UpdateSupplierDto req, CancellationToken ct)

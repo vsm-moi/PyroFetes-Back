@@ -14,6 +14,7 @@ public class GetSupplierEndpoint(PyroFetesDbContext database) : Endpoint<GetSupp
     public override void Configure()
     {
         Get("/api/suppliers/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
     
     public override async Task HandleAsync(GetSupplierRequest req, CancellationToken ct)

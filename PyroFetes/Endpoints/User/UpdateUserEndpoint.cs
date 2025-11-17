@@ -11,6 +11,7 @@ public class UpdateUserEndpoint(PyroFetesDbContext database) : Endpoint<UpdateUs
     public override void Configure()
     {
         Put("/api/users/{@Id}", x => new {x.Id});
+        AllowAnonymous();
     }
 
     public override async Task HandleAsync(UpdateUserDto req, CancellationToken ct)
