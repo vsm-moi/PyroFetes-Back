@@ -1,6 +1,8 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Prices;
 
 namespace PyroFetes.Endpoints.Prices;
 
@@ -10,7 +12,7 @@ public class DeletePriceRequest
     public int SupplierId { get; set; }
 }
 
-public class DeletePriceEndpoint(PyroFetesDbContext database) : Endpoint<DeletePriceRequest>
+public class DeletePriceEndpoint(PricesRepository pricesRepository) : Endpoint<DeletePriceRequest>
 {
     public override void Configure()
     {
@@ -20,8 +22,7 @@ public class DeletePriceEndpoint(PyroFetesDbContext database) : Endpoint<DeleteP
 
     public override async Task HandleAsync(DeletePriceRequest req, CancellationToken ct)
     {
-        Price? price = await database.Prices
-            .SingleOrDefaultAsync(p => p.ProductId == req.ProductId && p.SupplierId == req.SupplierId, ct);
+        Price? price = await pricesRepository.FirstOrDefaultAsync(new GetPriceByProductIdAndSupplierIdSpec(req.ProductId,req.SupplierId), ct);
 
         if (price == null)
         {
@@ -29,9 +30,8 @@ public class DeletePriceEndpoint(PyroFetesDbContext database) : Endpoint<DeleteP
             return;
         }
         
-        database.Prices.Remove(price); 
-        await database.SaveChangesAsync(ct);
+        await  pricesRepository.DeleteAsync(price, ct);
         
-        await Send.NoContentAsync(ct);
+        await Send.OkAsync(ct);
     }
 }
