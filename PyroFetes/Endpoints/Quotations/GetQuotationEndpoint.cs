@@ -19,7 +19,7 @@ public class GetQuotationEndpoint(
 {
     public override void Configure()
     {
-        Get("/api/quotations/{@Id}", x => new {x.Id});
+        Get("/quotations/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

@@ -14,7 +14,7 @@ public class UpdateSupplierEndpoint(
 {
     public override void Configure()
     {
-        Put("/api/suppliers/{@Id}", x => new {x.Id});
+        Put("/suppliers/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

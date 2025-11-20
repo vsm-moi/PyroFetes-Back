@@ -15,7 +15,7 @@ public class DeleteSupplierEndpoint(SuppliersRepository suppliersRepository) : E
 {
     public override void Configure()
     {
-        Delete("/api/suppliers/{@Id}", x => new {x.Id});
+        Delete("/suppliers/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
     

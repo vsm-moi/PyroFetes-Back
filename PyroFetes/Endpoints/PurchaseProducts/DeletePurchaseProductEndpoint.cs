@@ -16,7 +16,7 @@ public class DeletePurchaseProductEndpoint(PurchaseProductsRepository purchasePr
 {
     public override void Configure()
     {
-        Delete("/api/purchaseProducts/{@ProductId}/{@PurchaseOrderId}", x => new {x.ProductId, x.PurchaseOrderId});
+        Delete("/purchaseProducts/{@ProductId}/{@PurchaseOrderId}", x => new {x.ProductId, x.PurchaseOrderId});
         AllowAnonymous();
     }
 

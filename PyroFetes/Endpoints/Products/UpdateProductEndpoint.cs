@@ -14,7 +14,7 @@ public class UpdateProductEndpoint(
 {
     public override void Configure()
     {
-        Put("/api/products/{@Id}", x => new {x.Id});
+        Put("/products/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

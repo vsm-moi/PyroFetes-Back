@@ -13,7 +13,7 @@ public class CreateUserEndpoint(
 {
     public override void Configure()
     {
-        Post("/api/users");
+        Post("/users");
         AllowAnonymous();
     }
 

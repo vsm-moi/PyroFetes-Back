@@ -8,8 +8,8 @@ namespace PyroFetes.Models
         [Required, MaxLength(20)] public string? Reference { get; set; }
         [Required, MaxLength(100)] public string? Name { get; set; }
         [Required] public decimal Duration {get; set;} 
-        [Required] public decimal Caliber { get; set; }
-        [Required] public int ApprovalNumber { get; set; }
+        [Required] public int Caliber { get; set; }
+        [Required] public string? ApprovalNumber { get; set; }
         [Required] public decimal Weight { get; set; }
         [Required] public decimal Nec { get; set; }
         [Required] public string? Image { get; set; }

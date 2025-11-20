@@ -15,7 +15,7 @@ public class UpdateUserEndpoint(
 {
     public override void Configure()
     {
-        Put("/api/users/{@Id}", x => new {x.Id});
+        Put("/users/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

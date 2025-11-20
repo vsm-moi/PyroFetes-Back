@@ -14,7 +14,7 @@ public class PatchSettingLogoEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/setting/{@Id}/Logo", x => new {x.Id});
+        Patch("/settings/{@Id}/logo", x => new {x.Id});
         AllowAnonymous();
     }
     

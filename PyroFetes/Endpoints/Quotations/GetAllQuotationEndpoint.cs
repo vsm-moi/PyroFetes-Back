@@ -11,7 +11,7 @@ public class GetAllQuotationEndpoint(QuotationsRepository quotationsRepository) 
 {
     public override void Configure()
     {
-        Get("/api/quotations");
+        Get("/quotations");
         AllowAnonymous();
     }
 

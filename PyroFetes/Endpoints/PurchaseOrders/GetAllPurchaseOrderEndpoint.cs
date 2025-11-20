@@ -10,7 +10,7 @@ public class GetAllPurchaseOrderEndpoint(PurchaseOrdersRepository purchaseOrders
 {
     public override void Configure()
     {
-        Get("/api/purchaseOrders");
+        Get("/purchaseOrders");
         AllowAnonymous();
     }
 

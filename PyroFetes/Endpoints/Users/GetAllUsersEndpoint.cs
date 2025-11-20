@@ -9,7 +9,7 @@ public class GetAllUsersEndpoint(UsersRepository usersRepository) : EndpointWith
 {
     public override void Configure()
     {
-        Get("/api/users");
+        Get("/users");
         AllowAnonymous();
     }
 

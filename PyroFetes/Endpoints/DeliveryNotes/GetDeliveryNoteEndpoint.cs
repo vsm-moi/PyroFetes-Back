@@ -16,7 +16,7 @@ public class GetDeliveryNoteEndpoint(
 {
     public override void Configure()
     {
-        Get("/api/deliveryNote/{@id}", x=> new {x.DeliveryNoteId});
+        Get("/deliveryNotes/{@id}", x=> new {x.DeliveryNoteId});
         AllowAnonymous();
     }
 

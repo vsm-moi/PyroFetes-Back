@@ -15,7 +15,7 @@ public class PatchRealDeliveryDateEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/deliveryNote/{@id}", x=> new {x.Id});
+        Patch("/deliveryNotes/{@id}", x=> new {x.Id});
         AllowAnonymous();
     }
 

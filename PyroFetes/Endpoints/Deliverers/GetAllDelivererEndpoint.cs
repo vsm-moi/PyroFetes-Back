@@ -10,7 +10,7 @@ public class GetAllDelivererEndpoint(DeliverersRepository deliverersRepository) 
 {
     public override void Configure()
     {
-        Get("api/deliverers");
+        Get("/deliverers");
         AllowAnonymous();
 
     }

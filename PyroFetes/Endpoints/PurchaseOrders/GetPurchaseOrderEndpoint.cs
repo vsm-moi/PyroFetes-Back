@@ -19,7 +19,7 @@ public class GetPurchaseOrderEndpoint(
 {
     public override void Configure()
     {
-        Get("/api/purchaseOrders/{@Id}", x => new {x.Id});
+        Get("/purchaseOrders/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

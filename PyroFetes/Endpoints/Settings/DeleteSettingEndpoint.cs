@@ -15,7 +15,7 @@ public class DeleteSettingEndpoint(SettingsRepository settingsRepository) : Endp
 {
     public override void Configure()
     {
-        Delete("/api/setting/{@Id}", x => new {x.Id});
+        Delete("/settings/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
     

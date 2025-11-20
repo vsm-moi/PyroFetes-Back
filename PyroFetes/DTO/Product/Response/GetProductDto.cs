@@ -6,8 +6,8 @@ public class GetProductDto
     public string? References { get; set; }
     public string? Name { get; set; }
     public decimal Duration {get; set;} 
-    public decimal Caliber { get; set; }
-    public int ApprovalNumber { get; set; }
+    public int Caliber { get; set; }
+    public string? ApprovalNumber { get; set; }
     public decimal Weight { get; set; }
     public decimal Nec { get; set; }
     public string? Image { get; set; }

@@ -15,7 +15,7 @@ public class DeleteUserEndpoint(UsersRepository usersRepository) : Endpoint<Dele
 {
     public override void Configure()
     {
-        Delete("/api/users/{@Id}", x => new {x.Id});
+        Delete("/users/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

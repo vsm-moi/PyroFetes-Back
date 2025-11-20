@@ -17,7 +17,7 @@ public class CreatePriceEndpoint(
 {
     public override void Configure()
     {
-        Post("/api/prices");
+        Post("/prices");
         AllowAnonymous();
     }
 

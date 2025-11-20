@@ -15,7 +15,7 @@ public class PatchQuotationConditionsSaleEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/quotations/{@Id}/ConditionsSale", x => new { x.Id });
+        Patch("/quotations/{@Id}/saleConditions", x => new { x.Id });
         AllowAnonymous();
     }
 

@@ -17,7 +17,7 @@ public class CreatePurchaseProductEndpoint(
 {
     public override void Configure()
     {
-        Post("/api/purchaseProducts");
+        Post("/purchaseProducts");
         AllowAnonymous();
     }
 

@@ -9,7 +9,7 @@ public class GetAllSuppliersEndpoint(SuppliersRepository suppliersRepository) : 
 {
     public override void Configure()
     {
-        Get("/api/suppliers");
+        Get("/suppliers");
         AllowAnonymous();
     }
 

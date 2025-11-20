@@ -17,7 +17,7 @@ public class DeletePurchaseOrderEndpoint(
 {
     public override void Configure()
     {
-        Delete("/api/purchaseOrders/{@Id}", x => new {x.Id});
+        Delete("/purchaseOrders/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

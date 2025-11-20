@@ -10,7 +10,7 @@ public class GetAllProductsEndpoint(ProductsRepository productsRepository) : End
 {
     public override void Configure()
     {
-        Get("/api/products");
+        Get("/products");
         AllowAnonymous();
     }
 

@@ -12,7 +12,7 @@ public class CreateSupplierEndpoint(
 {
     public override void Configure()
     {
-        Post("/api/suppliers");
+        Post("/suppliers");
         AllowAnonymous();
     }
 

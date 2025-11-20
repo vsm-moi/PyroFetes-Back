@@ -15,7 +15,7 @@ public class PatchPurchaseOrderPurchaseConditionsEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/purchaseOrders/{@Id}/PurchaseConditions", x => new { x.Id });
+        Patch("/purchaseOrders/{@Id}/PurchaseConditions", x => new { x.Id });
         AllowAnonymous();
     }
 

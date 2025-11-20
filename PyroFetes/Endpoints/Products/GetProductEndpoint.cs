@@ -18,7 +18,7 @@ public class GetProductEndpoint(
 {
     public override void Configure()
     {
-        Get("/api/products/{@Id}", x => new {x.Id});
+        Get("/products/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

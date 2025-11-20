@@ -14,7 +14,7 @@ public class PatchPurchaseProductQuantityEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/purchaseProducts/{@ProductId}/{@PurchaseOrderId}/Quantity", x => new { x.ProductId, x.PurchaseOrderId });
+        Patch("/purchaseProducts/{@ProductId}/{@PurchaseOrderId}/Quantity", x => new { x.ProductId, x.PurchaseOrderId });
         AllowAnonymous();
     }
 

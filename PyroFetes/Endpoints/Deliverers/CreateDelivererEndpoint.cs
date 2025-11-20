@@ -12,7 +12,7 @@ public class CreateDelivererEndpoint(
 {
     public override void Configure()
     {
-        Post("api/deliverers");
+        Post("/deliverers");
         AllowAnonymous();
     }
 

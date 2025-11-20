@@ -17,7 +17,7 @@ public class GetTotalQuantityEndpoint(
 {
     public override void Configure()
     {
-        Get("/api/wareHouseProduct/{@ProductId}", x => new { x.ProductId });
+        Get("/wareHouseProducts/{@ProductId}", x => new { x.ProductId });
         AllowAnonymous();
     }
     
