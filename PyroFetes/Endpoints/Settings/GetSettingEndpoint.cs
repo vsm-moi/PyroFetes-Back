@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Settings;
 
 namespace PyroFetes.Endpoints.Settings;
 
@@ -10,7 +12,9 @@ public class GetSettingRequest
     public int Id { get; set; }
 }
 
-public class GetSettingEndpoint(PyroFetesDbContext database) : Endpoint<GetSettingRequest, GetSettingDto>
+public class GetSettingEndpoint(
+    SettingsRepository settingsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<GetSettingRequest, GetSettingDto>
 {
     public override void Configure()
     {
@@ -20,8 +24,7 @@ public class GetSettingEndpoint(PyroFetesDbContext database) : Endpoint<GetSetti
     
     public override async Task HandleAsync(GetSettingRequest req, CancellationToken ct)
     {
-        Setting? setting = await database.Settings
-            .SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        Setting? setting = await settingsRepository.FirstOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
 
         if (setting == null)
         {
@@ -29,12 +32,6 @@ public class GetSettingEndpoint(PyroFetesDbContext database) : Endpoint<GetSetti
             return;
         }
 
-        GetSettingDto responseDto = new()
-        {
-            Id = setting.Id,
-            ElectronicSignature = setting.ElectronicSignature,
-            Logo = setting.Logo
-        };
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetSettingDto>(setting), ct);
     }
 }

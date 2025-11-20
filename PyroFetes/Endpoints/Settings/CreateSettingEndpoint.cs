@@ -2,10 +2,13 @@
 using PyroFetes.DTO.SettingDTO.Request;
 using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Settings;
 
-public class CreateSettingEndpoint(PyroFetesDbContext database) : Endpoint<CreateSettingDto, GetSettingDto>
+public class CreateSettingEndpoint(
+    SettingsRepository settingsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<CreateSettingDto, GetSettingDto>
 {
     public override void Configure()
     {
@@ -21,15 +24,8 @@ public class CreateSettingEndpoint(PyroFetesDbContext database) : Endpoint<Creat
             Logo = req.Logo
         };
         
-        database.Settings.Add(setting);
-        await database.SaveChangesAsync(ct);
+        await settingsRepository.AddAsync(setting, ct);
 
-        GetSettingDto responseDto = new()
-        {
-            Id = setting.Id,
-            ElectronicSignature = setting.ElectronicSignature,
-            Logo = setting.Logo
-        };
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetSettingDto>(setting), ct);
     }
 }

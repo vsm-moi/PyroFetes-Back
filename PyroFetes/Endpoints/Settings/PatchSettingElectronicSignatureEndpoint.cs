@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.SettingDTO.Request;
 using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Settings;
 
 namespace PyroFetes.Endpoints.Settings;
 
-public class PatchSettingElectronicSignatureEndpoint(PyroFetesDbContext database) : Endpoint<PatchSettingElectronicSignatureDto, GetSettingDto>
+public class PatchSettingElectronicSignatureEndpoint(
+    SettingsRepository settingsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<PatchSettingElectronicSignatureDto, GetSettingDto>
 {
     public override void Configure()
     {
@@ -16,8 +20,8 @@ public class PatchSettingElectronicSignatureEndpoint(PyroFetesDbContext database
     
     public override async Task HandleAsync(PatchSettingElectronicSignatureDto req, CancellationToken ct)
     {
-        Setting? setting = await database.Settings.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
-
+        Setting? setting = await settingsRepository.FirstOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
+        
         if (setting == null)
         {
             await Send.NotFoundAsync(ct);
@@ -25,15 +29,8 @@ public class PatchSettingElectronicSignatureEndpoint(PyroFetesDbContext database
         }
 
         setting.ElectronicSignature = req.ElectronicSignature;
-        await database.SaveChangesAsync(ct);
+        await settingsRepository.UpdateAsync(setting, ct);
 
-        GetSettingDto responseDto = new()
-        {
-            Id = setting.Id,
-            ElectronicSignature = setting.ElectronicSignature,
-            Logo = setting.Logo
-        };
-        
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetSettingDto>(setting), ct);
     }
 }
