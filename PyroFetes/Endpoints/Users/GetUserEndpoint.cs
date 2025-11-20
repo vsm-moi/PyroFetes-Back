@@ -18,7 +18,7 @@ public class GetUserEndpoint(
 {
     public override void Configure()
     {
-        Get("/api/users/{@Id}", x => new {x.Id});
+        Get("/users/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

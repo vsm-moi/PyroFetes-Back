@@ -13,7 +13,7 @@ public class PatchPriceEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/prices/{@ProductId}/{@SupplierId}/SellingPrice", x => new { x.ProductId, x.SupplierId });
+        Patch("/prices/{@ProductId}/{@SupplierId}/SellingPrice", x => new { x.ProductId, x.SupplierId });
         AllowAnonymous();
     }
 

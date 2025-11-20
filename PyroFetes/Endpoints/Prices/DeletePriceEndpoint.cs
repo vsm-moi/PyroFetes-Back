@@ -16,7 +16,7 @@ public class DeletePriceEndpoint(PricesRepository pricesRepository) : Endpoint<D
 {
     public override void Configure()
     {
-        Delete("/api/prices/{@ProductId}/{@SupplierId}", x => new {x.ProductId, x.SupplierId});
+        Delete("/prices/{@ProductId}/{@SupplierId}", x => new {x.ProductId, x.SupplierId});
         AllowAnonymous();
     }
 

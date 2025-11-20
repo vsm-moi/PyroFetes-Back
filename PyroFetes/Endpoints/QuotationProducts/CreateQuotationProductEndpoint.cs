@@ -17,7 +17,7 @@ public class CreateQuotationProductEndpoint(
 {
     public override void Configure()
     {
-        Post("/api/quotationProduct");
+        Post("/quotationProducts");
         AllowAnonymous();
     }
 

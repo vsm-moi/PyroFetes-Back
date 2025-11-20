@@ -8,13 +8,13 @@ using PyroFetes.Specifications.Suppliers;
 
 namespace PyroFetes.Endpoints.Suppliers;
 
-public class PatchSupplierDeleveryDelayEndpoint(
+public class PatchSupplierDeliveryDelayEndpoint(
     SuppliersRepository suppliersRepository,
     AutoMapper.IMapper mapper) : Endpoint<PatchSupplierDeliveryDelayDto, GetSupplierDto>
 {
     public override void Configure()
     {
-        Patch("/api/supplier/{@Id}/DeleveryDalay", x => new {x.Id});
+        Patch("/suppliers/{@Id}/deliveryDelay", x => new {x.Id});
         AllowAnonymous();
     }
     

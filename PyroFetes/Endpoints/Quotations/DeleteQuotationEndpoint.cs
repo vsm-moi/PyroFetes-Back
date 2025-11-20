@@ -17,7 +17,7 @@ public class DeleteQuotationEndpoint(
 {
     public override void Configure()
     {
-        Delete("/api/quotations/{@Id}", x => new {x.Id});
+        Delete("/quotations/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
 

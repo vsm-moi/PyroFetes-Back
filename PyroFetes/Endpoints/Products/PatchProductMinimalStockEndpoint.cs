@@ -14,7 +14,7 @@ public class PatchProductMinimalStockEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/products/{@Id}/MinimalStock", x => new { x.Id });
+        Patch("/products/{@Id}/MinimalStock", x => new { x.Id });
         AllowAnonymous();
     }
 

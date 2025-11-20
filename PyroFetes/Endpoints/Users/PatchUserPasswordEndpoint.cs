@@ -14,7 +14,7 @@ public class PatchUserPasswordEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/users/{@Id}/Password", x => new { x.Id });
+        Patch("/users/{@Id}/password", x => new { x.Id });
         AllowAnonymous();
     }
 

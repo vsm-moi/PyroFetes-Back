@@ -14,7 +14,7 @@ public class PatchSettingElectronicSignatureEndpoint(
 {
     public override void Configure()
     {
-        Patch("/api/setting/{@Id}/ElectronicSignature", x => new {x.Id});
+        Patch("/settings/{@Id}/ElectronicSignature", x => new {x.Id});
         AllowAnonymous();
     }
     

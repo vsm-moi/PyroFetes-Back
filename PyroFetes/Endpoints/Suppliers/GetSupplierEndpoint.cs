@@ -18,7 +18,7 @@ public class GetSupplierEndpoint(
 {
     public override void Configure()
     {
-        Get("/api/suppliers/{@Id}", x => new {x.Id});
+        Get("/suppliers/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
     

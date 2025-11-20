@@ -16,7 +16,7 @@ public class DeleteQuotationProductEndpoint(QuotationProductsRepository quotatio
 {
     public override void Configure()
     {
-        Delete("/api/quotationProduct/{@ProductId}/{@QuotationId}", x => new {x.ProductId, x.QuotationId});
+        Delete("/quotationProducts/{@ProductId}/{@QuotationId}", x => new {x.ProductId, x.QuotationId});
         AllowAnonymous();
     }
 

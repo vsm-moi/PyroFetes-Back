@@ -13,7 +13,7 @@ public class DeleteDelivererEndpoint(DeliverersRepository deliverersRepository) 
 {
     public override void Configure()
     {
-        Delete("api/deliverers/{@id}", x=>new {x.DelivererId});
+        Delete("/deliverers/{@id}", x=>new {x.DelivererId});
         AllowAnonymous();
 
     }

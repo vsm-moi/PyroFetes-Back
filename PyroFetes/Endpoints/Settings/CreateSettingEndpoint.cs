@@ -12,7 +12,7 @@ public class CreateSettingEndpoint(
 {
     public override void Configure()
     {
-        Post("/api/setting");
+        Post("/settings");
         AllowAnonymous();
     }
 

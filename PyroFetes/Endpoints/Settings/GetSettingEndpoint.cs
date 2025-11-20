@@ -18,7 +18,7 @@ public class GetSettingEndpoint(
 {
     public override void Configure()
     {
-        Get("/api/setting/{@Id}", x => new {x.Id});
+        Get("/settings/{@Id}", x => new {x.Id});
         AllowAnonymous();
     }
     

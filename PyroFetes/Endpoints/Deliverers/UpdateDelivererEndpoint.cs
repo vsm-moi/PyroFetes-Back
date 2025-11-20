@@ -14,7 +14,7 @@ public class UpdateDelivererEndpoint(
 {
     public override void Configure()
     {
-        Put("api/deliverers/{@id}", x=>new {x.Id});
+        Put("/deliverers/{@id}", x=>new {x.Id});
         AllowAnonymous();
 
     }

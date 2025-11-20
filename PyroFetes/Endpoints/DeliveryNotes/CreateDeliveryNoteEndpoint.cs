@@ -17,7 +17,7 @@ public class CreateDeliveryNoteEndpoint(
 {
     public override void Configure()
     {
-        Post("/api/DeliveryNote");
+        Post("/deliveryNotes");
         AllowAnonymous();
     }
 

@@ -8,7 +8,7 @@ public class GetAllDeliveryNoteEndpoint(DeliveryNotesRepository deliveryNotesRep
 {
     public override void Configure()
     {
-        Get("api/deliveryNotes");
+        Get("/deliveryNotes");
         AllowAnonymous();
     }
 

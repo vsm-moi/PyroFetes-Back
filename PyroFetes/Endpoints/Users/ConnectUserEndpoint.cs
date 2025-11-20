@@ -13,7 +13,7 @@ public class ConnectUserEndpoint(UsersRepository usersRepository) : Endpoint<Con
 {
     public override void Configure()
     {
-        Post("/api/users/connect");
+        Post("/users/connection");
         AllowAnonymous();
     }
 

@@ -18,7 +18,7 @@ public class GetDelivererEndpoint(
 {
     public override void Configure()
     {
-        Get("api/deliverers/{@id}", x=>new {x.DelivererId});
+        Get("/deliverers/{@id}", x=>new {x.DelivererId});
         AllowAnonymous();
 
     }
