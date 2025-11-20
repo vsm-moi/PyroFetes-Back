@@ -5,7 +5,7 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using FastEndpoints.Security;
 using PyroFetes.MappingProfiles;
-using IMapper = FastEndpoints.IMapper;
+using PyroFetes.Repositories;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +19,17 @@ builder.Services
 // On ajoute ici la configuration de la base de données
 builder.Services.AddDbContext<PyroFetesDbContext>();
 
+builder.Services.AddScoped<DeliverersRepository>();
+builder.Services.AddScoped<DeliveryNotesRepository>();
+builder.Services.AddScoped<PricesRepository>();
+builder.Services.AddScoped<ProductDeliveriesRepository>();
+builder.Services.AddScoped<ProductsRepository>();
+builder.Services.AddScoped<PurchaseOrdersRepository>();
+builder.Services.AddScoped<PurchaseProductsRepository>();
+builder.Services.AddScoped<QuotationProductsRepository>();
+builder.Services.AddScoped<QuotationsRepository>();
+builder.Services.AddScoped<SuppliersRepository>();
+builder.Services.AddScoped<SettingsRepository>();
 
 MapperConfiguration mappingConfig = new(mc =>
 {

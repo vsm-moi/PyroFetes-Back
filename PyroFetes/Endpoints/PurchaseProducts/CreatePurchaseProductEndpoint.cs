@@ -29,9 +29,10 @@ public class CreatePurchaseProductEndpoint(
             await Send.NotFoundAsync(ct);
             return;
         }
-        
-        PurchaseOrder? purchaseOrder = await purchaseOrdersRepository.FirstOrDefaultAsync(new GetPurchaseOrderByIdSpec(req.PurchaseOrderId), ct);
-        
+
+        PurchaseOrder? purchaseOrder =
+            await purchaseOrdersRepository.FirstOrDefaultAsync(new GetPurchaseOrderByIdSpec(req.PurchaseOrderId), ct);
+
         if (purchaseOrder == null)
         {
             purchaseOrder = new PurchaseOrder()
@@ -40,16 +41,16 @@ public class CreatePurchaseProductEndpoint(
             };
             await purchaseOrdersRepository.AddAsync(purchaseOrder, ct);
         }
-        
+
         PurchaseProduct purchaseProduct = new PurchaseProduct()
         {
             ProductId = product.Id,
             PurchaseOrderId = purchaseOrder.Id,
             Quantity = req.Quantity
         };
-        
+
         await purchaseProductsRepository.AddAsync(purchaseProduct, ct);
-        
+
         await Send.OkAsync(mapper.Map<GetPurchaseProductDto>(purchaseProduct), ct);
     }
 }
