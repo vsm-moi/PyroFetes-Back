@@ -1,6 +1,8 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Suppliers;
 
 namespace PyroFetes.Endpoints.Suppliers;
 
@@ -9,7 +11,7 @@ public class DeleteSupplierRequest
     public int Id { get; set; }
 }
 
-public class DeleteSupplierEndpoint(PyroFetesDbContext database) : Endpoint<DeleteSupplierRequest>
+public class DeleteSupplierEndpoint(SuppliersRepository suppliersRepository) : Endpoint<DeleteSupplierRequest>
 {
     public override void Configure()
     {
@@ -19,7 +21,7 @@ public class DeleteSupplierEndpoint(PyroFetesDbContext database) : Endpoint<Dele
     
     public override async Task HandleAsync(DeleteSupplierRequest req, CancellationToken ct)
     {
-        Supplier? supplier = await database.Suppliers.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        Supplier? supplier = await suppliersRepository.FirstOrDefaultAsync(new GetSupplierByIdSpec(req.Id), ct);
 
         if (supplier == null)
         {
@@ -27,8 +29,7 @@ public class DeleteSupplierEndpoint(PyroFetesDbContext database) : Endpoint<Dele
             return;
         }
         
-        database.Suppliers.Remove(supplier);
-        await database.SaveChangesAsync(ct);
+        await  suppliersRepository.DeleteAsync(supplier, ct);
         
         await Send.NoContentAsync(ct);
     }

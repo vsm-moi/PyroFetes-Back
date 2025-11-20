@@ -2,10 +2,13 @@
 using PyroFetes.DTO.Supplier.Request;
 using PyroFetes.DTO.Supplier.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Suppliers;
 
-public class CreateSupplierEndpoint(PyroFetesDbContext database) : Endpoint<CreateSupplierDto, GetSupplierDto>
+public class CreateSupplierEndpoint(
+    SuppliersRepository suppliersRepository,
+    AutoMapper.IMapper mapper) : Endpoint<CreateSupplierDto, GetSupplierDto>
 {
     public override void Configure()
     {
@@ -26,20 +29,8 @@ public class CreateSupplierEndpoint(PyroFetesDbContext database) : Endpoint<Crea
             DeliveryDelay = req.DeliveryDelay
         };
         
-        database.Suppliers.Add(supplier);
-        await database.SaveChangesAsync(ct);
+        await suppliersRepository.AddAsync(supplier, ct);
 
-        GetSupplierDto responseDto = new()
-        {
-            Id = supplier.Id,
-            Name = supplier.Name,
-            Email = supplier.Email,
-            Phone = supplier.Phone,
-            Address = supplier.Address,
-            City = supplier.City,
-            ZipCode = supplier.ZipCode,
-            DeliveryDelay = supplier.DeliveryDelay
-        };
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetSupplierDto>(supplier), ct);
     }
 }

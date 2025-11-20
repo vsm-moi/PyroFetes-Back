@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Supplier.Request;
 using PyroFetes.DTO.Supplier.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Suppliers;
 
 namespace PyroFetes.Endpoints.Suppliers;
 
-public class UpdateSupplierEndpoint(PyroFetesDbContext database) : Endpoint<UpdateSupplierDto, GetSupplierDto>
+public class UpdateSupplierEndpoint(
+    SuppliersRepository suppliersRepository,
+    AutoMapper.IMapper mapper) : Endpoint<UpdateSupplierDto, GetSupplierDto>
 {
     public override void Configure()
     {
@@ -16,7 +20,7 @@ public class UpdateSupplierEndpoint(PyroFetesDbContext database) : Endpoint<Upda
 
     public override async Task HandleAsync(UpdateSupplierDto req, CancellationToken ct)
     {
-        Supplier? supplier = await database.Suppliers.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        Supplier? supplier = await suppliersRepository.FirstOrDefaultAsync(new GetSupplierByIdSpec(req.Id), ct);
         
         if (supplier == null)
         {
@@ -31,20 +35,9 @@ public class UpdateSupplierEndpoint(PyroFetesDbContext database) : Endpoint<Upda
         supplier.City = req.City;
         supplier.ZipCode = req.ZipCode;
         supplier.DeliveryDelay = req.DeliveryDelay;
-        await database.SaveChangesAsync(ct);
         
-        GetSupplierDto responseDto = new()
-        {
-            Id = supplier.Id,
-            Name = supplier.Name,
-            Email = supplier.Email,
-            Phone = supplier.Phone,
-            Address = supplier.Address,
-            City = supplier.City,
-            ZipCode = supplier.ZipCode,
-            DeliveryDelay = supplier.DeliveryDelay
-        };
+        await suppliersRepository.UpdateAsync(supplier, ct);
         
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetSupplierDto>(supplier), ct);
     }
 }

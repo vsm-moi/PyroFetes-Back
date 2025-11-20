@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Supplier.Request;
 using PyroFetes.DTO.Supplier.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Suppliers;
 
 namespace PyroFetes.Endpoints.Suppliers;
 
-public class PatchSupplierDeleveryDelayEndpoint(PyroFetesDbContext database) : Endpoint<PatchSupplierDeliveryDelayDto, GetSupplierDto>
+public class PatchSupplierDeleveryDelayEndpoint(
+    SuppliersRepository suppliersRepository,
+    AutoMapper.IMapper mapper) : Endpoint<PatchSupplierDeliveryDelayDto, GetSupplierDto>
 {
     public override void Configure()
     {
@@ -16,7 +20,7 @@ public class PatchSupplierDeleveryDelayEndpoint(PyroFetesDbContext database) : E
     
     public override async Task HandleAsync(PatchSupplierDeliveryDelayDto req, CancellationToken ct)
     {
-        Supplier? supplier = await database.Suppliers.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        Supplier? supplier = await suppliersRepository.FirstOrDefaultAsync(new GetSupplierByIdSpec(req.Id), ct);
 
         if (supplier == null)
         {
@@ -25,14 +29,8 @@ public class PatchSupplierDeleveryDelayEndpoint(PyroFetesDbContext database) : E
         }
 
         supplier.DeliveryDelay = req.DeliveryDelay;
-        await database.SaveChangesAsync(ct);
-
-        GetSupplierDto responseDto = new()
-        {
-            Id = supplier.Id,
-            DeliveryDelay = supplier.DeliveryDelay,
-        };
+        await suppliersRepository.UpdateAsync(supplier, ct);
         
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetSupplierDto>(supplier), ct);
     }
 }
