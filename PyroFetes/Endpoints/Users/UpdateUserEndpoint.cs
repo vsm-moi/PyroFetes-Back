@@ -4,10 +4,14 @@ using PasswordGenerator;
 using PyroFetes.DTO.User.Request;
 using PyroFetes.DTO.User.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Users;
 
 namespace PyroFetes.Endpoints.Users;
 
-public class UpdateUserEndpoint(PyroFetesDbContext database) : Endpoint<UpdateUserDto, GetUserDto>
+public class UpdateUserEndpoint(
+    UsersRepository usersRepository,
+    AutoMapper.IMapper mapper) : Endpoint<UpdateUserDto, GetUserDto>
 {
     public override void Configure()
     {
@@ -17,8 +21,8 @@ public class UpdateUserEndpoint(PyroFetesDbContext database) : Endpoint<UpdateUs
 
     public override async Task HandleAsync(UpdateUserDto req, CancellationToken ct)
     {
-        User? user = await database.Users.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
-        User? ckeckName = await database.Users.SingleOrDefaultAsync(x => x.Name == req.Name, ct);
+        User? user = await usersRepository.FirstOrDefaultAsync(new GetUserByIdSpec(req.Id), ct);
+        User? ckeckName = await usersRepository.FirstOrDefaultAsync(new GetUserByNameSpec(req.Name!), ct);
 
         if (user == null)
         {
@@ -39,18 +43,9 @@ public class UpdateUserEndpoint(PyroFetesDbContext database) : Endpoint<UpdateUs
         user.Salt = salt;
         user.Email = req.Email;
         user.Fonction = req.Fonction;
-        await database.SaveChangesAsync(ct);
         
-        GetUserDto responseDto = new()
-        {
-            Id = user.Id,
-            Name = user.Name,
-            Password = user.Password,
-            Salt = user.Salt,
-            Email = user.Email,
-            Fonction = user.Fonction
-        };
+        await usersRepository.UpdateAsync(user, ct);
         
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetUserDto>(user), ct);
     }
 }

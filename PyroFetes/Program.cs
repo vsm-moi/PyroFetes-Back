@@ -30,6 +30,7 @@ builder.Services.AddScoped<QuotationProductsRepository>();
 builder.Services.AddScoped<QuotationsRepository>();
 builder.Services.AddScoped<SuppliersRepository>();
 builder.Services.AddScoped<SettingsRepository>();
+builder.Services.AddScoped<UsersRepository>();
 
 MapperConfiguration mappingConfig = new(mc =>
 {

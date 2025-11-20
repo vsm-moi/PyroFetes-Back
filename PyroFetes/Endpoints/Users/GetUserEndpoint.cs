@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.User.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Users;
 
 namespace PyroFetes.Endpoints.Users;
 
@@ -10,7 +12,9 @@ public class GetUserRequest
     public int Id { get; set; }
 }
 
-public class GetUserEndpoint(PyroFetesDbContext database) : Endpoint<GetUserRequest, GetUserDto>
+public class GetUserEndpoint(
+    UsersRepository usersRepository,
+    AutoMapper.IMapper mapper) : Endpoint<GetUserRequest, GetUserDto>
 {
     public override void Configure()
     {
@@ -20,8 +24,7 @@ public class GetUserEndpoint(PyroFetesDbContext database) : Endpoint<GetUserRequ
 
     public override async Task HandleAsync(GetUserRequest req, CancellationToken ct)
     {
-        User? user = await database.Users
-            .SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        User? user = await usersRepository.FirstOrDefaultAsync(new GetUserByIdSpec(req.Id), ct);
 
         if (user == null)
         {
@@ -29,16 +32,6 @@ public class GetUserEndpoint(PyroFetesDbContext database) : Endpoint<GetUserRequ
             return;
         }
         
-        GetUserDto responseDto = new()
-        {
-            Id = user.Id,
-            Name = user.Name,
-            Password = user.Password,
-            Salt = user.Salt,
-            Email = user.Email,
-            Fonction = user.Fonction
-        };
-        
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetUserDto>(user), ct);
     }
 }

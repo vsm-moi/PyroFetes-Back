@@ -4,10 +4,12 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.User.Request;
 using PyroFetes.DTO.User.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Users;
 
 namespace PyroFetes.Endpoints.Users;
 
-public class ConnectUserEndpoint(PyroFetesDbContext database) : Endpoint<ConnectUserDto, GetTokenDto>
+public class ConnectUserEndpoint(UsersRepository usersRepository) : Endpoint<ConnectUserDto, GetTokenDto>
 {
     public override void Configure()
     {
@@ -17,7 +19,7 @@ public class ConnectUserEndpoint(PyroFetesDbContext database) : Endpoint<Connect
 
     public override async Task HandleAsync(ConnectUserDto req, CancellationToken ct)
     {
-        User? user = await database.Users.SingleOrDefaultAsync(x => x.Name == req.Name, ct);
+        User? user = await usersRepository.FirstOrDefaultAsync(new GetUserByNameSpec(req.Name!), ct);
 
         if (user == null)
         {

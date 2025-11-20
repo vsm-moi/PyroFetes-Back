@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.User.Request;
 using PyroFetes.DTO.User.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Users;
 
 namespace PyroFetes.Endpoints.Users;
 
-public class PatchUserPasswordEndpoint(PyroFetesDbContext database) : Endpoint<PatchUserPasswordDto, GetUserDto>
+public class PatchUserPasswordEndpoint(
+    UsersRepository usersRepository,
+    AutoMapper.IMapper mapper) : Endpoint<PatchUserPasswordDto, GetUserDto>
 {
     public override void Configure()
     {
@@ -16,7 +20,8 @@ public class PatchUserPasswordEndpoint(PyroFetesDbContext database) : Endpoint<P
 
     public override async Task HandleAsync(PatchUserPasswordDto req, CancellationToken ct)
     {
-        User? user = await database.Users.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        User? user = await usersRepository.FirstOrDefaultAsync(new GetUserByIdSpec(req.Id), ct);
+        
         if (user == null)
         {
             await Send.NotFoundAsync(ct);
@@ -24,17 +29,8 @@ public class PatchUserPasswordEndpoint(PyroFetesDbContext database) : Endpoint<P
         }
 
         user.Password = BCrypt.Net.BCrypt.HashPassword(req.Password + user.Salt);
-        await database.SaveChangesAsync(ct);
-
-        GetUserDto responseDto = new()
-        {
-            Id = user.Id,
-            Name = user.Name,
-            Password = user.Password,
-            Salt = user.Salt,
-            Email = user.Email,
-            Fonction = user.Fonction
-        };
-        await Send.OkAsync(responseDto, ct);
+        await usersRepository.UpdateAsync(user, ct);
+        
+        await Send.OkAsync(mapper.Map<GetUserDto>(user), ct);
     }
 }

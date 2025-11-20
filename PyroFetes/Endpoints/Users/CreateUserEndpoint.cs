@@ -3,10 +3,13 @@ using PasswordGenerator;
 using PyroFetes.DTO.User.Request;
 using PyroFetes.DTO.User.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Users;
 
-public class CreateUserEndpoint(PyroFetesDbContext database) : Endpoint<CreateUserDto, GetUserDto>
+public class CreateUserEndpoint(
+    UsersRepository usersRepository,
+    AutoMapper.IMapper mapper) : Endpoint<CreateUserDto, GetUserDto>
 {
     public override void Configure()
     {
@@ -27,20 +30,8 @@ public class CreateUserEndpoint(PyroFetesDbContext database) : Endpoint<CreateUs
             Fonction = req.Fonction
         };
         
-        database.Users.Add(user);
+        await usersRepository.AddAsync(user, ct);
         
-        await database.SaveChangesAsync(ct);
-        
-        GetUserDto responseDto = new()
-        {
-            Id = user.Id,
-            Name = user.Name,
-            Password = user.Password,
-            Salt = user.Salt,
-            Email = user.Email,
-            Fonction = user.Fonction
-        };
-        
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetUserDto>(user), ct);
     }
 }
