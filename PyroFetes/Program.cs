@@ -14,7 +14,20 @@ builder.Services
     .AddAuthenticationJwtBearer(s => s.SigningKey = "ThisIsASuperSecretJwtKeyThatIsAtLeast32CharsLong")
     .AddAuthorization()
     .AddFastEndpoints()
-    .SwaggerDocument();
+    .SwaggerDocument(options =>
+    {
+        options.ShortSchemaNames = true;
+    })
+    .AddCors(options =>
+    {
+        options.AddDefaultPolicy(policyBuilder =>
+        {
+            policyBuilder
+                .WithOrigins("http://localhost:4200")
+                .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+                .AllowAnyHeader();
+        });
+    });
 
 // On ajoute ici la configuration de la base de données
 builder.Services.AddDbContext<PyroFetesDbContext>();
@@ -48,9 +61,15 @@ builder.Services.AddSingleton(mapper);
 WebApplication app = builder.Build();
 app.UseAuthentication()
     .UseAuthorization()
-    .UseFastEndpoints()
+    .UseFastEndpoints(options =>
+    {
+        options.Endpoints.ShortNames = true;
+        options.Endpoints.RoutePrefix = "API";
+    })
     .UseSwaggerGen();
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.Run();
