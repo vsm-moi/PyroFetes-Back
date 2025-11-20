@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.QuotationProduct.Request;
 using PyroFetes.DTO.QuotationProduct.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.QuotationProducts;
 
 namespace PyroFetes.Endpoints.QuotationProducts;
 
-public class PatchQuotationProductQuantityEndpoint(PyroFetesDbContext database) : Endpoint<PatchQuotationProductQuantityDto, GetQuotationProductDto>
+public class PatchQuotationProductQuantityEndpoint(
+    QuotationProductsRepository quotationProductsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<PatchQuotationProductQuantityDto, GetQuotationProductDto>
 {
     public override void Configure()
     {
@@ -16,7 +20,9 @@ public class PatchQuotationProductQuantityEndpoint(PyroFetesDbContext database) 
 
     public override async Task HandleAsync(PatchQuotationProductQuantityDto req, CancellationToken ct)
     {
-        QuotationProduct? quotationProduct = await database.QuotationProducts.SingleOrDefaultAsync(qo => qo.ProductId == req.ProductId && qo.QuotationId == req.QuotationId, ct);
+        QuotationProduct? quotationProduct =
+            await quotationProductsRepository.FirstOrDefaultAsync(
+                new GetQuotationProductByProductIdAndQuotationIdSpec(req.ProductId, req.QuotationId), ct);
         if (quotationProduct == null)
         {
             await Send.NotFoundAsync(ct);
@@ -24,14 +30,8 @@ public class PatchQuotationProductQuantityEndpoint(PyroFetesDbContext database) 
         }
         
         quotationProduct.Quantity = req.Quantity;
-        await database.SaveChangesAsync(ct);
-
-        GetQuotationProductDto responseDto = new()
-        {
-            ProductId = quotationProduct.ProductId,
-            QuotationId = quotationProduct.QuotationId,
-            Quantity = quotationProduct.Quantity
-        };
-        await Send.OkAsync(responseDto, ct);
+        await quotationProductsRepository.UpdateAsync(quotationProduct, ct);
+        
+        await Send.OkAsync(mapper.Map<GetQuotationProductDto>(quotationProduct), ct);
     }
 }

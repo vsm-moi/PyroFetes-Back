@@ -3,10 +3,17 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.QuotationProduct.Request;
 using PyroFetes.DTO.QuotationProduct.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Products;
+using PyroFetes.Specifications.Quotations;
 
 namespace PyroFetes.Endpoints.QuotationProducts;
 
-public class CreateQuotationProductEndpoint(PyroFetesDbContext database) : Endpoint<CreateQuotationProductDto, GetQuotationProductDto>
+public class CreateQuotationProductEndpoint(
+    QuotationProductsRepository quotationProductsRepository,
+    ProductsRepository productsRepository,
+    QuotationsRepository quotationsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<CreateQuotationProductDto, GetQuotationProductDto>
 {
     public override void Configure()
     {
@@ -16,14 +23,15 @@ public class CreateQuotationProductEndpoint(PyroFetesDbContext database) : Endpo
 
     public override async Task HandleAsync(CreateQuotationProductDto req, CancellationToken ct)
     {
-        Product? product = await database.Products.FirstOrDefaultAsync(p => p.Id == req.ProductId, ct);
+        Product? product = await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(req.ProductId), ct);
+        
         if (product == null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
         
-        Quotation? quotation = await database.Quotations.FirstOrDefaultAsync(q => q.Id == req.QuotationId, ct);
+        Quotation? quotation = await quotationsRepository.FirstOrDefaultAsync(new GetQuotationByIdSpec(req.QuotationId), ct);
         
         if (quotation == null)
         {
@@ -32,8 +40,8 @@ public class CreateQuotationProductEndpoint(PyroFetesDbContext database) : Endpo
                 Message = req.QuotationMessage ?? "",
                 ConditionsSale = req.QuotationConditionsSale,
             };
-            database.Quotations.Add(quotation);
-            await database.SaveChangesAsync(ct);
+            
+            await quotationsRepository.AddAsync(quotation, ct);
         }
         
         QuotationProduct quotationProduct = new QuotationProduct()
@@ -42,28 +50,9 @@ public class CreateQuotationProductEndpoint(PyroFetesDbContext database) : Endpo
             QuotationId = quotation.Id,
             Quantity = req.Quantity
         };
-        database.QuotationProducts.Add(quotationProduct);
-        await database.SaveChangesAsync(ct);
         
-        GetQuotationProductDto responseDto = new GetQuotationProductDto()
-        {
-            ProductId = product.Id,
-            ProductReferences = product.Reference,
-            ProductName = product.Name,
-            ProductDuration = product.Duration,
-            ProductCaliber = product.Caliber,
-            ProductApprovalNumber = product.ApprovalNumber,
-            ProductWeight = product.Weight,
-            ProductNec = product.Nec,
-            ProductImage = product.Image,
-            ProductLink = product.Link,
-            ProductMinimalQuantity = product.MinimalQuantity,
-            Quantity = quotationProduct.Quantity,
-            QuotationMessage = quotation.Message,
-            QuotationConditionsSale = quotation.ConditionsSale,
-            QuotationId = quotation.Id,
-        };
+        await quotationProductsRepository.AddAsync(quotationProduct, ct);
 
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetQuotationProductDto>(quotationProduct), ct);
     }
 }
