@@ -59,9 +59,9 @@ public class PyrofetesRepository<T>(DbContext databaseContext, AutoMapper.IMappe
     /// <param name="selector"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<decimal> SumAsync(
+    public async Task<int> SumAsync(
         ISpecification<T> specification,
-        Expression<Func<T, decimal>> selector,
+        Expression<Func<T, int>> selector,
         CancellationToken cancellationToken = default)
     {
         return await ApplySpecification(specification).SumAsync(selector, cancellationToken);

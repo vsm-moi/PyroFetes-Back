@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.WareHouseProduct.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.WarehouseProducts;
 
 namespace PyroFetes.Endpoints.WareHouseProducts;
 
@@ -10,7 +12,8 @@ public class GetTotalQuantityRequest
     public int ProductId { get; set; }
 }
 
-public class GetTotalQuantityEndpoint(PyroFetesDbContext database) : Endpoint<GetTotalQuantityRequest, GetTotalQuantityDto>
+public class GetTotalQuantityEndpoint(
+    WarehouseProductsRepository warehouseProductsRepository) : Endpoint<GetTotalQuantityRequest, GetTotalQuantityDto>
 {
     public override void Configure()
     {
@@ -20,8 +23,7 @@ public class GetTotalQuantityEndpoint(PyroFetesDbContext database) : Endpoint<Ge
     
     public override async Task HandleAsync(GetTotalQuantityRequest req, CancellationToken ct)
     {
-        bool exists = await database.WarehouseProducts
-            .AnyAsync(wp => wp.ProductId == req.ProductId, ct);
+        bool exists = await warehouseProductsRepository.AnyAsync(new GetWarehouseProductByProductIdSpec(req.ProductId), ct);
 
         if (!exists)
         {
@@ -29,9 +31,9 @@ public class GetTotalQuantityEndpoint(PyroFetesDbContext database) : Endpoint<Ge
             return;
         }
         
-        int totalQuantity = await database.WarehouseProducts
-            .Where(wp => wp.ProductId == req.ProductId)
-            .SumAsync(wp => wp.Quantity, ct);
+        int totalQuantity =
+            await warehouseProductsRepository.SumAsync(new GetProductTotalQuantitySpec(req.ProductId),
+                wp => wp.Quantity, ct); 
 
         GetTotalQuantityDto responseDto = new()
         {
