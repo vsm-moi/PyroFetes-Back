@@ -7,14 +7,13 @@ using PyroFetes.Repositories;
 namespace PyroFetes.Endpoints.Deliverers;
 
 public class CreateDelivererEndpoint(
-    DeliverersRepository deliverersRepository,
+    DeliverersRepository deliverersRepository, 
     AutoMapper.IMapper mapper) : Endpoint<CreateDelivererDto, GetDelivererDto>
 {
     public override void Configure()
     {
         Post("api/deliverers");
         AllowAnonymous();
-
     }
 
     public override async Task HandleAsync(CreateDelivererDto req, CancellationToken ct)

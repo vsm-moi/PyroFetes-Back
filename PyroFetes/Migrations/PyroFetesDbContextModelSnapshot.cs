@@ -326,7 +326,7 @@ namespace PyroFetes.Migrations
                     b.Property<DateOnly>("ExpeditionDate")
                         .HasColumnType("date");
 
-                    b.Property<DateOnly>("RealDeliveryDate")
+                    b.Property<DateOnly?>("RealDeliveryDate")
                         .HasColumnType("date");
 
                     b.Property<string>("TrackingNumber")

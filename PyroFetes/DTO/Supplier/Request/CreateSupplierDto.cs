@@ -6,7 +6,7 @@ public class CreateSupplierDto
     public string? Email { get; set; }
     public string? Phone { get; set; }
     public string? Address { get; set; }
-    public int ZipCode { get; set; }
+    public string? ZipCode { get; set; }
     public string? City { get; set; }
     public int DeliveryDelay { get; set; }
 }
