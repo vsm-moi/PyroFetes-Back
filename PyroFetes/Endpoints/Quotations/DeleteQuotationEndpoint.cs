@@ -1,6 +1,8 @@
 ﻿using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Quotations;
 
 namespace PyroFetes.Endpoints.Quotations;
 
@@ -9,7 +11,9 @@ public class DeleteQuotationRequest
     public int Id { get; set; }
 }
 
-public class DeleteQuotationEndpoint(PyroFetesDbContext database) : Endpoint<DeleteQuotationRequest>
+public class DeleteQuotationEndpoint(
+    QuotationsRepository quotationsRepository,
+    QuotationProductsRepository quotationProductsRepository) : Endpoint<DeleteQuotationRequest>
 {
     public override void Configure()
     {
@@ -19,9 +23,7 @@ public class DeleteQuotationEndpoint(PyroFetesDbContext database) : Endpoint<Del
 
     public override async Task HandleAsync(DeleteQuotationRequest req, CancellationToken ct)
     {
-        Quotation? quotation = await database.Quotations
-            .Include(q => q.QuotationProducts)
-            .SingleOrDefaultAsync(q => q.Id == req.Id, ct);
+        Quotation? quotation = await quotationsRepository.FirstOrDefaultAsync(new GetQuotationByIdSpec(req.Id), ct);
 
         if (quotation == null)
         {
@@ -31,11 +33,10 @@ public class DeleteQuotationEndpoint(PyroFetesDbContext database) : Endpoint<Del
         
         if (quotation.QuotationProducts != null && quotation.QuotationProducts.Any())
         {
-            database.QuotationProducts.RemoveRange(quotation.QuotationProducts);
+            await quotationProductsRepository.DeleteRangeAsync(quotation.QuotationProducts, ct);
         }
         
-        database.Quotations.Remove(quotation); 
-        await database.SaveChangesAsync(ct);
+        await quotationsRepository.DeleteAsync(quotation, ct);
         
         await Send.NoContentAsync(ct);
     }
