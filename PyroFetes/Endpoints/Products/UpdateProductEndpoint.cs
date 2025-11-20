@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Request;
 using PyroFetes.DTO.Product.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Products;
 
 namespace PyroFetes.Endpoints.Products;
 
-public class UpdateProductEndpoint(PyroFetesDbContext database) : Endpoint<UpdateProductDto, GetProductDto>
+public class UpdateProductEndpoint(
+    ProductsRepository productsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<UpdateProductDto, GetProductDto>
 {
     public override void Configure()
     {
@@ -16,7 +20,7 @@ public class UpdateProductEndpoint(PyroFetesDbContext database) : Endpoint<Updat
 
     public override async Task HandleAsync(UpdateProductDto req, CancellationToken ct)
     {
-        Product? product = await database.Products.SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        Product? product = await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(req.Id), ct);
         
         if (product == null)
         {
@@ -34,23 +38,9 @@ public class UpdateProductEndpoint(PyroFetesDbContext database) : Endpoint<Updat
         product.Image = req.Image;
         product.Link = req.Link;
         product.MinimalQuantity = req.MinimalQuantity;
-        await database.SaveChangesAsync(ct);
         
-        GetProductDto responseDto = new()
-        {
-            Id = product.Id,
-            References = product.Reference,
-            Name = product.Name,
-            Duration = product.Duration,
-            Caliber = product.Caliber,
-            ApprovalNumber = product.ApprovalNumber,
-            Weight = product.Weight,
-            Nec = product.Nec,
-            Image = product.Image,
-            Link = product.Link,
-            MinimalQuantity = product.MinimalQuantity,
-        };
+        await productsRepository.UpdateAsync(product, ct);
         
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetProductDto>(product), ct);
     }
 }

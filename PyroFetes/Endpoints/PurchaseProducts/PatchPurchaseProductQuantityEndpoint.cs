@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.PurchaseProduct.Request;
 using PyroFetes.DTO.PurchaseProduct.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.PurchaseProducts;
 
 namespace PyroFetes.Endpoints.PurchaseProducts;
 
-public class PatchPurchaseProductQuantityEndpoint(PyroFetesDbContext database) : Endpoint<PatchPurchaseProductQuantityDto, GetPurchaseProductDto>
+public class PatchPurchaseProductQuantityEndpoint(
+    PurchaseProductsRepository purchaseProductsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<PatchPurchaseProductQuantityDto, GetPurchaseProductDto>
 {
     public override void Configure()
     {
@@ -16,7 +20,10 @@ public class PatchPurchaseProductQuantityEndpoint(PyroFetesDbContext database) :
 
     public override async Task HandleAsync(PatchPurchaseProductQuantityDto req, CancellationToken ct)
     {
-        PurchaseProduct? purchaseProduct = await database.PurchaseProducts.SingleOrDefaultAsync(po => po.ProductId == req.ProductId && po.PurchaseOrderId == req.PurchaseOrderId, ct);
+        PurchaseProduct? purchaseProduct =
+            await purchaseProductsRepository.FirstOrDefaultAsync(
+                new GetPurchaseProductByProductIdAndPurchaseOrderIdSpec(req.ProductId, req.PurchaseOrderId), ct);
+        
         if (purchaseProduct == null)
         {
             await Send.NotFoundAsync(ct);
@@ -24,14 +31,8 @@ public class PatchPurchaseProductQuantityEndpoint(PyroFetesDbContext database) :
         }
         
         purchaseProduct.Quantity = req.Quantity;
-        await database.SaveChangesAsync(ct);
+        await purchaseProductsRepository.UpdateAsync(purchaseProduct, ct);
 
-        GetPurchaseProductDto responseDto = new()
-        {
-            ProductId = purchaseProduct.ProductId,
-            PurchaseOrderId = purchaseProduct.PurchaseOrderId,
-            Quantity = purchaseProduct.Quantity
-        };
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetPurchaseProductDto>(purchaseProduct), ct);
     }
 }

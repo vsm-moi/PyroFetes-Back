@@ -32,6 +32,6 @@ public class DeletePriceEndpoint(PricesRepository pricesRepository) : Endpoint<D
         
         await  pricesRepository.DeleteAsync(price, ct);
         
-        await Send.OkAsync(ct);
+        await Send.NoContentAsync(ct);
     }
 }

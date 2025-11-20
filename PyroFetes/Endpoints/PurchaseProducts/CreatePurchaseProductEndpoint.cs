@@ -3,10 +3,17 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.PurchaseProduct.Request;
 using PyroFetes.DTO.PurchaseProduct.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Products;
+using PyroFetes.Specifications.PurchaseOrders;
 
 namespace PyroFetes.Endpoints.PurchaseProducts;
 
-public class CreatePurchaseProductEndpoint(PyroFetesDbContext database) : Endpoint<CreatePurchaseProductDto, GetPurchaseProductDto>
+public class CreatePurchaseProductEndpoint(
+    ProductsRepository productsRepository,
+    PurchaseOrdersRepository purchaseOrdersRepository,
+    PurchaseProductsRepository purchaseProductsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<CreatePurchaseProductDto, GetPurchaseProductDto>
 {
     public override void Configure()
     {
@@ -16,14 +23,14 @@ public class CreatePurchaseProductEndpoint(PyroFetesDbContext database) : Endpoi
 
     public override async Task HandleAsync(CreatePurchaseProductDto req, CancellationToken ct)
     {
-        Product? product = await database.Products.FirstOrDefaultAsync(p => p.Id == req.ProductId, ct);
+        Product? product = await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(req.ProductId), ct);
         if (product == null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
         
-        PurchaseOrder? purchaseOrder = await database.PurchaseOrders.FirstOrDefaultAsync(po => po.Id == req.PurchaseOrderId, ct);
+        PurchaseOrder? purchaseOrder = await purchaseOrdersRepository.FirstOrDefaultAsync(new GetPurchaseOrderByIdSpec(req.PurchaseOrderId), ct);
         
         if (purchaseOrder == null)
         {
@@ -31,8 +38,7 @@ public class CreatePurchaseProductEndpoint(PyroFetesDbContext database) : Endpoi
             {
                 PurchaseConditions = req.PurchaseOrderPurchaseConditions ?? "Conditions non précisées"
             };
-            database.PurchaseOrders.Add(purchaseOrder);
-            await database.SaveChangesAsync(ct);
+            await purchaseOrdersRepository.AddAsync(purchaseOrder, ct);
         }
         
         PurchaseProduct purchaseProduct = new PurchaseProduct()
@@ -41,28 +47,9 @@ public class CreatePurchaseProductEndpoint(PyroFetesDbContext database) : Endpoi
             PurchaseOrderId = purchaseOrder.Id,
             Quantity = req.Quantity
         };
-        database.PurchaseProducts.Add(purchaseProduct);
-        await database.SaveChangesAsync(ct);
         
-        GetPurchaseProductDto responseDto = new GetPurchaseProductDto()
-        {
-            ProductId = product.Id,
-            ProductReferences = product.Reference,
-            ProductName = product.Name,
-            ProductDuration = product.Duration,
-            ProductCaliber = product.Caliber,
-            ProductApprovalNumber = product.ApprovalNumber,
-            ProductWeight = product.Weight,
-            ProductNec = product.Nec,
-            ProductImage = product.Image,
-            ProductLink = product.Link,
-            ProductMinimalQuantity = product.MinimalQuantity,
-
-            PurchaseOrderId = purchaseOrder.Id,
-            PurchaseOrderPurchaseConditions = purchaseOrder.PurchaseConditions,
-            Quantity = purchaseProduct.Quantity
-        };
-
-        await Send.OkAsync(responseDto, ct);
+        await purchaseProductsRepository.AddAsync(purchaseProduct, ct);
+        
+        await Send.OkAsync(mapper.Map<GetPurchaseProductDto>(purchaseProduct), ct);
     }
 }

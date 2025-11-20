@@ -1,6 +1,8 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.PurchaseProducts;
 
 namespace PyroFetes.Endpoints.PurchaseProducts;
 
@@ -10,7 +12,7 @@ public class DeletePurchaseProductRequest
     public int PurchaseOrderId { get; set; }
 }
 
-public class DeletePurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint<DeletePurchaseProductRequest>
+public class DeletePurchaseProductEndpoint(PurchaseProductsRepository purchaseProductsRepository) : Endpoint<DeletePurchaseProductRequest>
 {
     public override void Configure()
     {
@@ -20,8 +22,8 @@ public class DeletePurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint
 
     public override async Task HandleAsync(DeletePurchaseProductRequest req, CancellationToken ct)
     {
-        PurchaseProduct? purchaseProduct = await database.PurchaseProducts
-            .SingleOrDefaultAsync(po => po.ProductId == req.ProductId && po.PurchaseOrderId == req.PurchaseOrderId, ct);
+        PurchaseProduct? purchaseProduct = await purchaseProductsRepository.FirstOrDefaultAsync(
+            new GetPurchaseProductByProductIdAndPurchaseOrderIdSpec(req.ProductId, req.PurchaseOrderId), ct);
 
         if (purchaseProduct == null)
         {
@@ -29,8 +31,7 @@ public class DeletePurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint
             return;
         }
         
-        database.PurchaseProducts.Remove(purchaseProduct); 
-        await database.SaveChangesAsync(ct);
+        await purchaseProductsRepository.DeleteAsync(purchaseProduct, ct);
         
         await Send.NoContentAsync(ct);
     }

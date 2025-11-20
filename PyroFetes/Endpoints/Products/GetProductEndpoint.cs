@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Products;
 
 namespace PyroFetes.Endpoints.Products;
 
@@ -10,7 +12,9 @@ public class GetProductRequest
     public int Id { get; set; }
 }
 
-public class GetProductEndpoint(PyroFetesDbContext database) : Endpoint<GetProductRequest, GetProductDto>
+public class GetProductEndpoint(
+    ProductsRepository productsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<GetProductRequest, GetProductDto>
 {
     public override void Configure()
     {
@@ -20,8 +24,7 @@ public class GetProductEndpoint(PyroFetesDbContext database) : Endpoint<GetProdu
 
     public override async Task HandleAsync(GetProductRequest req, CancellationToken ct)
     {
-        Product? product = await database.Products
-            .SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        Product? product = await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(req.Id), ct);
 
         if (product == null)
         {
@@ -29,21 +32,6 @@ public class GetProductEndpoint(PyroFetesDbContext database) : Endpoint<GetProdu
             return;
         }
         
-        GetProductDto responseDto = new()
-        {
-            Id = product.Id,
-            References = product.Reference,
-            Name = product.Name,
-            Duration = product.Duration,
-            Caliber = product.Caliber,
-            ApprovalNumber = product.ApprovalNumber,
-            Weight = product.Weight,
-            Nec = product.Nec,
-            Image = product.Image,
-            Link = product.Link,
-            MinimalQuantity = product.MinimalQuantity,
-        };
-        
-        await Send.OkAsync(responseDto, ct);
+        await  Send.OkAsync(mapper.Map<GetProductDto>(product), ct);
     }
 }

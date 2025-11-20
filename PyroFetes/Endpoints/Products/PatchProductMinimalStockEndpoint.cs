@@ -3,11 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Request;
 using PyroFetes.DTO.Product.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.Products;
 
 namespace PyroFetes.Endpoints.Products;
 
-public class PatchProductMinimalStockEndpoint(PyroFetesDbContext database)
-    : Endpoint<PatchProductMinimalStockDto, GetProductDto>
+public class PatchProductMinimalStockEndpoint(
+    ProductsRepository productsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<PatchProductMinimalStockDto, GetProductDto>
 {
     public override void Configure()
     {
@@ -17,7 +20,8 @@ public class PatchProductMinimalStockEndpoint(PyroFetesDbContext database)
 
     public override async Task HandleAsync(PatchProductMinimalStockDto req, CancellationToken ct)
     {
-        Product? product = await database.Products.SingleOrDefaultAsync(po => po.Id == req.Id, ct);
+        Product? product = await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(req.Id), ct);
+        
         if (product == null)
         {
             await Send.NotFoundAsync(ct);
@@ -25,22 +29,8 @@ public class PatchProductMinimalStockEndpoint(PyroFetesDbContext database)
         }
 
         product.MinimalQuantity = req.MinimalQuantity;
-        await database.SaveChangesAsync(ct);
-
-        GetProductDto responseDto = new()
-        {
-            Id = product.Id,
-            References = product.Reference,
-            Name = product.Name,
-            Duration = product.Duration,
-            Caliber = product.Caliber,
-            ApprovalNumber = product.ApprovalNumber,
-            Weight = product.Weight,
-            Nec = product.Nec,
-            Image = product.Image,
-            Link = product.Link,
-            MinimalQuantity = product.MinimalQuantity,
-        };
-        await Send.OkAsync(responseDto, ct);
+        await productsRepository.UpdateAsync(product, ct);
+        
+        await Send.OkAsync(mapper.Map<GetProductDto>(product), ct);
     }
 }

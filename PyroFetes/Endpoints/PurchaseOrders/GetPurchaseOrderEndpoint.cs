@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.PurchaseOrder.Response;
 using PyroFetes.DTO.PurchaseProduct.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.PurchaseOrders;
 
 namespace PyroFetes.Endpoints.PurchaseOrders;
 
@@ -11,7 +13,9 @@ public class GetPurchaseOrderRequest
     public int Id { get; set; }
 }
 
-public class GetPurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint<GetPurchaseOrderRequest, GetPurchaseOrderDto>
+public class GetPurchaseOrderEndpoint(
+    PurchaseOrdersRepository purchaseOrdersRepository,
+    AutoMapper.IMapper mapper) : Endpoint<GetPurchaseOrderRequest, GetPurchaseOrderDto>
 {
     public override void Configure()
     {
@@ -21,8 +25,7 @@ public class GetPurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint<Ge
 
     public override async Task HandleAsync(GetPurchaseOrderRequest req, CancellationToken ct)
     {
-        PurchaseOrder? purchaseOrder = await database.PurchaseOrders
-            .SingleOrDefaultAsync(x => x.Id == req.Id, ct);
+        PurchaseOrder? purchaseOrder = await purchaseOrdersRepository.FirstOrDefaultAsync(new GetPurchaseOrderByIdSpec(req.Id), ct);
 
         if (purchaseOrder == null)
         {
@@ -30,29 +33,6 @@ public class GetPurchaseOrderEndpoint(PyroFetesDbContext database) : Endpoint<Ge
             return;
         }
         
-        GetPurchaseOrderDto responseDto = new()
-        {
-            Id = purchaseOrder.Id,
-            PurchaseConditions = purchaseOrder.PurchaseConditions,
-            GetPurchaseProductDto = purchaseOrder.PurchaseProducts
-                .Select(p => new GetPurchaseProductDto
-            {
-                ProductId = p.ProductId,
-                ProductReferences = p.Product.Reference,
-                ProductName = p.Product.Name,
-                ProductDuration = p.Product.Duration,
-                ProductCaliber = p.Product.Caliber,
-                ProductApprovalNumber = p.Product.ApprovalNumber,
-                ProductWeight = p.Product.Weight,
-                ProductNec = p.Product.Nec,
-                ProductImage = p.Product.Image,
-                ProductLink = p.Product.Link,
-                ProductMinimalQuantity = p.Product.MinimalQuantity,
-                PurchaseOrderId = p.PurchaseOrderId,
-                Quantity = p.Quantity,
-            }).ToList()
-        };
-        
-        await Send.OkAsync(responseDto, ct);
+        await Send.OkAsync(mapper.Map<GetPurchaseOrderDto>(purchaseOrder), ct);
     }
 }
