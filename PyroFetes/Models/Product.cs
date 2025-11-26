@@ -9,7 +9,7 @@ namespace PyroFetes.Models
         [Required, MaxLength(100)] public string? Name { get; set; }
         [Required] public decimal Duration {get; set;} 
         [Required] public int Caliber { get; set; }
-        [Required] public string? ApprovalNumber { get; set; }
+        [Required, MaxLength(100)] public string? ApprovalNumber { get; set; }
         [Required] public decimal Weight { get; set; }
         [Required] public decimal Nec { get; set; }
         [Required] public string? Image { get; set; }
