@@ -30,7 +30,7 @@ public class UpdateUserEndpoint(
             return;
         }
         
-        if (ckeckName != null)
+        if (ckeckName != null && ckeckName.Id != user.Id)
         {
             await Send.StringAsync("Ce nom d'utilisateur existe déjà.",409, cancellation: ct);
             return;

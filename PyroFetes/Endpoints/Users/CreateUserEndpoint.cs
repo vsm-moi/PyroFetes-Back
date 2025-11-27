@@ -4,6 +4,7 @@ using PyroFetes.DTO.User.Request;
 using PyroFetes.DTO.User.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
+using PyroFetes.Specifications.Users;
 
 namespace PyroFetes.Endpoints.Users;
 
@@ -19,6 +20,14 @@ public class CreateUserEndpoint(
 
     public override async Task HandleAsync(CreateUserDto req, CancellationToken ct)
     {
+        User? ckeckName = await usersRepository.FirstOrDefaultAsync(new GetUserByNameSpec(req.Name!), ct);
+        
+        if (ckeckName != null)
+        {
+            await Send.StringAsync("Ce nom d'utilisateur existe déjà.",409, cancellation: ct);
+            return;
+        }
+        
         string? salt = new Password().IncludeLowercase().IncludeUppercase().IncludeNumeric().LengthRequired(24).Next();
         
         User user = new User()
