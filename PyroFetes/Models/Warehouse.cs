@@ -10,7 +10,7 @@ public class Warehouse
     [Required] public int Current {get; set;}
     [Required] public int MinWeight {get; set;}
     [Required, MaxLength(100)] public string? Address { get; set; }
-    [Required] public int ZipCode { get; set; }
+    [Required, Length(5,5)] public string? ZipCode { get; set; }
     [Required, MaxLength(100)] public string? City { get; set; }
     
     public List<WarehouseProduct>? WarehouseProducts { get; set; }
