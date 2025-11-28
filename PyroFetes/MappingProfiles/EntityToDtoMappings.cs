@@ -9,6 +9,7 @@ using PyroFetes.DTO.PurchaseProduct.Response;
 using PyroFetes.DTO.Quotation.Response;
 using PyroFetes.DTO.QuotationProduct.Response;
 using PyroFetes.DTO.SettingDTO.Response;
+using PyroFetes.DTO.Supplier.Response;
 using PyroFetes.DTO.User.Response;
 using PyroFetes.DTO.WareHouseProduct.Response;
 using PyroFetes.Models;
@@ -20,6 +21,8 @@ public class EntityToDtoMappings : Profile
     public EntityToDtoMappings()
     {
         CreateMap<Deliverer, GetDelivererDto>();
+        
+        CreateMap<Supplier, GetSupplierDto>();
         
         CreateMap<DeliveryNote, GetDeliveryNoteDto>();
         
