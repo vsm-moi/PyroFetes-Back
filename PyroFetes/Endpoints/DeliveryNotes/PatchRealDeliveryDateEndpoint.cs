@@ -30,6 +30,12 @@ public class PatchRealDeliveryDateEndpoint(
             return;
         }
         
+        if (deliveryNoteToPath.RealDeliveryDate != null)
+        {
+            await Send.StringAsync("Impossible de modifier la date.", 400);
+            return;
+        }
+        
         deliveryNoteToPath.RealDeliveryDate = req.RealDeliveryDate;
         
         await deliveryNotesRepository.UpdateAsync(deliveryNoteToPath, ct);
