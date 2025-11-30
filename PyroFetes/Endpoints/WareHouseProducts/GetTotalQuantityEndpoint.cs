@@ -31,9 +31,10 @@ public class GetTotalQuantityEndpoint(
             return;
         }
         
-        int totalQuantity =
-            await warehouseProductsRepository.SumAsync(new GetProductTotalQuantitySpec(req.ProductId),
-                wp => wp.Quantity, ct); 
+        int? totalQuantityNullable = await warehouseProductsRepository.
+            SumAsync(new GetProductTotalQuantitySpec(req.ProductId), wp => wp.Quantity, ct);
+        
+        int totalQuantity =  totalQuantityNullable ?? 0;
 
         GetTotalQuantityDto responseDto = new()
         {
