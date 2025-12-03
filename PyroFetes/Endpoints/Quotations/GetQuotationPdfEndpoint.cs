@@ -9,7 +9,6 @@ namespace PyroFetes.Endpoints.Quotations;
 
 public class GetQuotationPdfEndpoint(
     QuotationsRepository quotationRepository,
-    QuotationProductsRepository quotationProductRepository, 
     IQuotationPdfService quotationPdfService) 
     : Endpoint<GetQuotationPdfDto>
 {

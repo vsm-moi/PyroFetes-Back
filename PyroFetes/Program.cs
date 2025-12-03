@@ -51,6 +51,8 @@ builder.Services.AddScoped<SettingsRepository>();
 builder.Services.AddScoped<UsersRepository>();
 builder.Services.AddScoped<WarehouseProductsRepository>();
 
+builder.Services.AddScoped<IDeliveryNotePdfService, DeliveryNotePdfService>();
+builder.Services.AddScoped<IPurchaseOrderPdfService, PurchaseOrderPdfService>();
 builder.Services.AddScoped<IQuotationPdfService, QuotationPdfService>();
 
 MapperConfiguration mappingConfig = new(mc =>
