@@ -6,8 +6,13 @@ using FastEndpoints.Swagger;
 using FastEndpoints.Security;
 using PyroFetes.MappingProfiles;
 using PyroFetes.Repositories;
+using PyroFetes.Services.Pdf;
+using QuestPDF.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+// Configurer la licence QuestPDF
+QuestPDF.Settings.License = LicenseType.Community;
 
 // On ajoute ici FastEndpoints, un framework REPR et Swagger aux services disponibles dans le projet
 builder.Services
@@ -45,6 +50,8 @@ builder.Services.AddScoped<SuppliersRepository>();
 builder.Services.AddScoped<SettingsRepository>();
 builder.Services.AddScoped<UsersRepository>();
 builder.Services.AddScoped<WarehouseProductsRepository>();
+
+builder.Services.AddScoped<IQuotationPdfService, QuotationPdfService>();
 
 MapperConfiguration mappingConfig = new(mc =>
 {

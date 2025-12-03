@@ -23,7 +23,21 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.20" />
         <PackageReference Include="PasswordGenerator" Version="2.1.0" />
         <PackageReference Include="Plainquire.Page" Version="6.5.0" />
+        <PackageReference Include="QuestPDF" Version="2025.7.4" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\Images\logo.jpg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="wwwroot\Images\logo.jpg">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\Images\signature.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
