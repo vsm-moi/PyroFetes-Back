@@ -4,6 +4,7 @@ using PyroFetes;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using FastEndpoints.Security;
+using Microsoft.Net.Http.Headers;
 using PyroFetes.MappingProfiles;
 using PyroFetes.Repositories;
 using PyroFetes.Services.Pdf;
@@ -30,7 +31,8 @@ builder.Services
             policyBuilder
                 .WithOrigins("http://localhost:4200")
                 .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .WithExposedHeaders(HeaderNames.ContentDisposition);
         });
     });
 

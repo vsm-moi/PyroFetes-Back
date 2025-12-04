@@ -1,4 +1,5 @@
-﻿using FastEndpoints;
+﻿using System.Net.Mime;
+using FastEndpoints;
 using PyroFetes.DTO.Quotation.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
@@ -10,12 +11,13 @@ namespace PyroFetes.Endpoints.Quotations;
 public class GetQuotationPdfEndpoint(
     QuotationsRepository quotationRepository,
     IQuotationPdfService quotationPdfService) 
-    : Endpoint<GetQuotationPdfDto>
+    : Endpoint<GetQuotationPdfDto, byte[]>
 {
     public override void Configure()
     {
         Get("/quotations/{@Id}/pdf", x => new {x.Id});
         AllowAnonymous();
+        Description(b => b.Produces<byte[]>(200, MediaTypeNames.Application.Pdf));
     }
     
     public override async Task HandleAsync(GetQuotationPdfDto req, CancellationToken ct)

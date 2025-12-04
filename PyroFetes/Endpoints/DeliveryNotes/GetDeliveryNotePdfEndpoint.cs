@@ -1,4 +1,5 @@
-﻿using FastEndpoints;
+﻿using System.Net.Mime;
+using FastEndpoints;
 using PyroFetes.DTO.DeliveryNote.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
@@ -11,12 +12,13 @@ namespace PyroFetes.Endpoints.DeliveryNotes;
 public class GetDeliveryNotePdfEndpoint(
     DeliveryNotesRepository deliveryNotesRepository,
     IDeliveryNotePdfService deliveryNotePdfService)
-    : Endpoint<GetDeliveryNotePdfDto>
+    : Endpoint<GetDeliveryNotePdfDto, byte[]>
 {
     public override void Configure()
     {
         Get("/deliveryNotes/{@Id}/pdf", x => new {x.Id});
         AllowAnonymous();
+        Description(b => b.Produces<byte[]>(200, MediaTypeNames.Application.Pdf));
     }
     
     public override async Task HandleAsync(GetDeliveryNotePdfDto req, CancellationToken ct)

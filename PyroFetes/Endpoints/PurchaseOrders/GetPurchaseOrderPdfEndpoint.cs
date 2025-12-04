@@ -1,4 +1,5 @@
-﻿using FastEndpoints;
+﻿using System.Net.Mime;
+using FastEndpoints;
 using PyroFetes.DTO.PurchaseOrder.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
@@ -9,12 +10,13 @@ namespace PyroFetes.Endpoints.PurchaseOrders;
 public class GetPurchaseOrderPdfEndpoint(
     PurchaseOrdersRepository purchaseOrdersRepository,
     IPurchaseOrderPdfService purchaseOrderPdfService) 
-    : Endpoint<GetPurchaseOrderPdfDto>
+    : Endpoint<GetPurchaseOrderPdfDto, byte[]>
 {
     public override void Configure()
     {
         Get("/purchaseOrders/{@Id}/pdf", x => new {x.Id});
         AllowAnonymous();
+        Description(b => b.Produces<byte[]>(200, MediaTypeNames.Application.Pdf));
     }
     
     public override async Task HandleAsync(GetPurchaseOrderPdfDto req, CancellationToken ct)
