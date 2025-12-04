@@ -51,6 +51,7 @@ builder.Services.AddScoped<SettingsRepository>();
 builder.Services.AddScoped<UsersRepository>();
 builder.Services.AddScoped<WarehouseProductsRepository>();
 
+// Ajout des services
 builder.Services.AddScoped<IDeliveryNotePdfService, DeliveryNotePdfService>();
 builder.Services.AddScoped<IPurchaseOrderPdfService, PurchaseOrderPdfService>();
 builder.Services.AddScoped<IQuotationPdfService, QuotationPdfService>();

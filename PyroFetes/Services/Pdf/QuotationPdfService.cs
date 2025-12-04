@@ -1,4 +1,5 @@
 ﻿using PyroFetes.Models;
+using QuestPDF.Companion;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -74,10 +75,10 @@ public class QuotationPdfService : IQuotationPdfService
                     {
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.RelativeColumn(4);  // Produit
-                            columns.RelativeColumn(1);  // Qté
-                            columns.RelativeColumn(2);  // PU
-                            columns.RelativeColumn(2);  // Total
+                            columns.RelativeColumn(10);  // Produit
+                            columns.RelativeColumn(2);  // Qté
+                            columns.RelativeColumn(3);  // PU
+                            columns.RelativeColumn(3);  // Total
                         });
 
                         // En-têtes
@@ -137,6 +138,9 @@ public class QuotationPdfService : IQuotationPdfService
                 });
             });
         });
+        
+        // Pour avoir la vue du PDF en temps réel
+        document.ShowInCompanion();
 
         return document.GeneratePdf();
     }
