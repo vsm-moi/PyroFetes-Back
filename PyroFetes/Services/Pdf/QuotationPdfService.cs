@@ -140,7 +140,7 @@ public class QuotationPdfService : IQuotationPdfService
         });
         
         // Pour avoir la vue du PDF en temps réel
-        document.ShowInCompanion();
+        // document.ShowInCompanion();
 
         return document.GeneratePdf();
     }
