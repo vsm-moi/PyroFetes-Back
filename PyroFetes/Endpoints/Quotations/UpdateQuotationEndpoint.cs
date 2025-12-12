@@ -28,7 +28,7 @@ public class UpdateQuotationEndpoint(
         }
         
         quotation.ConditionsSale = req.ConditionsSale;
-        quotation.Message =  req.Message;
+        quotation.Message = req.Message;
         await quotationsRepository.UpdateAsync(quotation, ct);
         
         await Send.OkAsync(mapper.Map<GetQuotationDto>(quotation), ct);
