@@ -46,9 +46,19 @@ public class EntityToDtoMappings : Profile
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
             .ForMember(dest => dest.ProductReferences, opt => opt.MapFrom(src => src.Product.Reference));
         
-        CreateMap<Quotation, GetQuotationDto>();
+        // CreateMap<Quotation, GetQuotationDto>();
+        //
+        // CreateMap<QuotationProduct, GetQuotationProductDto>();
         
-        CreateMap<QuotationProduct, GetQuotationProductDto>();
+        CreateMap<Quotation, GetQuotationDto>()
+            .ForMember(dest => dest.Products,
+                opt => opt.MapFrom(src => src.QuotationProducts));
+
+        CreateMap<QuotationProduct, GetQuotationProductDto>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+            .ForMember(dest => dest.ProductReferences, opt => opt.MapFrom(src => src.Product.Reference));
         
         CreateMap<Setting, GetSettingDto>();
         

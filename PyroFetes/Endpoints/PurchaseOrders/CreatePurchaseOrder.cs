@@ -23,7 +23,7 @@ public class CreatePurchaseOrder(
 
     public override async Task HandleAsync(CreatePurchaseOrderDto req, CancellationToken ct)
     {
-        var purchaseOrder = new PurchaseOrder
+        PurchaseOrder purchaseOrder = new PurchaseOrder
         {
             PurchaseConditions = req.PurchaseConditions ?? "Conditions non précisées",
             PurchaseProducts = new List<PurchaseProduct>()

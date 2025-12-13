@@ -47,6 +47,7 @@ public class DtoToEntityMappings : Profile
         
         CreateMap<PatchQuotationConditionsSaleDto, Quotation>();
         CreateMap<PatchQuotationMessageDto, Quotation>();
+        CreateMap<CreateProductQuotationDto, Quotation>();
 
         CreateMap<CreateQuotationProductDto, QuotationProduct>();
         CreateMap<UpdateQuotationProductDto, QuotationProduct>();
