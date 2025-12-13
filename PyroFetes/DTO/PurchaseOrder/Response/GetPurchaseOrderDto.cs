@@ -6,5 +6,5 @@ public class GetPurchaseOrderDto
 {
     public int Id { get; set; }
     public string? PurchaseConditions { get; set; }
-    public List<GetPurchaseProductDto>? GetPurchaseProductDto { get; set; }
+    public List<GetPurchaseProductDto>? Products { get; set; }
 }

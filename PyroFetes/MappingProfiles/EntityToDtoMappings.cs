@@ -32,9 +32,19 @@ public class EntityToDtoMappings : Profile
         
         CreateMap<ProductDelivery, GetProductDeliveryDto>();
         
-        CreateMap<PurchaseOrder, GetPurchaseOrderDto>();
+        // CreateMap<PurchaseOrder, GetPurchaseOrderDto>();
+        //
+        // CreateMap<PurchaseProduct, GetPurchaseProductDto>();
         
-        CreateMap<PurchaseProduct, GetPurchaseProductDto>();
+        CreateMap<PurchaseOrder, GetPurchaseOrderDto>()
+            .ForMember(dest => dest.Products,
+                opt => opt.MapFrom(src => src.PurchaseProducts));
+
+        CreateMap<PurchaseProduct, GetPurchaseProductDto>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+            .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
+            .ForMember(dest => dest.ProductReferences, opt => opt.MapFrom(src => src.Product.Reference));
         
         CreateMap<Quotation, GetQuotationDto>();
         

@@ -38,6 +38,7 @@ public class DtoToEntityMappings : Profile
         CreateMap<CreateProductDeliveryDto, ProductDelivery>();
         CreateMap<UpdateProductDeliveryDto, ProductDelivery>();
         
+        CreateMap<CreatePurchaseOrderDto, PurchaseOrder>();
         CreateMap<PatchPurchaseOrderPurchaseConditionsDto,PurchaseOrder>();
         
         CreateMap<CreatePurchaseProductDto, PurchaseProduct>();
