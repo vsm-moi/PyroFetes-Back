@@ -8,6 +8,7 @@ public sealed class GetProductByIdSpec : Specification<Product>
     public GetProductByIdSpec(int? productId)
     {
         Query
-            .Where(p => p.Id == productId);
+            .Where(p => p.Id == productId)
+            .Include(p => p.Prices);
     }
 }

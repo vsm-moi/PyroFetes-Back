@@ -10,6 +10,7 @@ public class GetPurchaseOrderByIdWithProductsSpec : Specification<PurchaseOrder>
         Query
             .Where(p => p.Id == purchaseOrderId)
             .Include(p => p.PurchaseProducts!)
-            .ThenInclude(pp => pp.Product);
+            .ThenInclude(pp => pp.Product)
+            .ThenInclude(pp=> pp!.Prices);
     }
-}
+}   

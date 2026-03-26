@@ -34,7 +34,8 @@ public class EntityToDtoMappings : Profile
         
         // CreateMap<PurchaseOrder, GetPurchaseOrderDto>();
         //
-        // CreateMap<PurchaseProduct, GetPurchaseProductDto>();
+        CreateMap<PurchaseProduct, GetPurchaseProductDto>();
+
         
         CreateMap<PurchaseOrder, GetPurchaseOrderDto>()
             .ForMember(dest => dest.Products,

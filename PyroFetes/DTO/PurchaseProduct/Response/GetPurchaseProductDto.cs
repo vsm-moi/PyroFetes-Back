@@ -13,6 +13,7 @@ public class GetPurchaseProductDto
     public string? ProductImage { get; set; }
     public string? ProductLink { get; set; }
     public int ProductMinimalQuantity { get; set; }
+    public decimal ProductPrice { get; set; }
     
     public int PurchaseOrderId { get; set; }
     public string? PurchaseOrderPurchaseConditions { get; set; }

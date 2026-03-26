@@ -15,7 +15,7 @@ public class GetPriceDto
     public int SupplierDeliveryDelay { get; set; }
     
     public int ProductId { get; set; }
-    public string? ProductReferences { get; set; }
+    public string? ProductReference { get; set; }
     public string? ProductName { get; set; }
     public decimal ProductDuration {get; set;} 
     public int ProductCaliber { get; set; }
