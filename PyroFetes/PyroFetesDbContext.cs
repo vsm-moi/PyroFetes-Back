@@ -63,13 +63,15 @@ public class PyroFetesDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string connectionString =
-            "Server=romaric-thibault.fr;" + 
-            "Database=PyroFetes;" + 
-            "User Id=pyrofetes;" +
-            "Password=Crablike8-Fringe-Swimmable;" +
+            "Server=localhost,1433;" +
+            "Database=pyrofetes-db;" +
+            "User Id=sa;" +
+            "Password=AdminMotDePasse!;" +
             "TrustServerCertificate=true;";
 
         optionsBuilder.UseSqlServer(connectionString);
+
+
     }
     
     // Models customization

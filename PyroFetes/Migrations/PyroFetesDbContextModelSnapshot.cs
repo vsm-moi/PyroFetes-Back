@@ -695,7 +695,12 @@ namespace PyroFetes.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("PurchaseOrders");
                 });
@@ -1543,6 +1548,17 @@ namespace PyroFetes.Migrations
                     b.Navigation("Contact");
 
                     b.Navigation("Provider");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.PurchaseOrder", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.PurchaseProduct", b =>

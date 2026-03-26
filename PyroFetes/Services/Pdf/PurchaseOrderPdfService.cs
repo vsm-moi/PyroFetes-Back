@@ -17,7 +17,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
         var logoPath = Path.Combine(AppContext.BaseDirectory, "wwwroot", "Images", "logo.jpg");
         var signaturePath = Path.Combine(AppContext.BaseDirectory, "wwwroot", "Images", "signature.png");
         int totalQuantity = 0;
-        int total = 0;
+        decimal total = 0;
         var document = Document.Create(container =>
         {
             container.Page(page =>
@@ -92,13 +92,17 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                         
                         foreach (var l in lignes)
                         {
+                            decimal price = l.Product!.Prices!
+                                .FirstOrDefault(p => p.SupplierId == l.PurchaseOrder!.SupplierId)
+                                ?.SellingPrice ?? 0;
+                            
                             table.Cell().Element(CellBody).Text(l.Product?.Name);
                             table.Cell().Element(CellBody).AlignRight().Text(l.Quantity.ToString());
-                            table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity:n2} €");
-                            table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity * l.Quantity:n2} €");
+                            table.Cell().Element(CellBody).AlignRight().Text($"{price:n2} €");
+                            table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity * price:n2} €");
                             
                             totalQuantity += l.Quantity;
-                            total +=  l.Quantity * l.Quantity;
+                            total +=  l.Quantity * price;
                         }
 
                         IContainer CellHeader(IContainer c) =>
@@ -128,7 +132,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                             right.Item().AlignRight().Text($"Total: {totalQuantity:n2} produits");
                             right.Item().AlignRight().Text($"Total HT: {total:n2} €");
                             right.Item().AlignRight().Text("Taxe: 20 %");
-                            right.Item().AlignRight().Text($"Total TTC: {(total * 1.2):n2} €");
+                            right.Item().AlignRight().Text($"Total TTC: {(total * 1,2):n2} €");
                         });
                     });
                 });

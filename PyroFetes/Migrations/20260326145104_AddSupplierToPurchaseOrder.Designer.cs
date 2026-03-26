@@ -12,8 +12,8 @@ using PyroFetes;
 namespace PyroFetes.Migrations
 {
     [DbContext(typeof(PyroFetesDbContext))]
-    [Migration("20251113162655_FixedNullableValue")]
-    partial class FixedNullableValue
+    [Migration("20260326145104_AddSupplierToPurchaseOrder")]
+    partial class AddSupplierToPurchaseOrder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -506,11 +506,13 @@ namespace PyroFetes.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApprovalNumber")
-                        .HasColumnType("int");
+                    b.Property<string>("ApprovalNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Caliber")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("Caliber")
+                        .HasColumnType("int");
 
                     b.Property<int>("ClassificationId")
                         .HasColumnType("int");
@@ -696,7 +698,12 @@ namespace PyroFetes.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("PurchaseOrders");
                 });
@@ -1116,8 +1123,9 @@ namespace PyroFetes.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("int");
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1181,8 +1189,8 @@ namespace PyroFetes.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<string>("Salt")
                         .IsRequired()
@@ -1226,8 +1234,9 @@ namespace PyroFetes.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("int");
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1542,6 +1551,17 @@ namespace PyroFetes.Migrations
                     b.Navigation("Contact");
 
                     b.Navigation("Provider");
+                });
+
+            modelBuilder.Entity("PyroFetes.Models.PurchaseOrder", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.PurchaseProduct", b =>

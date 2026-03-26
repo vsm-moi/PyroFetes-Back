@@ -21,22 +21,22 @@ public class EntityToDtoMappings : Profile
     public EntityToDtoMappings()
     {
         CreateMap<Deliverer, GetDelivererDto>();
-        
+
         CreateMap<Supplier, GetSupplierDto>();
-        
+
         CreateMap<DeliveryNote, GetDeliveryNoteDto>();
-        
+
         CreateMap<Price, GetPriceDto>();
-        
+
         CreateMap<Product, GetProductDto>();
-        
+
         CreateMap<ProductDelivery, GetProductDeliveryDto>();
-        
+
         // CreateMap<PurchaseOrder, GetPurchaseOrderDto>();
         //
-        CreateMap<PurchaseProduct, GetPurchaseProductDto>();
+        //CreateMap<PurchaseProduct, GetPurchaseProductDto>();
 
-        
+
         CreateMap<PurchaseOrder, GetPurchaseOrderDto>()
             .ForMember(dest => dest.Products,
                 opt => opt.MapFrom(src => src.PurchaseProducts));
@@ -45,12 +45,16 @@ public class EntityToDtoMappings : Profile
             .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
-            .ForMember(dest => dest.ProductReferences, opt => opt.MapFrom(src => src.Product.Reference));
-        
+            .ForMember(dest => dest.ProductReferences, opt => opt.MapFrom(src => src.Product.Reference))
+            .ForMember(dest => dest.ProductPrice, opt => opt.MapFrom(src => src.Product.Prices
+                .FirstOrDefault(p => p.SupplierId == src.PurchaseOrder!.SupplierId)
+                .SellingPrice));
+
         // CreateMap<Quotation, GetQuotationDto>();
         //
-        // CreateMap<QuotationProduct, GetQuotationProductDto>();
-        
+        //CreateMap<QuotationProduct, GetQuotationProductDto>();
+
+
         CreateMap<Quotation, GetQuotationDto>()
             .ForMember(dest => dest.Products,
                 opt => opt.MapFrom(src => src.QuotationProducts));
@@ -60,9 +64,9 @@ public class EntityToDtoMappings : Profile
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.Product.Name))
             .ForMember(dest => dest.ProductReferences, opt => opt.MapFrom(src => src.Product.Reference));
-        
+
         CreateMap<Setting, GetSettingDto>();
-        
+
         CreateMap<User, GetUserDto>();
 
         CreateMap<WarehouseProduct, GetWareHouseProductDto>();
