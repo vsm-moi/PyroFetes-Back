@@ -34,8 +34,8 @@ public class CreatePurchaseOrder(
                     await Send.NotFoundAsync(ct);
                     return;
                 }
-                
-                PurchaseProduct? purchaseProduct = 
+
+                PurchaseProduct? purchaseProduct =
                     await purchaseProductsRepository.SingleOrDefaultAsync(new GetPurchaseProductByProductIdAndPurchaseOrderIdSpec(line.ProductId, purchaseOrder.Id), ct);
 
                 if (purchaseProduct is not null)

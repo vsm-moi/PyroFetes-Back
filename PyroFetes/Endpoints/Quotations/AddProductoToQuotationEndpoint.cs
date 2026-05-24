@@ -19,7 +19,8 @@ public class AddProductoToQuotationEndpoint(
 
     public override async Task HandleAsync(AddQuotationProductDto req, CancellationToken ct)
     {
-        QuotationProduct? productQuotation = await  quotationProductsRepository.SingleOrDefaultAsync(new GetQuotationProductByProductIdAndQuotationIdSpec(req.ProductId, req.QuotationId), ct);
+        QuotationProduct? productQuotation =
+            await quotationProductsRepository.SingleOrDefaultAsync(new GetQuotationProductByProductIdAndQuotationIdSpec(req.ProductId, req.QuotationId), ct);
 
         if (productQuotation is not null)
         {
@@ -28,7 +29,7 @@ public class AddProductoToQuotationEndpoint(
         }
 
         QuotationProduct quotationProduct = mapper.Map<QuotationProduct>(req);
-        
+
         await quotationProductsRepository.AddAsync(quotationProduct, ct);
         await Send.NoContentAsync(ct);
     }

@@ -2,5 +2,5 @@
 
 public class GetQuotationPdfDto
 {
-    public int Id  { get; set; }
+    public int Id { get; set; }
 }

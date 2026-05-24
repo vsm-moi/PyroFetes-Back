@@ -78,10 +78,10 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                     {
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.RelativeColumn(4);  // Produit
-                            columns.RelativeColumn(2);  // Qté
-                            columns.RelativeColumn(2);  // PU
-                            columns.RelativeColumn(2);  // Total
+                            columns.RelativeColumn(4); // Produit
+                            columns.RelativeColumn(2); // Qté
+                            columns.RelativeColumn(2); // PU
+                            columns.RelativeColumn(2); // Total
                         });
 
                         // En-têtes
@@ -92,16 +92,16 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                             header.Cell().Element(CellHeader).AlignRight().Text("PU");
                             header.Cell().Element(CellHeader).AlignRight().Text("Total");
                         });
-                        
+
                         foreach (ProductDelivery l in lignes)
                         {
                             table.Cell().Element(CellBody).Text(l.Product?.Name);
                             table.Cell().Element(CellBody).AlignRight().Text(l.Quantity.ToString());
                             table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity:n2} €");
                             table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity * l.Quantity:n2} €");
-                            
+
                             totalQuantity += l.Quantity;
-                            total  += l.Quantity * l.Quantity;
+                            total += l.Quantity * l.Quantity;
                         }
 
                         IContainer CellHeader(IContainer c) =>
@@ -121,10 +121,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                 });
 
                 // Signature en bas à droite
-                page.Footer().AlignRight().Column(col =>
-                {
-                    col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea);
-                });
+                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea); });
             });
         });
 

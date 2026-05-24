@@ -25,7 +25,7 @@ public class PatchProductMinimalStockEndpoint(ProductsRepository productsReposit
         }
 
         mapper.Map(req, product);
-            
+
         await productsRepository.UpdateAsync(product, ct);
         await Send.NoContentAsync(ct);
     }

@@ -28,9 +28,9 @@ public class PatchSettingLogoEndpoint(SettingsRepository settingsRepository) : E
         using MemoryStream memoryStream = new();
         if (req.Logo != null) await req.Logo.CopyToAsync(memoryStream, ct);
         byte[] logoBytes = memoryStream.ToArray();
-        
+
         setting.Logo = Convert.ToBase64String(logoBytes);
-        
+
         await settingsRepository.SaveChangesAsync(ct);
         await Send.NoContentAsync(ct);
     }

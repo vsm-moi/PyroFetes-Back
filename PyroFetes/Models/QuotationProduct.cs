@@ -8,8 +8,8 @@ public class QuotationProduct
 {
     [Required] public int ProductId { get; set; }
     [Required] public int QuotationId { get; set; }
-    [Required] public int Quantity { get; set; }   
-    
+    [Required] public int Quantity { get; set; }
+
     public Product? Product { get; set; }
     public Quotation? Quotation { get; set; }
 }

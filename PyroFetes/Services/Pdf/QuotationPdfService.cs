@@ -74,10 +74,10 @@ public class QuotationPdfService : IQuotationPdfService
                     {
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.RelativeColumn(10);  // Produit
-                            columns.RelativeColumn(2);  // Qté
-                            columns.RelativeColumn(3);  // PU
-                            columns.RelativeColumn(3);  // Total
+                            columns.RelativeColumn(10); // Produit
+                            columns.RelativeColumn(2); // Qté
+                            columns.RelativeColumn(3); // PU
+                            columns.RelativeColumn(3); // Total
                         });
 
                         // En-têtes
@@ -88,15 +88,15 @@ public class QuotationPdfService : IQuotationPdfService
                             header.Cell().Element(CellHeader).AlignRight().Text("PU");
                             header.Cell().Element(CellHeader).AlignRight().Text("Total");
                         });
-                        
+
                         foreach (QuotationProduct l in lignes)
                         {
                             table.Cell().Element(CellBody).Text(l.Product?.Name);
                             table.Cell().Element(CellBody).AlignRight().Text(l.Quantity.ToString());
                             table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity:n2} €");
                             table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity * l.Quantity:n2} €");
-                            
-                            total  = total +  l.Quantity * l.Quantity;
+
+                            total = total + l.Quantity * l.Quantity;
                         }
 
                         IContainer CellHeader(IContainer c) =>
@@ -131,13 +131,10 @@ public class QuotationPdfService : IQuotationPdfService
                 });
 
                 // Signature en bas à droite
-                page.Footer().AlignRight().Column(col =>
-                {
-                    col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea);
-                });
+                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea); });
             });
         });
-        
+
         // Pour avoir la vue du PDF en temps réel
         // document.ShowInCompanion();
 

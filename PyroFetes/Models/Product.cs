@@ -7,7 +7,7 @@ namespace PyroFetes.Models
         [Key] public int Id { get; set; }
         [Required, MaxLength(20)] public string? Reference { get; set; }
         [Required, MaxLength(100)] public string? Name { get; set; }
-        [Required] public decimal Duration {get; set;} 
+        [Required] public decimal Duration { get; set; }
         [Required] public int Caliber { get; set; }
         [Required, MaxLength(100)] public string? ApprovalNumber { get; set; }
         [Required] public decimal Weight { get; set; }
@@ -22,9 +22,9 @@ namespace PyroFetes.Models
 
         [Required] public int ProductCategoryId { get; set; }
         public ProductCategory? ProductCategory { get; set; }
-        
-        [Required] public int MovementId {get; set;}
-        public Movement? Movement {get; set;}
+
+        [Required] public int MovementId { get; set; }
+        public Movement? Movement { get; set; }
 
         public List<ProductDelivery>? ProductDeliveries { get; set; }
         public List<Brand>? Brands { get; set; }
@@ -35,7 +35,5 @@ namespace PyroFetes.Models
         public List<QuotationProduct>? QuotationProducts { get; set; }
         public List<WarehouseProduct>? WarehouseProducts { get; set; }
         public List<ProductTimecode>? ProductTimecodes { get; set; }
-        
-        
     }
 }

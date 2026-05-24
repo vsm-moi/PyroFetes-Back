@@ -11,7 +11,7 @@ namespace PyroFetes.Endpoints.Suppliers;
 public class AddProductToSupplierEndpoint(
     SuppliersRepository suppliersRepository,
     ProductsRepository productsRepository,
-    PricesRepository pricesRepository, 
+    PricesRepository pricesRepository,
     AutoMapper.IMapper mapper) : Endpoint<CreatePriceDto>
 {
     public override void Configure()
@@ -36,7 +36,7 @@ public class AddProductToSupplierEndpoint(
             await Send.StringAsync("Le fournisseur a déjà un prix pour ce produit.", 400, cancellation: ct);
             return;
         }
-        
+
         await pricesRepository.AddAsync(mapper.Map<Price>(req), ct);
         await Send.NoContentAsync(ct);
     }

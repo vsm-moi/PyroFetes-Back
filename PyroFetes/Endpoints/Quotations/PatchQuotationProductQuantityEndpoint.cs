@@ -28,7 +28,7 @@ public class PatchQuotationProductQuantityEndpoint(
         }
 
         mapper.Map(req, quotationProduct);
-        
+
         await quotationProductsRepository.SaveChangesAsync(ct);
         await Send.NoContentAsync(ct);
     }

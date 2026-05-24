@@ -28,9 +28,9 @@ public class PatchSettingElectronicSignatureEndpoint(SettingsRepository settings
         using MemoryStream memoryStream = new();
         if (req.ElectronicSignature != null) await req.ElectronicSignature.CopyToAsync(memoryStream, ct);
         byte[] signatureBytes = memoryStream.ToArray();
-        
+
         setting.ElectronicSignature = Convert.ToBase64String(signatureBytes);
-        
+
         await settingsRepository.SaveChangesAsync(ct);
         await Send.NoContentAsync(ct);
     }

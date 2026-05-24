@@ -38,16 +38,16 @@ public class DtoToEntityMappings : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         CreateMap<PatchProductMinimalStockDto, Product>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
-        
+
         CreateMap<CreatePurchaseOrderDto, PurchaseOrder>();
-        CreateMap<PatchPurchaseOrderPurchaseConditionsDto,PurchaseOrder>()
+        CreateMap<PatchPurchaseOrderPurchaseConditionsDto, PurchaseOrder>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
-        
+
         CreateMap<CreatePurchaseProductDto, PurchaseProduct>();
         CreateMap<PatchPurchaseProductQuantityDto, PurchaseProduct>()
             .ForMember(dest => dest.ProductId, opt => opt.Ignore())
             .ForMember(dest => dest.PurchaseOrderId, opt => opt.Ignore());
-        
+
         CreateMap<PatchQuotationConditionsSaleDto, Quotation>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         CreateMap<PatchQuotationMessageDto, Quotation>()
@@ -58,19 +58,19 @@ public class DtoToEntityMappings : Profile
         CreateMap<PatchQuotationProductQuantityDto, QuotationProduct>()
             .ForMember(dest => dest.ProductId, opt => opt.Ignore())
             .ForMember(dest => dest.QuotationId, opt => opt.Ignore());
-        
+
         CreateMap<CreateSettingDto, Setting>();
         CreateMap<PatchSettingElectronicSignatureDto, Setting>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         CreateMap<PatchSettingLogoDto, Setting>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
-        
+
         CreateMap<CreateSupplierDto, Supplier>();
         CreateMap<UpdateSupplierDto, Supplier>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         CreateMap<PatchSupplierDeliveryDelayDto, Supplier>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
-        
+
         CreateMap<CreateUserDto, User>();
         CreateMap<UpdateUserDto, User>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());

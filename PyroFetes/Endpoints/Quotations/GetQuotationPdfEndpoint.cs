@@ -10,7 +10,7 @@ namespace PyroFetes.Endpoints.Quotations;
 
 public class GetQuotationPdfEndpoint(
     QuotationsRepository quotationRepository,
-    IQuotationPdfService quotationPdfService, 
+    IQuotationPdfService quotationPdfService,
     SettingsRepository settingsRepository)
     : Endpoint<GetQuotationPdfDto, byte[]>
 {
@@ -32,7 +32,7 @@ public class GetQuotationPdfEndpoint(
         }
 
         Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
-        
+
         byte[] bytes = quotationPdfService.Generate(quotation, quotation.QuotationProducts!, setting!);
 
         await Send.BytesAsync(

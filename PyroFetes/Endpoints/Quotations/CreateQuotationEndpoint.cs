@@ -33,7 +33,7 @@ public class CreateQuotationEndpoint(
                 Product? product = await productsRepository.SingleOrDefaultAsync(new GetProductByIdSpec(line.ProductId), ct);
                 QuotationProduct? quotationProduct =
                     await quotationProductsRepository.SingleOrDefaultAsync(new GetQuotationProductByProductIdAndQuotationIdSpec(line.ProductId, quotation.Id), ct);
-               
+
                 if (product is null)
                 {
                     await Send.NotFoundAsync(ct);

@@ -10,7 +10,7 @@ public class SoundTimecode
     public Show? Show { get; set; }
     [Required] public int SoundId { get; set; }
     public Sound? Sound { get; set; }
-    
+
     [Required] public decimal Start { get; set; }
     [Required] public decimal End { get; set; }
 }

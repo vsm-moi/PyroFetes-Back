@@ -28,7 +28,7 @@ public class PatchPurchaseProductQuantityEndpoint(PurchaseProductsRepository pur
         }
 
         mapper.Map(req, purchaseProduct);
-        
+
         await purchaseProductsRepository.SaveChangesAsync(ct);
         await Send.NoContentAsync(ct);
     }

@@ -13,10 +13,10 @@ public class Contact
     [Required] public int ZipCode { get; set; }
     [Required, MaxLength(100)] public string? City { get; set; }
     [Required, MaxLength(100)] public string? Role { get; set; }
-    
+
     public Customer? Customer { get; set; }
     [Required] public int CustomerId { get; set; }
-    
+
     public List<Communication>? Communications { get; set; }
     public List<StaffContact>? StaffContacts { get; set; }
     public List<ContactServiceProvider>? ContactServiceProviders { get; set; }

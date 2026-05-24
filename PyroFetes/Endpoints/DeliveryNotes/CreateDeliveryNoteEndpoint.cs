@@ -51,7 +51,7 @@ public class CreateDeliveryNoteEndpoint(
                     DeliveryNote = newDeliveryNote,
                     Quantity = productQuantity.Value,
                     Product = product,
-                    ProductId =  product.Id,
+                    ProductId = product.Id,
                     DeliveryNoteId = newDeliveryNote.Id
                 };
 

@@ -17,7 +17,7 @@ public class PatchWareHouseProductQuantityEndpoint(WarehouseProductsRepository w
 
     public override async Task HandleAsync(PatchWareHouseProductQuantityDto req, CancellationToken ct)
     {
-        WarehouseProduct? wareHouseProduct = await warehouseProductsRepository.FirstOrDefaultAsync(new GetWarehouseProductByProductIdSpec(req.ProductId, req.WareHouseId) , ct);
+        WarehouseProduct? wareHouseProduct = await warehouseProductsRepository.FirstOrDefaultAsync(new GetWarehouseProductByProductIdSpec(req.ProductId, req.WareHouseId), ct);
 
         if (wareHouseProduct is null)
         {
@@ -27,7 +27,7 @@ public class PatchWareHouseProductQuantityEndpoint(WarehouseProductsRepository w
 
         wareHouseProduct.Quantity = req.Quantity;
         await warehouseProductsRepository.SaveChangesAsync(ct);
-        
+
         await Send.NoContentAsync(ct);
     }
 }

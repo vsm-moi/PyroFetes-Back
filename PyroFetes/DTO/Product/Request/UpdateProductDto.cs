@@ -5,7 +5,7 @@ public class UpdateProductDto
     public int Id { get; set; }
     public string? References { get; set; }
     public string? Name { get; set; }
-    public decimal Duration {get; set;} 
+    public decimal Duration { get; set; }
     public int Caliber { get; set; }
     public string? ApprovalNumber { get; set; }
     public decimal Weight { get; set; }

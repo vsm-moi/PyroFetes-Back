@@ -7,6 +7,6 @@ public class UpdateDeliveryNoteDto
     public DateOnly EstimateDeliveryDate { get; set; }
     public DateOnly ExpeditionDate { get; set; }
     public DateOnly? RealDeliveryDate { get; set; }
-    
+
     public int DelivererId { get; set; }
 }

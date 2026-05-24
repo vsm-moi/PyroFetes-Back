@@ -22,7 +22,7 @@ public class CreateSettingEndpoint(SettingsRepository settingsRepository) : Endp
 
         if (req.ElectronicSignature != null) await req.ElectronicSignature.CopyToAsync(memoryStream, ct);
         byte[] signatureBytes = memoryStream.ToArray();
-        
+
         Setting setting = new()
         {
             ElectronicSignature = Convert.ToBase64String(signatureBytes),

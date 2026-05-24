@@ -8,7 +8,8 @@ using PyroFetes.Specifications.DeliveryNotes;
 
 namespace PyroFetes.Endpoints.DeliveryNotes;
 
-public class GetDeliveryNotePdfEndpoint(DeliveryNotesRepository deliveryNotesRepository, IDeliveryNotePdfService deliveryNotePdfService, SettingsRepository settingsRepository) : Endpoint<GetDeliveryNotePdfDto, byte[]>
+public class GetDeliveryNotePdfEndpoint(DeliveryNotesRepository deliveryNotesRepository, IDeliveryNotePdfService deliveryNotePdfService, SettingsRepository settingsRepository)
+    : Endpoint<GetDeliveryNotePdfDto, byte[]>
 {
     public override void Configure()
     {

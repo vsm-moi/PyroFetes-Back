@@ -71,7 +71,7 @@ public class PyroFetesDbContext : DbContext
 
         optionsBuilder.UseSqlServer(connectionString);
     }
-    
+
     // Models customization
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,13 +80,13 @@ public class PyroFetesDbContext : DbContext
             .WithMany(w => w.MovementsSource)
             .HasForeignKey(m => m.SourceWarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         modelBuilder.Entity<Movement>()
             .HasOne(m => m.DestinationWarehouse)
             .WithMany(w => w.MovementsDestination)
             .HasForeignKey(m => m.DestinationWarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         modelBuilder.Entity<MaterialWarehouse>()
             .HasOne(mw => mw.Material)
             .WithMany(m => m.MaterialWarehouses)

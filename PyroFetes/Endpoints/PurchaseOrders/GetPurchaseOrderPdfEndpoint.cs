@@ -10,7 +10,7 @@ namespace PyroFetes.Endpoints.PurchaseOrders;
 
 public class GetPurchaseOrderPdfEndpoint(
     PurchaseOrdersRepository purchaseOrdersRepository,
-    IPurchaseOrderPdfService purchaseOrderPdfService, 
+    IPurchaseOrderPdfService purchaseOrderPdfService,
     SettingsRepository settingsRepository)
     : Endpoint<GetPurchaseOrderPdfDto, byte[]>
 {
@@ -24,7 +24,7 @@ public class GetPurchaseOrderPdfEndpoint(
     public override async Task HandleAsync(GetPurchaseOrderPdfDto req, CancellationToken ct)
     {
         PurchaseOrder? purchaseOrder = await purchaseOrdersRepository.SingleOrDefaultAsync(new GetPurchaseOrderByIdWithProductsSpec(req.Id), ct);
-        
+
         if (purchaseOrder is null)
         {
             await Send.NotFoundAsync(ct);
@@ -32,7 +32,7 @@ public class GetPurchaseOrderPdfEndpoint(
         }
 
         Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
-        
+
         byte[] bytes = purchaseOrderPdfService.Generate(purchaseOrder, purchaseOrder.PurchaseProducts!, setting!);
 
         await Send.BytesAsync(

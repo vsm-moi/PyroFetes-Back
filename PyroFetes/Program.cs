@@ -20,10 +20,7 @@ builder.Services
     .AddAuthenticationJwtBearer(s => s.SigningKey = "ThisIsASuperSecretJwtKeyThatIsAtLeast32CharsLong")
     .AddAuthorization()
     .AddFastEndpoints()
-    .SwaggerDocument(options =>
-    {
-        options.ShortSchemaNames = true;
-    })
+    .SwaggerDocument(options => { options.ShortSchemaNames = true; })
     .AddCors(options =>
     {
         options.AddDefaultPolicy(policyBuilder =>

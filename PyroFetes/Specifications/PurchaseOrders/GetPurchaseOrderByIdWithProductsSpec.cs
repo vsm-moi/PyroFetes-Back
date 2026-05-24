@@ -11,6 +11,6 @@ public class GetPurchaseOrderByIdWithProductsSpec : SingleResultSpecification<Pu
             .Where(x => x.Id == purchaseOrderId)
             .Include(x => x.PurchaseProducts!)
             .ThenInclude(p => p.Product)
-            .ThenInclude(p=> p!.Prices);
+            .ThenInclude(p => p!.Prices);
     }
-}   
+}

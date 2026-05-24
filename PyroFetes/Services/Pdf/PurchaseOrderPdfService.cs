@@ -75,10 +75,10 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                     {
                         table.ColumnsDefinition(columns =>
                         {
-                            columns.RelativeColumn(4);  // Produit
-                            columns.RelativeColumn(1);  // Qté
-                            columns.RelativeColumn(2);  // PU
-                            columns.RelativeColumn(2);  // Total
+                            columns.RelativeColumn(4); // Produit
+                            columns.RelativeColumn(1); // Qté
+                            columns.RelativeColumn(2); // PU
+                            columns.RelativeColumn(2); // Total
                         });
 
                         // En-têtes
@@ -89,20 +89,20 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                             header.Cell().Element(CellHeader).AlignRight().Text("PU");
                             header.Cell().Element(CellHeader).AlignRight().Text("Total");
                         });
-                        
+
                         foreach (PurchaseProduct l in lignes)
                         {
                             decimal price = l.Product!.Prices!
                                 .FirstOrDefault(p => p.SupplierId == l.PurchaseOrder!.SupplierId)
                                 ?.SellingPrice ?? 0;
-                            
+
                             table.Cell().Element(CellBody).Text(l.Product?.Name);
                             table.Cell().Element(CellBody).AlignRight().Text(l.Quantity.ToString());
                             table.Cell().Element(CellBody).AlignRight().Text($"{price:n2} €");
                             table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity * price:n2} €");
-                            
+
                             totalQuantity += l.Quantity;
-                            total +=  l.Quantity * price;
+                            total += l.Quantity * price;
                         }
 
                         IContainer CellHeader(IContainer c) =>
@@ -132,16 +132,13 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                             right.Item().AlignRight().Text($"Total: {totalQuantity:n2} produits");
                             right.Item().AlignRight().Text($"Total HT: {total:n2} €");
                             right.Item().AlignRight().Text("Taxe: 20 %");
-                            right.Item().AlignRight().Text($"Total TTC: {(total * 1,2):n2} €");
+                            right.Item().AlignRight().Text($"Total TTC: {(total * 1, 2):n2} €");
                         });
                     });
                 });
 
                 // Signature en bas à droite
-                page.Footer().AlignRight().Column(col =>
-                {
-                    col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea);
-                });
+                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea); });
             });
         });
 

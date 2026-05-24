@@ -7,7 +7,7 @@ using PyroFetes.Specifications.Users;
 
 namespace PyroFetes.Endpoints.Users;
 
-public class PatchUserPasswordEndpoint(UsersRepository usersRepository,AutoMapper.IMapper mapper) : Endpoint<PatchUserPasswordDto, GetUserDto>
+public class PatchUserPasswordEndpoint(UsersRepository usersRepository, AutoMapper.IMapper mapper) : Endpoint<PatchUserPasswordDto, GetUserDto>
 {
     public override void Configure()
     {

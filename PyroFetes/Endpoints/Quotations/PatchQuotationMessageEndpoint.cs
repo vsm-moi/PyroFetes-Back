@@ -28,7 +28,7 @@ public class PatchQuotationMessageEndpoint(
         }
 
         mapper.Map(req, quotation);
-        
+
         await quotationsRepository.SaveChangesAsync(ct);
         await Send.NoContentAsync(ct);
     }

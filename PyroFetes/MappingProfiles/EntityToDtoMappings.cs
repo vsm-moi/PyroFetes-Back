@@ -28,10 +28,10 @@ public class EntityToDtoMappings : Profile
             .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.ProductDeliveries));
 
         CreateMap<Price, GetPriceDto>();
-        
+
         CreateMap<Product, GetProductDto>()
             .ForMember(dest => dest.References, opt => opt.MapFrom(src => src.Reference));
-            
+
         CreateMap<ProductDelivery, GetProductDeliveryDto>();
 
         CreateMap<PurchaseOrder, GetPurchaseOrderDto>()

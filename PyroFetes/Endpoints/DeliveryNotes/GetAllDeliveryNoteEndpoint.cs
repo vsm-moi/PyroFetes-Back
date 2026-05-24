@@ -15,6 +15,6 @@ public class GetAllDeliveryNoteEndpoint(DeliveryNotesRepository deliveryNotesRep
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        await Send.OkAsync(await deliveryNotesRepository.ProjectToListAsync<GetDeliveryNoteDto>(new GetAllDeliveryNoteSpec() ,ct), ct);
+        await Send.OkAsync(await deliveryNotesRepository.ProjectToListAsync<GetDeliveryNoteDto>(new GetAllDeliveryNoteSpec(), ct), ct);
     }
 }

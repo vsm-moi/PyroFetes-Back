@@ -27,7 +27,7 @@ public class PatchPriceEndpoint(
         }
 
         mapper.Map(req, price);
-        
+
         await pricesRepository.SaveChangesAsync(ct);
         await Send.NoContentAsync(ct);
     }

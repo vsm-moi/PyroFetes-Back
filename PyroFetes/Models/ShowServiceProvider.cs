@@ -4,6 +4,5 @@ namespace PyroFetes.Models;
 
 public class ShowServiceProvider
 {
-    [Key] public int Id { get; set; } 
-    
+    [Key] public int Id { get; set; }
 }
