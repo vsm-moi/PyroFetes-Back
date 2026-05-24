@@ -1,14 +1,11 @@
 ﻿using FastEndpoints;
 using PyroFetes.DTO.SettingDTO.Request;
-using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Settings;
 
-public class CreateSettingEndpoint(
-    SettingsRepository settingsRepository,
-    AutoMapper.IMapper mapper) : Endpoint<CreateSettingDto, GetSettingDto>
+public class CreateSettingEndpoint(SettingsRepository settingsRepository) : Endpoint<CreateSettingDto>
 {
     public override void Configure()
     {
@@ -18,14 +15,21 @@ public class CreateSettingEndpoint(
 
     public override async Task HandleAsync(CreateSettingDto req, CancellationToken ct)
     {
-        Setting setting = new Setting()
-        {
-            ElectronicSignature = req.ElectronicSignature,
-            Logo = req.Logo
-        };
-        
-        await settingsRepository.AddAsync(setting, ct);
+        // Encodage en base64
+        using MemoryStream memoryStream = new();
+        if (req.Logo != null) await req.Logo.CopyToAsync(memoryStream, ct);
+        byte[] logoBytes = memoryStream.ToArray();
 
-        await Send.OkAsync(mapper.Map<GetSettingDto>(setting), ct);
+        if (req.ElectronicSignature != null) await req.ElectronicSignature.CopyToAsync(memoryStream, ct);
+        byte[] signatureBytes = memoryStream.ToArray();
+        
+        Setting setting = new()
+        {
+            ElectronicSignature = Convert.ToBase64String(signatureBytes),
+            Logo = Convert.ToBase64String(logoBytes)
+        };
+
+        await settingsRepository.AddAsync(setting, ct);
+        await Send.NoContentAsync(ct);
     }
 }

@@ -3,7 +3,7 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.Users;
 
-public sealed class GetUserByIdSpec : Specification<User>
+public sealed class GetUserByIdSpec : SingleResultSpecification<User>
 {
     public GetUserByIdSpec(int userId)
     {

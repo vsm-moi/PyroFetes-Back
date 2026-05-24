@@ -3,7 +3,7 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.Settings;
 
-public sealed class GetSettingByIdSpec : Specification<Setting>
+public sealed class GetSettingByIdSpec : SingleResultSpecification<Setting>
 {
     public GetSettingByIdSpec(int settingId)
     {

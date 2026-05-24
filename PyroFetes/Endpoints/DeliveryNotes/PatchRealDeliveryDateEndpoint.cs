@@ -1,45 +1,41 @@
 using FastEndpoints;
 using PyroFetes.DTO.DeliveryNote.Request;
-using PyroFetes.DTO.DeliveryNote.Response;
-using PyroFetes.DTO.PurchaseProduct.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
-using PyroFetes.Specifications.Deliverers;
 using PyroFetes.Specifications.DeliveryNotes;
 
 namespace PyroFetes.Endpoints.DeliveryNotes;
 
 public class PatchRealDeliveryDateEndpoint(
     DeliveryNotesRepository deliveryNotesRepository,
-    AutoMapper.IMapper mapper) : Endpoint<PatchDeliveryNoteRealDeliveryDateDto, GetDeliveryNoteDto>
+    AutoMapper.IMapper mapper) : Endpoint<PatchDeliveryNoteRealDeliveryDateDto>
 {
     public override void Configure()
     {
-        Patch("/deliveryNotes/{@id}", x=> new {x.Id});
+        Patch("/deliveryNotes/{@Id}", x => new { x.Id });
         AllowAnonymous();
     }
 
     public override async Task HandleAsync(PatchDeliveryNoteRealDeliveryDateDto req, CancellationToken ct)
     {
-        DeliveryNote? deliveryNoteToPath =
-            await deliveryNotesRepository.FirstOrDefaultAsync(new GetDeliveryNoteByIdSpec(req.Id),ct);
+        DeliveryNote? deliveryNoteToPath = await deliveryNotesRepository.SingleOrDefaultAsync(new GetDeliveryNoteByIdSpec(req.Id), ct);
 
-        if (deliveryNoteToPath == null)
+        if (deliveryNoteToPath is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
-        if (deliveryNoteToPath.RealDeliveryDate != null)
+
+        if (deliveryNoteToPath.RealDeliveryDate is not null)
         {
-            await Send.StringAsync("Impossible de modifier la date.", 400);
+            await Send.StringAsync("Impossible de modifier la date.", 400, cancellation: ct);
             return;
         }
-        
-        deliveryNoteToPath.RealDeliveryDate = req.RealDeliveryDate;
-        
+
+        mapper.Map(req, deliveryNoteToPath);
+
         await deliveryNotesRepository.UpdateAsync(deliveryNoteToPath, ct);
-        
-        await Send.OkAsync(mapper.Map<GetDeliveryNoteDto>(deliveryNoteToPath), ct);
+
+        await Send.NoContentAsync(ct);
     }
 }

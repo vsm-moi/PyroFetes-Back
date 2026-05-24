@@ -3,14 +3,14 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.PurchaseOrders;
 
-public class GetPurchaseOrderByIdWithProductsSpec : Specification<PurchaseOrder>
+public class GetPurchaseOrderByIdWithProductsSpec : SingleResultSpecification<PurchaseOrder>
 {
     public GetPurchaseOrderByIdWithProductsSpec(int purchaseOrderId)
     {
         Query
-            .Where(p => p.Id == purchaseOrderId)
-            .Include(p => p.PurchaseProducts!)
-            .ThenInclude(pp => pp.Product)
-            .ThenInclude(pp=> pp!.Prices);
+            .Where(x => x.Id == purchaseOrderId)
+            .Include(x => x.PurchaseProducts!)
+            .ThenInclude(p => p.Product)
+            .ThenInclude(p=> p!.Prices);
     }
 }   

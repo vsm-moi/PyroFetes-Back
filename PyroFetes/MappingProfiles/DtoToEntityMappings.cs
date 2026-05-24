@@ -3,7 +3,6 @@ using PyroFetes.DTO.Deliverer.Request;
 using PyroFetes.DTO.DeliveryNote.Request;
 using PyroFetes.DTO.Price.Request;
 using PyroFetes.DTO.Product.Request;
-using PyroFetes.DTO.ProductDelivery.Request;
 using PyroFetes.DTO.PurchaseOrder.Request;
 using PyroFetes.DTO.PurchaseProduct.Request;
 using PyroFetes.DTO.Quotation.Request;
@@ -21,50 +20,65 @@ public class DtoToEntityMappings : Profile
     public DtoToEntityMappings()
     {
         CreateMap<CreateDelivererDto, Deliverer>();
-        CreateMap<UpdateDelivererDto, Deliverer>();
+        CreateMap<UpdateDelivererDto, Deliverer>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<CreateDeliveryNoteDto, DeliveryNote>();
-        CreateMap<UpdateDeliveryNoteDto, DeliveryNote>();
-        CreateMap<PatchDeliveryNoteRealDeliveryDateDto, DeliveryNote>();
+        CreateMap<UpdateDeliveryNoteDto, DeliveryNote>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<PatchDeliveryNoteRealDeliveryDateDto, DeliveryNote>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<CreatePriceDto, Price>();
-        CreateMap<UpdatePriceDto, Price>();
-        CreateMap<PatchPriceSellingPriceDto, Price>();
+        CreateMap<PatchPriceSellingPriceDto, Price>()
+            .ForMember(dest => dest.ProductId, opt => opt.Ignore())
+            .ForMember(dest => dest.SupplierId, opt => opt.Ignore());
 
-        CreateMap<CreateProductDto, Product>();
-        CreateMap<UpdateProductDto, Product>();
-        CreateMap<PatchProductMinimalStockDto, Product>();
-
-        CreateMap<CreateProductDeliveryDto, ProductDelivery>();
-        CreateMap<UpdateProductDeliveryDto, ProductDelivery>();
+        CreateMap<UpdateProductDto, Product>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<PatchProductMinimalStockDto, Product>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
         
         CreateMap<CreatePurchaseOrderDto, PurchaseOrder>();
-        CreateMap<PatchPurchaseOrderPurchaseConditionsDto,PurchaseOrder>();
+        CreateMap<PatchPurchaseOrderPurchaseConditionsDto,PurchaseOrder>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
         
         CreateMap<CreatePurchaseProductDto, PurchaseProduct>();
-        CreateMap<UpdatePurchaseProductDto, PurchaseProduct>();
-        CreateMap<PatchPurchaseProductQuantityDto, PurchaseProduct>();
+        CreateMap<PatchPurchaseProductQuantityDto, PurchaseProduct>()
+            .ForMember(dest => dest.ProductId, opt => opt.Ignore())
+            .ForMember(dest => dest.PurchaseOrderId, opt => opt.Ignore());
         
-        CreateMap<PatchQuotationConditionsSaleDto, Quotation>();
-        CreateMap<PatchQuotationMessageDto, Quotation>();
+        CreateMap<PatchQuotationConditionsSaleDto, Quotation>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<PatchQuotationMessageDto, Quotation>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
         CreateMap<CreateProductQuotationDto, Quotation>();
 
-        CreateMap<CreateQuotationProductDto, QuotationProduct>();
-        CreateMap<UpdateQuotationProductDto, QuotationProduct>();
-        CreateMap<PatchQuotationProductQuantityDto, QuotationProduct>();
+        CreateMap<AddQuotationProductDto, QuotationProduct>();
+        CreateMap<PatchQuotationProductQuantityDto, QuotationProduct>()
+            .ForMember(dest => dest.ProductId, opt => opt.Ignore())
+            .ForMember(dest => dest.QuotationId, opt => opt.Ignore());
         
         CreateMap<CreateSettingDto, Setting>();
-        CreateMap<PatchSettingElectronicSignatureDto, Setting>();
-        CreateMap<PatchSettingLogoDto, Setting>();
+        CreateMap<PatchSettingElectronicSignatureDto, Setting>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<PatchSettingLogoDto, Setting>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
         
         CreateMap<CreateSupplierDto, Supplier>();
-        CreateMap<UpdateSupplierDto, Supplier>();
-        CreateMap<PatchSupplierDeliveryDelayDto, Supplier>();
+        CreateMap<UpdateSupplierDto, Supplier>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<PatchSupplierDeliveryDelayDto, Supplier>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
         
         CreateMap<CreateUserDto, User>();
-        CreateMap<UpdateUserDto, User>();
-        CreateMap<PatchUserPasswordDto, User>();
+        CreateMap<UpdateUserDto, User>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
+        CreateMap<PatchUserPasswordDto, User>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
-        CreateMap<PatchWareHouseProductQuantityDto, WarehouseProduct>();
+        CreateMap<PatchWareHouseProductQuantityDto, WarehouseProduct>()
+            .ForMember(dest => dest.ProductId, opt => opt.Ignore())
+            .ForMember(dest => dest.WarehouseId, opt => opt.Ignore());
     }
 }

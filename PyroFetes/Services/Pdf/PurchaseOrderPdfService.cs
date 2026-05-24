@@ -7,18 +7,18 @@ namespace PyroFetes.Services.Pdf;
 
 public interface IPurchaseOrderPdfService
 {
-    byte[] Generate(PurchaseOrder purchaseOrder, List<PurchaseProduct> lignes);
+    byte[] Generate(PurchaseOrder purchaseOrder, List<PurchaseProduct> lignes, Setting setting);
 }
 
 public class PurchaseOrderPdfService : IPurchaseOrderPdfService
 {
-    public byte[] Generate(PurchaseOrder purchaseOrder, List<PurchaseProduct> lignes)
+    public byte[] Generate(PurchaseOrder purchaseOrder, List<PurchaseProduct> lignes, Setting setting)
     {
-        var logoPath = Path.Combine(AppContext.BaseDirectory, "wwwroot", "Images", "logo.jpg");
-        var signaturePath = Path.Combine(AppContext.BaseDirectory, "wwwroot", "Images", "signature.png");
+        byte[] logo = Convert.FromBase64String(setting.Logo!);
+        byte[] signature = Convert.FromBase64String(setting.ElectronicSignature!);
         int totalQuantity = 0;
         decimal total = 0;
-        var document = Document.Create(container =>
+        Document document = Document.Create(container =>
         {
             container.Page(page =>
             {
@@ -42,7 +42,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                     // Logo + société à droite
                     row.ConstantItem(200).Column(col =>
                     {
-                        col.Item().AlignRight().Height(70).Image(logoPath, ImageScaling.FitArea);
+                        col.Item().AlignRight().Height(70).Image(logo, ImageScaling.FitArea);
                         col.Item().Height(20);
                         col.Item().AlignRight().Text("Pyro-Fêtes").SemiBold();
                         col.Item().Height(5);
@@ -90,7 +90,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                             header.Cell().Element(CellHeader).AlignRight().Text("Total");
                         });
                         
-                        foreach (var l in lignes)
+                        foreach (PurchaseProduct l in lignes)
                         {
                             decimal price = l.Product!.Prices!
                                 .FirstOrDefault(p => p.SupplierId == l.PurchaseOrder!.SupplierId)
@@ -140,7 +140,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                 // Signature en bas à droite
                 page.Footer().AlignRight().Column(col =>
                 {
-                    col.Item().AlignRight().Height(100).Image(signaturePath, ImageScaling.FitArea);
+                    col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea);
                 });
             });
         });

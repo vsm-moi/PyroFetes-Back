@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.PurchaseOrders;
@@ -11,13 +10,11 @@ public class DeletePurchaseOrderRequest
     public int Id { get; set; }
 }
 
-public class DeletePurchaseOrderEndpoint(
-    PurchaseOrdersRepository purchaseOrdersRepository,
-    PurchaseProductsRepository purchaseProductsRepository) : Endpoint<DeletePurchaseOrderRequest>
+public class DeletePurchaseOrderEndpoint(PurchaseOrdersRepository purchaseOrdersRepository) : Endpoint<DeletePurchaseOrderRequest>
 {
     public override void Configure()
     {
-        Delete("/purchaseOrders/{@Id}", x => new {x.Id});
+        Delete("/purchaseOrders/{@Id}", x => new { x.Id });
         AllowAnonymous();
     }
 
@@ -25,19 +22,13 @@ public class DeletePurchaseOrderEndpoint(
     {
         PurchaseOrder? purchaseOrder = await purchaseOrdersRepository.FirstOrDefaultAsync(new GetPurchaseOrderByIdSpec(req.Id), ct);
 
-        if (purchaseOrder == null)
+        if (purchaseOrder is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
-        if (purchaseOrder.PurchaseProducts != null && purchaseOrder.PurchaseProducts.Any())
-        {
-            await purchaseProductsRepository.DeleteRangeAsync(purchaseOrder.PurchaseProducts, ct);
-        }
-        
-        await purchaseOrdersRepository.DeleteAsync(purchaseOrder, ct);   
-        
+
+        await purchaseOrdersRepository.DeleteAsync(purchaseOrder, ct);
         await Send.NoContentAsync(ct);
     }
 }

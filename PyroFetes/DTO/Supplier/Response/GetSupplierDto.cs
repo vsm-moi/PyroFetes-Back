@@ -1,5 +1,4 @@
 using PyroFetes.DTO.Price.Response;
-using PyroFetes.DTO.Product.Response;
 
 namespace PyroFetes.DTO.Supplier.Response;
 
@@ -13,6 +12,5 @@ public class GetSupplierDto
     public string? ZipCode { get; set; }
     public string? City { get; set; }
     public int DeliveryDelay { get; set; }
-    public List<GetProductDto>? Products { get; set; }
     public List<GetPriceDto>? Prices { get; set; }
 }

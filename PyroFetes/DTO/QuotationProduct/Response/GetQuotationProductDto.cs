@@ -4,12 +4,8 @@ public class GetQuotationProductDto
 {
     public int Quantity { get; set; }
     
-    public int QuotationId { get; set; }
-    public string? QuotationMessage { get; set; }
-    public string? QuotationConditionsSale { get; set; }
-    
     public int ProductId { get; set; }
-    public string? ProductReferences { get; set; }
+    public string? ProductReference { get; set; }
     public string? ProductName { get; set; }
     public decimal ProductDuration {get; set;} 
     public int ProductCaliber { get; set; }

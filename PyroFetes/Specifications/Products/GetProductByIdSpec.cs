@@ -3,9 +3,9 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.Products;
 
-public sealed class GetProductByIdSpec : Specification<Product>
+public sealed class GetProductByIdSpec : SingleResultSpecification<Product>
 {
-    public GetProductByIdSpec(int? productId)
+    public GetProductByIdSpec(int productId)
     {
         Query
             .Where(p => p.Id == productId)

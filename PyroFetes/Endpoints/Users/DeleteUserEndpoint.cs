@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Users;
@@ -15,22 +14,21 @@ public class DeleteUserEndpoint(UsersRepository usersRepository) : Endpoint<Dele
 {
     public override void Configure()
     {
-        Delete("/users/{@Id}", x => new {x.Id});
+        Delete("/users/{@Id}", x => new { x.Id });
         AllowAnonymous();
     }
 
     public override async Task HandleAsync(DeleteUserRequest req, CancellationToken ct)
     {
-        User? user = await usersRepository.FirstOrDefaultAsync(new GetUserByIdSpec(req.Id), ct);
+        User? user = await usersRepository.SingleOrDefaultAsync(new GetUserByIdSpec(req.Id), ct);
 
-        if (user == null)
+        if (user is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
+
         await usersRepository.DeleteAsync(user, ct);
-        
         await Send.NoContentAsync(ct);
     }
 }

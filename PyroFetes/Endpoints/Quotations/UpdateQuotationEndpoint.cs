@@ -9,7 +9,7 @@ namespace PyroFetes.Endpoints.Quotations;
 
 public class UpdateQuotationEndpoint(
     QuotationsRepository quotationsRepository,
-    AutoMapper.IMapper mapper) : Endpoint<UpdateQuotationDto, GetQuotationDto>
+    AutoMapper.IMapper mapper) : Endpoint<UpdateQuotationDto>
 {
     public override void Configure()
     {
@@ -19,18 +19,17 @@ public class UpdateQuotationEndpoint(
 
     public override async Task HandleAsync(UpdateQuotationDto req, CancellationToken ct)
     {
-        Quotation? quotation = await quotationsRepository.FirstOrDefaultAsync(new GetQuotationByIdSpec(req.Id), ct);
-        
-        if (quotation == null)
+        Quotation? quotation = await quotationsRepository.SingleOrDefaultAsync(new GetQuotationByIdSpec(req.Id), ct);
+
+        if (quotation is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
+
+        mapper.Map(req, quotation);
         
-        quotation.ConditionsSale = req.ConditionsSale;
-        quotation.Message = req.Message;
-        await quotationsRepository.UpdateAsync(quotation, ct);
-        
-        await Send.OkAsync(mapper.Map<GetQuotationDto>(quotation), ct);
+        await quotationsRepository.SaveChangesAsync(ct);
+        await Send.NoContentAsync(ct);
     }
 }

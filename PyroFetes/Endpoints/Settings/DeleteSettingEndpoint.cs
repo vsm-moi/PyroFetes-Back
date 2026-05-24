@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Settings;
@@ -15,22 +14,21 @@ public class DeleteSettingEndpoint(SettingsRepository settingsRepository) : Endp
 {
     public override void Configure()
     {
-        Delete("/settings/{@Id}", x => new {x.Id});
+        Delete("/settings/{@Id}", x => new { x.Id });
         AllowAnonymous();
     }
-    
+
     public override async Task HandleAsync(DeleteSettingRequest req, CancellationToken ct)
     {
-        Setting? setting = await settingsRepository.FirstOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
+        Setting? setting = await settingsRepository.SingleOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
 
-        if (setting == null)
+        if (setting is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
+
         await settingsRepository.DeleteAsync(setting, ct);
-        
         await Send.NoContentAsync(ct);
     }
 }

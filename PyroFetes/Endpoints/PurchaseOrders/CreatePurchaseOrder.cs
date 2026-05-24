@@ -1,19 +1,18 @@
 ﻿using FastEndpoints;
 using PyroFetes.DTO.PurchaseOrder.Request;
-using PyroFetes.DTO.PurchaseOrder.Response;
 using PyroFetes.DTO.PurchaseProduct.Request;
-using PyroFetes.DTO.PurchaseProduct.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Products;
-using PyroFetes.Specifications.PurchaseOrders;
+using PyroFetes.Specifications.PurchaseProducts;
 
 namespace PyroFetes.Endpoints.PurchaseOrders;
 
 public class CreatePurchaseOrder(
     PurchaseOrdersRepository purchaseOrdersRepository,
     ProductsRepository productsRepository,
-    AutoMapper.IMapper mapper) : Endpoint<CreatePurchaseOrderDto, GetPurchaseOrderDto>
+    PurchaseProductsRepository purchaseProductsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<CreatePurchaseOrderDto>
 {
     public override void Configure()
     {
@@ -23,30 +22,35 @@ public class CreatePurchaseOrder(
 
     public override async Task HandleAsync(CreatePurchaseOrderDto req, CancellationToken ct)
     {
-        PurchaseOrder purchaseOrder = new PurchaseOrder
-        {
-            PurchaseConditions = req.PurchaseConditions ?? "Conditions non précisées",
-            PurchaseProducts = new List<PurchaseProduct>()
-        };
+        PurchaseOrder purchaseOrder = mapper.Map<PurchaseOrder>(req);
 
-        foreach (var line in req.Products)
+        if (req.Products != null)
         {
-            var product = await productsRepository.GetByIdAsync(line.ProductId, ct);
-            if (product == null)
+            foreach (CreatePurchaseOrderProductDto line in req.Products)
             {
-                await Send.NotFoundAsync(ct);
-                return;
+                Product? product = await productsRepository.SingleOrDefaultAsync(new GetProductByIdSpec(line.ProductId), ct);
+                if (product is null)
+                {
+                    await Send.NotFoundAsync(ct);
+                    return;
+                }
+                
+                PurchaseProduct? purchaseProduct = 
+                    await purchaseProductsRepository.SingleOrDefaultAsync(new GetPurchaseProductByProductIdAndPurchaseOrderIdSpec(line.ProductId, purchaseOrder.Id), ct);
+
+                if (purchaseProduct is not null)
+                {
+                    await Send.StringAsync("Le produit est déjà dans le bon de commande", 400, cancellation: ct);
+                }
+
+                PurchaseProduct? productOnPurchase = mapper.Map<PurchaseProduct>(line);
+                productOnPurchase.PurchaseOrderId = purchaseOrder.Id;
+
+                await purchaseProductsRepository.AddAsync(productOnPurchase, ct);
             }
-
-            purchaseOrder.PurchaseProducts.Add(new PurchaseProduct
-            {
-                ProductId = product.Id,
-                Quantity = line.Quantity,
-            });
         }
 
         await purchaseOrdersRepository.AddAsync(purchaseOrder, ct);
-
-        await Send.OkAsync(mapper.Map<GetPurchaseOrderDto>(purchaseOrder), ct);
+        await Send.NoContentAsync(ct);
     }
 }

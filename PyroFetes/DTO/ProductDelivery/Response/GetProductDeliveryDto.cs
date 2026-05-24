@@ -14,15 +14,5 @@ public class GetProductDeliveryDto
     public string? ProductLink { get; set; }
     public int ProductMinimalQuantity { get; set; }
     
-    public int DeliveryNoteId { get; set; }
-    public string? DeliveryNoteTrackingNumber { get; set; }
-    public DateOnly DeliveryNoteEstimateDeliveryDate { get; set; }
-    public DateOnly DeliveryNoteExpeditionDate { get; set; }
-    public DateOnly? DeliveryNoteRealDeliveryDate { get; set; }
-    
-    public int DeliveryNoteDeliverId { get; set; }
-    public string? DeliveryNoteDeliverTransporter { get; set; }
-    
-    
     public int Quantity { get; set; }
 }

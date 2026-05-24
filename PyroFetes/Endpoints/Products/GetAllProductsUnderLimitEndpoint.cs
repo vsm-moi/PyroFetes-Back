@@ -1,4 +1,3 @@
-using AutoMapper;
 using FastEndpoints;
 using PyroFetes.DTO.Product.Response;
 using PyroFetes.Repositories;
@@ -15,7 +14,7 @@ public class GetAllProductsUnderLimitEndpoint(ProductsRepository productsReposit
     }
 
     public override async Task HandleAsync(CancellationToken ct)
-    {   
+    {
         await Send.OkAsync(await productsRepository.ProjectToListAsync<GetProductDto>(new GetProductsUnderLimitSpec(), ct), ct);
     }
 }

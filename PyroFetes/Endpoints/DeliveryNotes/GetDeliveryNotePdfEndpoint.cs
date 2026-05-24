@@ -5,39 +5,37 @@ using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Services.Pdf;
 using PyroFetes.Specifications.DeliveryNotes;
-using PyroFetes.Specifications.Quotations;
 
 namespace PyroFetes.Endpoints.DeliveryNotes;
 
-public class GetDeliveryNotePdfEndpoint(
-    DeliveryNotesRepository deliveryNotesRepository,
-    IDeliveryNotePdfService deliveryNotePdfService)
-    : Endpoint<GetDeliveryNotePdfDto, byte[]>
+public class GetDeliveryNotePdfEndpoint(DeliveryNotesRepository deliveryNotesRepository, IDeliveryNotePdfService deliveryNotePdfService, SettingsRepository settingsRepository) : Endpoint<GetDeliveryNotePdfDto, byte[]>
 {
     public override void Configure()
     {
-        Get("/deliveryNotes/{@Id}/pdf", x => new {x.Id});
+        Get("/deliveryNotes/{@Id}/pdf", x => new { x.Id });
         AllowAnonymous();
         Description(b => b.Produces<byte[]>(200, MediaTypeNames.Application.Pdf));
     }
-    
+
     public override async Task HandleAsync(GetDeliveryNotePdfDto req, CancellationToken ct)
     {
         DeliveryNote? deliveryNote = await deliveryNotesRepository
-            .FirstOrDefaultAsync(new GetDeliveryNoteByIdWithProductsSpec(req.Id), ct);
+            .SingleOrDefaultAsync(new GetDeliveryNoteByIdWithProductsSpec(req.Id), ct);
 
-        if (deliveryNote == null)
+        Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
+
+        if (deliveryNote is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
-        var bytes = deliveryNotePdfService.Generate(deliveryNote, deliveryNote.ProductDeliveries!);
+
+        byte[] bytes = deliveryNotePdfService.Generate(deliveryNote, deliveryNote.ProductDeliveries!, setting!);
 
         await Send.BytesAsync(
             bytes: bytes,
             contentType: "application/pdf",
-            fileName: $"bon-de-livraison-{deliveryNote.Id}.pdf",
+            fileName: $"bon-de-livraison-{deliveryNote.Id}{DateOnly.FromDateTime(DateTime.Now)}.pdf",
             cancellation: ct);
     }
 }

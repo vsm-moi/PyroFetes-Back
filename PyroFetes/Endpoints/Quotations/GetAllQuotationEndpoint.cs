@@ -1,8 +1,5 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Quotation.Response;
-using PyroFetes.DTO.QuotationProduct.Response;
-using PyroFetes.Models;
 using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Quotations;

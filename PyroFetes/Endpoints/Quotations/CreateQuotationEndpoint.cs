@@ -1,15 +1,19 @@
 ﻿using FastEndpoints;
 using PyroFetes.DTO.Quotation.Request;
 using PyroFetes.DTO.Quotation.Response;
+using PyroFetes.DTO.QuotationProduct.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
+using PyroFetes.Specifications.Products;
+using PyroFetes.Specifications.QuotationProducts;
 
 namespace PyroFetes.Endpoints.Quotations;
 
 public class CreateQuotationEndpoint(
     QuotationsRepository quotationsRepository,
+    QuotationProductsRepository quotationProductsRepository,
     ProductsRepository productsRepository,
-    AutoMapper.IMapper mapper) : Endpoint<CreateQuotationDto, GetQuotationDto>
+    AutoMapper.IMapper mapper) : Endpoint<CreateQuotationDto>
 {
     public override void Configure()
     {
@@ -19,32 +23,36 @@ public class CreateQuotationEndpoint(
 
     public override async Task HandleAsync(CreateQuotationDto req, CancellationToken ct)
     {
-        Quotation quotation = new Quotation
-        {
-            Message = req.Message,
-            ConditionsSale = req.ConditionsSale ?? "Conditions non précisées",
-            CustomerId = 1, // A changer
-            QuotationProducts = new List<QuotationProduct>()
-        };
+        Quotation quotation = mapper.Map<Quotation>(req);
+        quotation.CustomerId = 1; // TODO: A changer
 
-        foreach (var line in req.Products)
+        if (req.Products != null)
         {
-            var product = await productsRepository.GetByIdAsync(line.ProductId, ct);
-            if (product == null)
+            foreach (CreateProductQuotationDto line in req.Products)
             {
-                await Send.NotFoundAsync(ct);
-                return;
+                Product? product = await productsRepository.SingleOrDefaultAsync(new GetProductByIdSpec(line.ProductId), ct);
+                QuotationProduct? quotationProduct =
+                    await quotationProductsRepository.SingleOrDefaultAsync(new GetQuotationProductByProductIdAndQuotationIdSpec(line.ProductId, quotation.Id), ct);
+               
+                if (product is null)
+                {
+                    await Send.NotFoundAsync(ct);
+                    return;
+                }
+
+                if (quotationProduct is not null)
+                {
+                    await Send.StringAsync("Le produit est déjà dans le devis", 400, cancellation: ct);
+                }
+
+                QuotationProduct? productOnQuotation = mapper.Map<QuotationProduct>(line);
+                productOnQuotation.QuotationId = quotation.Id;
+
+                await quotationProductsRepository.AddAsync(productOnQuotation, ct);
             }
-
-            quotation.QuotationProducts.Add(new QuotationProduct
-            {
-                ProductId = product.Id,
-                Quantity = line.Quantity,
-            });
         }
 
         await quotationsRepository.AddAsync(quotation, ct);
-
-        await Send.OkAsync(mapper.Map<GetQuotationDto>(quotation), ct);
+        await Send.NoContentAsync(ct);
     }
 }

@@ -10,33 +10,35 @@ namespace PyroFetes.Endpoints.Quotations;
 
 public class GetQuotationPdfEndpoint(
     QuotationsRepository quotationRepository,
-    IQuotationPdfService quotationPdfService) 
+    IQuotationPdfService quotationPdfService, 
+    SettingsRepository settingsRepository)
     : Endpoint<GetQuotationPdfDto, byte[]>
 {
     public override void Configure()
     {
-        Get("/quotations/{@Id}/pdf", x => new {x.Id});
+        Get("/quotations/{@Id}/pdf", x => new { x.Id });
         AllowAnonymous();
         Description(b => b.Produces<byte[]>(200, MediaTypeNames.Application.Pdf));
     }
-    
+
     public override async Task HandleAsync(GetQuotationPdfDto req, CancellationToken ct)
     {
-        Quotation? quotation = await quotationRepository
-            .FirstOrDefaultAsync(new GetQuotationByIdWithProductsSpec(req.Id), ct);
+        Quotation? quotation = await quotationRepository.SingleOrDefaultAsync(new GetQuotationByIdWithProductsSpec(req.Id), ct);
 
-        if (quotation == null)
+        if (quotation is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
+
+        Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
         
-        var bytes = quotationPdfService.Generate(quotation, quotation.QuotationProducts!);
+        byte[] bytes = quotationPdfService.Generate(quotation, quotation.QuotationProducts!, setting!);
 
         await Send.BytesAsync(
             bytes: bytes,
             contentType: "application/pdf",
-            fileName: $"devis-{quotation.Id}.pdf",
+            fileName: $"devis-{quotation.Id}{DateOnly.FromDateTime(DateTime.Now)}.pdf",
             cancellation: ct);
     }
 }

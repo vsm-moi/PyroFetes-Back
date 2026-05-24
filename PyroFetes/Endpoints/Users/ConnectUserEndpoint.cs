@@ -19,31 +19,30 @@ public class ConnectUserEndpoint(UsersRepository usersRepository) : Endpoint<Con
 
     public override async Task HandleAsync(ConnectUserDto req, CancellationToken ct)
     {
-        User? user = await usersRepository.FirstOrDefaultAsync(new GetUserByNameSpec(req.Name!), ct);
+        User? user = await usersRepository.SingleOrDefaultAsync(new GetUserByNameSpec(req.Name!), ct);
 
-        if (user == null)
+        if (user is null)
         {
             await Send.UnauthorizedAsync(ct);
             return;
         }
-        
+
         if (BCrypt.Net.BCrypt.Verify(req.Password + user.Salt, user.Password))
         {
-            string jwtToken = JwtBearer.CreateToken(
-                o =>
-                {
-                    o.SigningKey = "ThisIsASuperSecretJwtKeyThatIsAtLeast32CharsLong";
-                    o.ExpireAt = DateTime.UtcNow.AddMinutes(15);
-                    if (user.Fonction != null) o.User.Roles.Add(user.Fonction);
-                    o.User.Claims.Add(("Name", user.Name)!);
-                    o.User.Claims.Add(("Id", user.Id.ToString())!);
-                });
+            string jwtToken = JwtBearer.CreateToken(o =>
+            {
+                o.SigningKey = "ThisIsASuperSecretJwtKeyThatIsAtLeast32CharsLong";
+                o.ExpireAt = DateTime.UtcNow.AddMinutes(15);
+                if (user.Fonction is not null) o.User.Roles.Add(user.Fonction);
+                o.User.Claims.Add(("Name", user.Name)!);
+                o.User.Claims.Add(("Id", user.Id.ToString())!);
+            });
 
             GetTokenDto responseDto = new()
             {
                 Token = jwtToken
             };
-            
+
             await Send.OkAsync(responseDto, ct);
         }
         else await Send.UnauthorizedAsync(ct);

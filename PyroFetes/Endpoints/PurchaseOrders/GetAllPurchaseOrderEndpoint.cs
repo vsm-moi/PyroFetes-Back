@@ -1,7 +1,5 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.PurchaseOrder.Response;
-using PyroFetes.DTO.PurchaseProduct.Response;
 using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.PurchaseOrders;

@@ -1,7 +1,5 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Response;
-using PyroFetes.Models;
 using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Products;

@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
@@ -18,15 +17,15 @@ public class GetSettingEndpoint(
 {
     public override void Configure()
     {
-        Get("/settings/{@Id}", x => new {x.Id});
+        Get("/settings/{@Id}", x => new { x.Id });
         AllowAnonymous();
     }
-    
+
     public override async Task HandleAsync(GetSettingRequest req, CancellationToken ct)
     {
-        Setting? setting = await settingsRepository.FirstOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
+        Setting? setting = await settingsRepository.SingleOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
 
-        if (setting == null)
+        if (setting is null)
         {
             await Send.NotFoundAsync(ct);
             return;

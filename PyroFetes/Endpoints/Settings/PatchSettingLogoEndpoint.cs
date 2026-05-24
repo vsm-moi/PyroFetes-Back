@@ -1,36 +1,37 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.SettingDTO.Request;
-using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Settings;
 
 namespace PyroFetes.Endpoints.Settings;
 
-public class PatchSettingLogoEndpoint(
-    SettingsRepository settingsRepository,
-    AutoMapper.IMapper mapper) : Endpoint<PatchSettingLogoDto, GetSettingDto>
+public class PatchSettingLogoEndpoint(SettingsRepository settingsRepository) : Endpoint<PatchSettingLogoDto>
 {
     public override void Configure()
     {
-        Patch("/settings/{@Id}/logo", x => new {x.Id});
+        Patch("/settings/{@Id}/logo", x => new { x.Id });
         AllowAnonymous();
     }
-    
+
     public override async Task HandleAsync(PatchSettingLogoDto req, CancellationToken ct)
     {
-        Setting? setting = await settingsRepository.FirstOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
+        Setting? setting = await settingsRepository.SingleOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
 
-        if (setting == null)
+        if (setting is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        setting.Logo = req.Logo;
-        await settingsRepository.UpdateAsync(setting, ct);
+        // Encodage en base64
+        using MemoryStream memoryStream = new();
+        if (req.Logo != null) await req.Logo.CopyToAsync(memoryStream, ct);
+        byte[] logoBytes = memoryStream.ToArray();
         
-        await Send.OkAsync(mapper.Map<GetSettingDto>(setting), ct);
+        setting.Logo = Convert.ToBase64String(logoBytes);
+        
+        await settingsRepository.SaveChangesAsync(ct);
+        await Send.NoContentAsync(ct);
     }
 }

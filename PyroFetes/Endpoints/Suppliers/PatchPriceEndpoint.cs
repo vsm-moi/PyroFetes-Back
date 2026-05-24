@@ -1,15 +1,14 @@
 using FastEndpoints;
 using PyroFetes.DTO.Price.Request;
-using PyroFetes.DTO.Price.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Prices;
 
-namespace PyroFetes.Endpoints.Prices;
+namespace PyroFetes.Endpoints.Suppliers;
 
 public class PatchPriceEndpoint(
     PricesRepository pricesRepository,
-    AutoMapper.IMapper mapper) : Endpoint<PatchPriceSellingPriceDto, GetPriceDto>
+    AutoMapper.IMapper mapper) : Endpoint<PatchPriceSellingPriceDto>
 {
     public override void Configure()
     {
@@ -19,18 +18,17 @@ public class PatchPriceEndpoint(
 
     public override async Task HandleAsync(PatchPriceSellingPriceDto req, CancellationToken ct)
     {
-        Price? price = await pricesRepository.FirstOrDefaultAsync(new GetPriceByProductIdAndSupplierIdSpec(req.ProductId, req.SupplierId),ct);
-        
-        if (price == null)
+        Price? price = await pricesRepository.SingleOrDefaultAsync(new GetPriceByProductIdAndSupplierIdSpec(req.ProductId, req.SupplierId), ct);
+
+        if (price is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
+
+        mapper.Map(req, price);
         
-        price.SellingPrice = req.SellingPrice;
-        
-        await pricesRepository.UpdateAsync(price, ct);
-        
-        await Send.OkAsync(mapper.Map<GetPriceDto>(price), ct);
+        await pricesRepository.SaveChangesAsync(ct);
+        await Send.NoContentAsync(ct);
     }
 }

@@ -10,26 +10,27 @@ public class GetDeliveryNoteRequest
 {
     public int DeliveryNoteId { get; set; }
 }
+
 public class GetDeliveryNoteEndpoint(
     DeliveryNotesRepository deliveryNotesRepository,
     AutoMapper.IMapper mapper) : Endpoint<GetDeliveryNoteRequest, GetDeliveryNoteDto>
 {
     public override void Configure()
     {
-        Get("/deliveryNotes/{@id}", x=> new {x.DeliveryNoteId});
+        Get("/deliveryNotes/{@Id}", x => new { x.DeliveryNoteId });
         AllowAnonymous();
     }
 
     public override async Task HandleAsync(GetDeliveryNoteRequest req, CancellationToken ct)
     {
-        DeliveryNote? deliveryNote = await deliveryNotesRepository.FirstOrDefaultAsync(new GetDeliveryNoteByIdSpec(req.DeliveryNoteId), ct);
+        DeliveryNote? deliveryNote = await deliveryNotesRepository.SingleOrDefaultAsync(new GetDeliveryNoteByIdSpec(req.DeliveryNoteId), ct);
 
-        if (deliveryNote == null)
+        if (deliveryNote is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
+
         await Send.OkAsync(mapper.Map<GetDeliveryNoteDto>(deliveryNote), ct);
     }
 }

@@ -3,13 +3,13 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.Quotations;
 
-public class GetQuotationByIdWithProductsSpec : Specification<Quotation>
+public class GetQuotationByIdWithProductsSpec : SingleResultSpecification<Quotation>
 {
     public GetQuotationByIdWithProductsSpec(int quotationId)
     {
         Query
-            .Where(q => q.Id == quotationId)
-            .Include(q => q.QuotationProducts!)
-            .ThenInclude(qp => qp.Product);
+            .Where(x => x.Id == quotationId)
+            .Include(x => x.QuotationProducts!)
+            .ThenInclude(p => p.Product);
     }
 }

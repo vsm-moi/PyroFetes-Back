@@ -3,7 +3,7 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.PurchaseProducts;
 
-public sealed class GetPurchaseProductByProductIdAndPurchaseOrderIdSpec : Specification<PurchaseProduct>
+public sealed class GetPurchaseProductByProductIdAndPurchaseOrderIdSpec : SingleResultSpecification<PurchaseProduct>
 {
     public GetPurchaseProductByProductIdAndPurchaseOrderIdSpec(int  productId, int purchaseOrderId)
     {

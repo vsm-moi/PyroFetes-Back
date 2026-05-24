@@ -2,17 +2,7 @@
 
 public class GetPriceDto
 {
-    public int Id { get; set; }
     public decimal SellingPrice { get; set; }
-    
-    public int SupplierId { get; set; }
-    public string? SupplierName { get; set; }
-    public string? SupplierEmail { get; set; }
-    public string? SupplierPhone { get; set; }
-    public string? SupplierAddress { get; set; }
-    public string? SupplierZipCode { get; set; }
-    public string? SupplierCity { get; set; }
-    public int SupplierDeliveryDelay { get; set; }
     
     public int ProductId { get; set; }
     public string? ProductReference { get; set; }

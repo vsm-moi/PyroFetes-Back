@@ -9,6 +9,6 @@ public sealed class GetProductsUnderLimitSpec : Specification<Product>
     {
         Query
             .Include(p => p.QuotationProducts)
-            .Where(p => p.QuotationProducts.Any(q => q.Quantity < p.MinimalQuantity));
+            .Where(p => p.QuotationProducts != null && p.QuotationProducts.Any(q => q.Quantity < p.MinimalQuantity));
     }
 }

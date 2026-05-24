@@ -6,9 +6,7 @@ using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Deliverers;
 
-public class CreateDelivererEndpoint(
-    DeliverersRepository deliverersRepository, 
-    AutoMapper.IMapper mapper) : Endpoint<CreateDelivererDto, GetDelivererDto>
+public class CreateDelivererEndpoint(DeliverersRepository deliverersRepository) : Endpoint<CreateDelivererDto, GetDelivererDto>
 {
     public override void Configure()
     {
@@ -18,13 +16,12 @@ public class CreateDelivererEndpoint(
 
     public override async Task HandleAsync(CreateDelivererDto req, CancellationToken ct)
     {
-        Deliverer newDeliverer = new Deliverer()
+        Deliverer newDeliverer = new()
         {
             Transporter = req.Transporter,
         };
 
         await deliverersRepository.AddAsync(newDeliverer, ct);
-
-        await Send.OkAsync(mapper.Map<GetDelivererDto>(newDeliverer), ct);
+        await Send.NoContentAsync(ct);
     }
 }

@@ -1,24 +1,23 @@
 ﻿using FastEndpoints;
+using PyroFetes.DTO.Quotation.Request;
+using PyroFetes.DTO.Quotation.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Quotations;
 
 namespace PyroFetes.Endpoints.Quotations;
 
-public class DeleteQuotationRequest
-{
-    public int Id { get; set; }
-}
-
-public class DeleteQuotationEndpoint(QuotationsRepository quotationsRepository) : Endpoint<DeleteQuotationRequest>
+public class PatchQuotationMessageEndpoint(
+    QuotationsRepository quotationsRepository,
+    AutoMapper.IMapper mapper) : Endpoint<PatchQuotationMessageDto>
 {
     public override void Configure()
     {
-        Delete("/quotations/{@Id}", x => new { x.Id });
+        Patch("/quotations/{@Id}/message", x => new { x.Id });
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(DeleteQuotationRequest req, CancellationToken ct)
+    public override async Task HandleAsync(PatchQuotationMessageDto req, CancellationToken ct)
     {
         Quotation? quotation = await quotationsRepository.SingleOrDefaultAsync(new GetQuotationByIdSpec(req.Id), ct);
 
@@ -28,7 +27,9 @@ public class DeleteQuotationEndpoint(QuotationsRepository quotationsRepository) 
             return;
         }
 
-        await quotationsRepository.DeleteAsync(quotation, ct);
+        mapper.Map(req, quotation);
+        
+        await quotationsRepository.SaveChangesAsync(ct);
         await Send.NoContentAsync(ct);
     }
 }

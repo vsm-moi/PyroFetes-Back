@@ -1,10 +1,9 @@
 using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Prices;
 
-namespace PyroFetes.Endpoints.Prices;
+namespace PyroFetes.Endpoints.Suppliers;
 
 public class DeletePriceRequest
 {
@@ -12,26 +11,25 @@ public class DeletePriceRequest
     public int SupplierId { get; set; }
 }
 
-public class DeletePriceEndpoint(PricesRepository pricesRepository) : Endpoint<DeletePriceRequest>
+public class DeleteProductToSupplierEndpoint(PricesRepository pricesRepository) : Endpoint<DeletePriceRequest>
 {
     public override void Configure()
     {
-        Delete("/prices/{@ProductId}/{@SupplierId}", x => new {x.ProductId, x.SupplierId});
+        Delete("/suppliers/{@SupplierId}/{@Product}", x => new { x.SupplierId, x.ProductId });
         AllowAnonymous();
     }
 
     public override async Task HandleAsync(DeletePriceRequest req, CancellationToken ct)
     {
-        Price? price = await pricesRepository.FirstOrDefaultAsync(new GetPriceByProductIdAndSupplierIdSpec(req.ProductId,req.SupplierId), ct);
+        Price? price = await pricesRepository.SingleOrDefaultAsync(new GetPriceByProductIdAndSupplierIdSpec(req.ProductId, req.SupplierId), ct);
 
-        if (price == null)
+        if (price is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
-        await  pricesRepository.DeleteAsync(price, ct);
-        
+
+        await pricesRepository.DeleteAsync(price, ct);
         await Send.NoContentAsync(ct);
     }
 }

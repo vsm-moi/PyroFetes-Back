@@ -80,7 +80,7 @@ app.UseAuthentication()
     })
     .UseSwaggerGen();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseCors();
 

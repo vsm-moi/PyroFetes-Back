@@ -1,7 +1,5 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Quotation.Response;
-using PyroFetes.DTO.QuotationProduct.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Quotations;
@@ -19,20 +17,20 @@ public class GetQuotationEndpoint(
 {
     public override void Configure()
     {
-        Get("/quotations/{@Id}", x => new {x.Id});
+        Get("/quotations/{@Id}", x => new { x.Id });
         AllowAnonymous();
     }
 
     public override async Task HandleAsync(GetQuotationRequest req, CancellationToken ct)
     {
-        Quotation? quotation = await quotationsRepository.FirstOrDefaultAsync(new GetQuotationByIdSpec(req.Id), ct);
+        Quotation? quotation = await quotationsRepository.SingleOrDefaultAsync(new GetQuotationByIdSpec(req.Id), ct);
 
-        if (quotation == null)
+        if (quotation is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
+
         await Send.OkAsync(mapper.Map<GetQuotationDto>(quotation), ct);
     }
 }

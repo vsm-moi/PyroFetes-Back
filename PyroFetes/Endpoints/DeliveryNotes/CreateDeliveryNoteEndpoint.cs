@@ -1,6 +1,5 @@
 using FastEndpoints;
 using PyroFetes.DTO.DeliveryNote.Request;
-using PyroFetes.DTO.DeliveryNote.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Deliverers;
@@ -12,8 +11,7 @@ public class CreateDeliveryNoteEndpoint(
     DeliveryNotesRepository deliveryNotesRepository,
     DeliverersRepository deliverersRepository,
     ProductsRepository productsRepository,
-    ProductDeliveriesRepository productDeliveriesRepository,
-    AutoMapper.IMapper mapper) : Endpoint<CreateDeliveryNoteDto, GetDeliveryNoteDto>
+    ProductDeliveriesRepository productDeliveriesRepository) : Endpoint<CreateDeliveryNoteDto>
 {
     public override void Configure()
     {
@@ -23,46 +21,44 @@ public class CreateDeliveryNoteEndpoint(
 
     public override async Task HandleAsync(CreateDeliveryNoteDto req, CancellationToken ct)
     {
-        Deliverer? deliverer = await deliverersRepository.FirstOrDefaultAsync(new GetDelivererByIdSpec(req.DelivererId), ct);
-        
-        if (deliverer == null)
+        Deliverer? deliverer = await deliverersRepository.SingleOrDefaultAsync(new GetDelivererByIdSpec(req.DelivererId), ct);
+        if (deliverer is null)
         {
-            await Send.StringAsync("No deliverer found", 404, cancellation: ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
-        
+
         //Creating the Delivery Note
-        DeliveryNote newDeliveryNote = new DeliveryNote()
+        DeliveryNote newDeliveryNote = new()
         {
             TrackingNumber = req.TrackingNumber,
             EstimateDeliveryDate = req.EstimateDeliveryDate,
-            ExpeditionDate =  req.ExpeditionDate,
-            DelivererId = req.DelivererId,
+            ExpeditionDate = req.ExpeditionDate,
+            DelivererId = deliverer.Id,
             Deliverer = deliverer,
-            
         };
-        
+
         await deliveryNotesRepository.AddAsync(newDeliveryNote, ct);
 
-        foreach (var productQuantity in req.ProductQuantities!)
+        if (req.ProductQuantities is not null)
         {
-            Product? product =
-                await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(productQuantity.Key), ct);
-            if (product != null)
+            foreach (KeyValuePair<int, int> productQuantity in req.ProductQuantities)
             {
-                ProductDelivery productDelivery = new ProductDelivery()
+                Product? product = await productsRepository.SingleOrDefaultAsync(new GetProductByIdSpec(productQuantity.Key), ct);
+                if (product is null) continue;
+                ProductDelivery productDelivery = new()
                 {
                     DeliveryNote = newDeliveryNote,
                     Quantity = productQuantity.Value,
                     Product = product,
+                    ProductId =  product.Id,
                     DeliveryNoteId = newDeliveryNote.Id
                 };
-                
+
                 await productDeliveriesRepository.AddAsync(productDelivery, ct);
             }
-
         }
-        
-        await Send.OkAsync(mapper.Map<GetDeliveryNoteDto>(newDeliveryNote), ct);
+
+        await Send.NoContentAsync(ct);
     }
 }

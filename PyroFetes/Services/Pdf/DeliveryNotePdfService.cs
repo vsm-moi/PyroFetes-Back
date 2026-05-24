@@ -7,18 +7,18 @@ namespace PyroFetes.Services.Pdf;
 
 public interface IDeliveryNotePdfService
 {
-    byte[] Generate(DeliveryNote deliveryNote, List<ProductDelivery> lignes);
+    byte[] Generate(DeliveryNote deliveryNote, List<ProductDelivery> lignes, Setting setting);
 }
 
 public class DeliveryNotePdfService : IDeliveryNotePdfService
 {
-    public byte[] Generate(DeliveryNote deliveryNote, List<ProductDelivery> lignes)
+    public byte[] Generate(DeliveryNote deliveryNote, List<ProductDelivery> lignes, Setting setting)
     {
-        var logoPath = Path.Combine(AppContext.BaseDirectory, "wwwroot", "Images", "logo.jpg");
-        var signaturePath = Path.Combine(AppContext.BaseDirectory, "wwwroot", "Images", "signature.png");
+        byte[] logo = Convert.FromBase64String(setting.Logo!);
+        byte[] signature = Convert.FromBase64String(setting.ElectronicSignature!);
         int total = 0;
         int totalQuantity = 0;
-        var document = Document.Create(container =>
+        Document document = Document.Create(container =>
         {
             container.Page(page =>
             {
@@ -48,7 +48,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                     // Logo + société à droite
                     row.ConstantItem(200).Column(col =>
                     {
-                        col.Item().AlignRight().Height(70).Image(logoPath, ImageScaling.FitArea);
+                        col.Item().AlignRight().Height(70).Image(logo, ImageScaling.FitArea);
                         col.Item().Height(20);
                         col.Item().AlignRight().Text("Pyro-Fêtes").SemiBold();
                         col.Item().Height(5);
@@ -93,7 +93,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                             header.Cell().Element(CellHeader).AlignRight().Text("Total");
                         });
                         
-                        foreach (var l in lignes)
+                        foreach (ProductDelivery l in lignes)
                         {
                             table.Cell().Element(CellBody).Text(l.Product?.Name);
                             table.Cell().Element(CellBody).AlignRight().Text(l.Quantity.ToString());
@@ -123,7 +123,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                 // Signature en bas à droite
                 page.Footer().AlignRight().Column(col =>
                 {
-                    col.Item().AlignRight().Height(100).Image(signaturePath, ImageScaling.FitArea);
+                    col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea);
                 });
             });
         });

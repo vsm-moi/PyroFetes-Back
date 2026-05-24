@@ -1,6 +1,7 @@
 using FastEndpoints;
 using PyroFetes.DTO.DeliveryNote.Response;
 using PyroFetes.Repositories;
+using PyroFetes.Specifications.DeliveryNotes;
 
 namespace PyroFetes.Endpoints.DeliveryNotes;
 
@@ -14,7 +15,6 @@ public class GetAllDeliveryNoteEndpoint(DeliveryNotesRepository deliveryNotesRep
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        await Send.OkAsync(await deliveryNotesRepository.ProjectToListAsync<GetDeliveryNoteDto>(ct), ct);
+        await Send.OkAsync(await deliveryNotesRepository.ProjectToListAsync<GetDeliveryNoteDto>(new GetAllDeliveryNoteSpec() ,ct), ct);
     }
-    
 }
