@@ -2,7 +2,6 @@
 using PyroFetes.DTO.SettingDTO.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
-using PyroFetes.Specifications.Settings;
 
 namespace PyroFetes.Endpoints.Settings;
 
@@ -10,13 +9,14 @@ public class PatchSettingElectronicSignatureEndpoint(SettingsRepository settings
 {
     public override void Configure()
     {
-        Patch("/settings/{@Id}/ElectronicSignature", x => new { x.Id });
+        Patch("/settings/electronicSignature");
+        AllowFormData();
         AllowAnonymous();
     }
 
     public override async Task HandleAsync(PatchSettingElectronicSignatureDto req, CancellationToken ct)
     {
-        Setting? setting = await settingsRepository.SingleOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
+        Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
 
         if (setting is null)
         {
