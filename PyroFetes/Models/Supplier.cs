@@ -15,5 +15,6 @@ public class Supplier
 
     public List<Price>? Prices { get; set; } 
     public List<Quotation>? Quotations { get; set; }
+    public List<DeliveryNote>? DeliveryNotes { get; set; }
     public List<PurchaseOrder>? PurchaseOrders { get; set; }
 }
