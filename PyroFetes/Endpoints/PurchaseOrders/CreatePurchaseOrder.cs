@@ -23,6 +23,7 @@ public class CreatePurchaseOrder(
     public override async Task HandleAsync(CreatePurchaseOrderDto req, CancellationToken ct)
     {
         PurchaseOrder purchaseOrder = mapper.Map<PurchaseOrder>(req);
+        await purchaseOrdersRepository.AddAsync(purchaseOrder, ct);
 
         if (req.Products != null)
         {
@@ -49,8 +50,6 @@ public class CreatePurchaseOrder(
                 await purchaseProductsRepository.AddAsync(productOnPurchase, ct);
             }
         }
-
-        await purchaseOrdersRepository.AddAsync(purchaseOrder, ct);
         await Send.NoContentAsync(ct);
     }
 }

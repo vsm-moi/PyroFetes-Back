@@ -1,6 +1,5 @@
 ﻿using FastEndpoints;
 using PyroFetes.DTO.Quotation.Request;
-using PyroFetes.DTO.Quotation.Response;
 using PyroFetes.DTO.QuotationProduct.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
@@ -25,6 +24,7 @@ public class CreateQuotationEndpoint(
     {
         Quotation quotation = mapper.Map<Quotation>(req);
         quotation.CustomerId = 1; // TODO: A changer
+        await quotationsRepository.AddAsync(quotation, ct);
 
         if (req.Products != null)
         {
@@ -43,6 +43,7 @@ public class CreateQuotationEndpoint(
                 if (quotationProduct is not null)
                 {
                     await Send.StringAsync("Le produit est déjà dans le devis", 400, cancellation: ct);
+                    return;
                 }
 
                 QuotationProduct? productOnQuotation = mapper.Map<QuotationProduct>(line);
@@ -51,8 +52,7 @@ public class CreateQuotationEndpoint(
                 await quotationProductsRepository.AddAsync(productOnQuotation, ct);
             }
         }
-
-        await quotationsRepository.AddAsync(quotation, ct);
+        
         await Send.NoContentAsync(ct);
     }
 }

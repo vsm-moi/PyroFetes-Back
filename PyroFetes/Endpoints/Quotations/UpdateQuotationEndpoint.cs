@@ -1,6 +1,5 @@
 ﻿using FastEndpoints;
 using PyroFetes.DTO.Quotation.Request;
-using PyroFetes.DTO.Quotation.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Quotations;

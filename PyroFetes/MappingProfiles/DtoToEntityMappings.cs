@@ -44,6 +44,7 @@ public class DtoToEntityMappings : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<CreatePurchaseProductDto, PurchaseProduct>();
+        CreateMap<CreatePurchaseOrderProductDto, PurchaseProduct>();
         CreateMap<PatchPurchaseProductQuantityDto, PurchaseProduct>()
             .ForMember(dest => dest.ProductId, opt => opt.Ignore())
             .ForMember(dest => dest.PurchaseOrderId, opt => opt.Ignore());
@@ -52,7 +53,10 @@ public class DtoToEntityMappings : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
         CreateMap<PatchQuotationMessageDto, Quotation>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
-        CreateMap<CreateProductQuotationDto, Quotation>();
+        CreateMap<CreateQuotationDto, Quotation>();
+        CreateMap<CreateProductQuotationDto, QuotationProduct>();
+        CreateMap<UpdateQuotationDto, Quotation>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<AddQuotationProductDto, QuotationProduct>();
         CreateMap<PatchQuotationProductQuantityDto, QuotationProduct>()
