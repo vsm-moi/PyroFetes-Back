@@ -10,6 +10,7 @@ public class GetQuotationByIdWithProductsSpec : SingleResultSpecification<Quotat
         Query
             .Where(x => x.Id == quotationId)
             .Include(x => x.QuotationProducts!)
-            .ThenInclude(p => p.Product);
+            .ThenInclude(x => x.Product)
+            .ThenInclude(x => x!.Prices);
     }
 }

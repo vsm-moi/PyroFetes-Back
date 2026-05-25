@@ -16,7 +16,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
     {
         byte[] logo = Convert.FromBase64String(setting.Logo!);
         byte[] signature = Convert.FromBase64String(setting.ElectronicSignature!);
-        int total = 0;
+        decimal total = 0;
         int totalQuantity = 0;
         Document document = Document.Create(container =>
         {
@@ -42,7 +42,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                         col.Item().Height(5);
                         col.Item().AlignLeft().Text($"Estimée au {deliveryNote.EstimateDeliveryDate}");
                         col.Item().Height(5);
-                        col.Item().AlignLeft().Text($"Reçu le {deliveryNote.RealDeliveryDate}");
+                        col.Item().AlignLeft().Text(deliveryNote.RealDeliveryDate is null ? "Pas encore arrivée à destination" : $"Reçu le {deliveryNote.RealDeliveryDate}");
                     });
 
                     // Logo + société à droite
@@ -95,13 +95,17 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
 
                         foreach (ProductDelivery l in lignes)
                         {
+                            decimal price = l.Product!.Prices!
+                                .FirstOrDefault(x => x.SupplierId == l.DeliveryNote!.SupplierId && x.ProductId == l.ProductId)
+                                ?.SellingPrice ?? 0;
+                        
                             table.Cell().Element(CellBody).Text(l.Product?.Name);
                             table.Cell().Element(CellBody).AlignRight().Text(l.Quantity.ToString());
-                            table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity:n2} €");
-                            table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity * l.Quantity:n2} €");
-
+                            table.Cell().Element(CellBody).AlignRight().Text($"{price:n2} €");
+                            table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity * price:n2} €");
+                        
                             totalQuantity += l.Quantity;
-                            total += l.Quantity * l.Quantity;
+                            total += l.Quantity * price;
                         }
 
                         IContainer CellHeader(IContainer c) =>
@@ -114,10 +118,10 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                     col.Item().LineHorizontal(1);
                     col.Item().Height(30);
 
-                    col.Item().AlignRight().Text($"Total: {totalQuantity:n2} produits");
+                    col.Item().AlignRight().Text($"Total: {totalQuantity} produits");
                     col.Item().AlignRight().Text($"Total HT: {total:n2} €");
                     col.Item().AlignRight().Text("Taxe : 20 %");
-                    col.Item().AlignRight().Text($"Total TTC: {(total * 1.2):n2} €");
+                    col.Item().AlignRight().Text($"Total TTC: {total * (decimal)1.2:n2} €");
                 });
 
                 // Signature en bas à droite

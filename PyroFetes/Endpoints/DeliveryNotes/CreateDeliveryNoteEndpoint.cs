@@ -4,6 +4,7 @@ using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Deliverers;
 using PyroFetes.Specifications.Products;
+using PyroFetes.Specifications.Suppliers;
 
 namespace PyroFetes.Endpoints.DeliveryNotes;
 
@@ -11,6 +12,7 @@ public class CreateDeliveryNoteEndpoint(
     DeliveryNotesRepository deliveryNotesRepository,
     DeliverersRepository deliverersRepository,
     ProductsRepository productsRepository,
+    SuppliersRepository suppliersRepository,
     ProductDeliveriesRepository productDeliveriesRepository) : Endpoint<CreateDeliveryNoteDto>
 {
     public override void Configure()
@@ -22,7 +24,8 @@ public class CreateDeliveryNoteEndpoint(
     public override async Task HandleAsync(CreateDeliveryNoteDto req, CancellationToken ct)
     {
         Deliverer? deliverer = await deliverersRepository.SingleOrDefaultAsync(new GetDelivererByIdSpec(req.DelivererId), ct);
-        if (deliverer is null)
+        Supplier? supplier = await suppliersRepository.SingleOrDefaultAsync(new GetSupplierByIdSpec(req.SupplierId), ct);
+        if (deliverer is null || supplier is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -36,6 +39,8 @@ public class CreateDeliveryNoteEndpoint(
             ExpeditionDate = req.ExpeditionDate,
             DelivererId = deliverer.Id,
             Deliverer = deliverer,
+            SupplierId = req.SupplierId,
+            Supplier = supplier
         };
 
         await deliveryNotesRepository.AddAsync(newDeliveryNote, ct);

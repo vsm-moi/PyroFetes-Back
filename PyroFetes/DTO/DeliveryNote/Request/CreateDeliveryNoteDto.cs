@@ -7,6 +7,7 @@ public class CreateDeliveryNoteDto
     public DateOnly ExpeditionDate { get; set; }
 
     public int DelivererId { get; set; }
+    public int SupplierId { get; set; }
 
     public Dictionary<int, int>? ProductQuantities { get; set; }
 }

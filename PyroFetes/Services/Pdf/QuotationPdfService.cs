@@ -16,7 +16,7 @@ public class QuotationPdfService : IQuotationPdfService
     {
         byte[] logo = Convert.FromBase64String(setting.Logo!);
         byte[] signature = Convert.FromBase64String(setting.ElectronicSignature!);
-        int total = 0;
+        decimal total = 0;
         Document document = Document.Create(container =>
         {
             container.Page(page =>
@@ -91,19 +91,21 @@ public class QuotationPdfService : IQuotationPdfService
 
                         foreach (QuotationProduct l in lignes)
                         {
+                            decimal price = l.Product!.Prices!
+                                .FirstOrDefault(x => x.SupplierId == l.Quotation!.SupplierId && x.ProductId == l.ProductId)
+                                ?.SellingPrice ?? 0;
+
                             table.Cell().Element(CellBody).Text(l.Product?.Name);
                             table.Cell().Element(CellBody).AlignRight().Text(l.Quantity.ToString());
-                            table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity:n2} €");
-                            table.Cell().Element(CellBody).AlignRight().Text($"{l.Quantity * l.Quantity:n2} €");
+                            table.Cell().Element(CellBody).AlignRight().Text($"{price:n2} €");
+                            table.Cell().Element(CellBody).AlignRight().Text($"{price * l.Quantity:n2} €");
 
-                            total = total + l.Quantity * l.Quantity;
+                            total += l.Quantity * price;
                         }
 
-                        IContainer CellHeader(IContainer c) =>
-                            c.BorderBottom(1).PaddingVertical(5).DefaultTextStyle(x => x.SemiBold());
+                        IContainer CellHeader(IContainer c) => c.BorderBottom(1).PaddingVertical(5).DefaultTextStyle(x => x.SemiBold());
 
-                        IContainer CellBody(IContainer c) =>
-                            c.PaddingVertical(2);
+                        IContainer CellBody(IContainer c) => c.PaddingVertical(2);
                     });
 
                     col.Item().LineHorizontal(1);
@@ -125,7 +127,7 @@ public class QuotationPdfService : IQuotationPdfService
                         {
                             right.Item().AlignRight().Text($"Total HT : {total:n2} €");
                             right.Item().AlignRight().Text("Taxe : 20 %");
-                            right.Item().AlignRight().Text($"Total TTC : {(total * 1.2):n2} €");
+                            right.Item().AlignRight().Text($"Total TTC : {total * (decimal)1.2:n2} €");
                         });
                     });
                 });

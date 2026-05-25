@@ -8,8 +8,11 @@ public class GetDeliveryNoteByIdWithProductsSpec : SingleResultSpecification<Del
     public GetDeliveryNoteByIdWithProductsSpec(int deliveryNoteId)
     {
         Query
-            .Where(x => x.Id == deliveryNoteId)
             .Include(x => x.ProductDeliveries!)
-            .ThenInclude(p => p.Product);
+            .ThenInclude(p => p.Product)
+            .ThenInclude(x => x!.Prices)
+            .Include(x => x.Deliverer)
+            .Include(x => x.Supplier)
+            .Where(x => x.Id == deliveryNoteId);
     }
 }

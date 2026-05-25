@@ -35,8 +35,11 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                         col.Item().Text("");
                         col.Item().Text("");
                         col.Item().Text("");
-                        col.Item().Text("Fournisseur").SemiBold().FontSize(12);
-                        col.Item().Text("Mettre fournisseur ici");
+                        col.Item().Text("Fournisseur :").SemiBold().FontSize(12);
+                        col.Item().Text($"{purchaseOrder.Supplier?.Name}");
+                        col.Item().Text($"{purchaseOrder.Supplier?.Address}");
+                        col.Item().Text($"{purchaseOrder.Supplier?.ZipCode} {purchaseOrder.Supplier?.City}");
+                        col.Item().Text($"{purchaseOrder.Supplier?.DeliveryDelay} jours de délai moyen de livraison");
                     });
 
                     // Logo + société à droite
@@ -93,7 +96,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                         foreach (PurchaseProduct l in lignes)
                         {
                             decimal price = l.Product!.Prices!
-                                .FirstOrDefault(p => p.SupplierId == l.PurchaseOrder!.SupplierId)
+                                .FirstOrDefault(x => x.SupplierId == l.PurchaseOrder!.SupplierId && x.ProductId == l.ProductId)
                                 ?.SellingPrice ?? 0;
 
                             table.Cell().Element(CellBody).Text(l.Product?.Name);
@@ -129,10 +132,10 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                         // Colonne droite : totaux
                         row.ConstantItem(180).Column(right =>
                         {
-                            right.Item().AlignRight().Text($"Total: {totalQuantity:n2} produits");
+                            right.Item().AlignRight().Text($"Total: {totalQuantity} produits");
                             right.Item().AlignRight().Text($"Total HT: {total:n2} €");
                             right.Item().AlignRight().Text("Taxe: 20 %");
-                            right.Item().AlignRight().Text($"Total TTC: {(total * 1, 2):n2} €");
+                            right.Item().AlignRight().Text($"Total TTC: {total * (decimal)1.2:n2} €");
                         });
                     });
                 });
