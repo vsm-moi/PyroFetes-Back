@@ -15,5 +15,6 @@ public class GetQuotationProductDto
     public string? ProductImage { get; set; }
     public string? ProductLink { get; set; }
     public int ProductMinimalQuantity { get; set; }
+    public decimal ProductPrice { get; set; }
     public int QuotationId { get; set; }
 }

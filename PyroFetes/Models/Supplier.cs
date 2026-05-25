@@ -13,5 +13,7 @@ public class Supplier
     [Required, MaxLength(100)] public string? City { get; set; }
     [Required] public int DeliveryDelay { get; set; }
 
-    public List<Price>? Prices { get; set; }
+    public List<Price>? Prices { get; set; } 
+    public List<Quotation>? Quotations { get; set; }
+    public List<PurchaseOrder>? PurchaseOrders { get; set; }
 }

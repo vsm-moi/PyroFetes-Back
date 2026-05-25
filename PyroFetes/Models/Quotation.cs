@@ -10,6 +10,9 @@ public class Quotation
 
     [Required] public int CustomerId { get; set; }
     public Customer? Customer { get; set; }
+    
+    [Required] public int SupplierId { get; set; }
+    public Supplier? Supplier { get; set; }
 
     public List<QuotationProduct>? QuotationProducts { get; set; }
 }

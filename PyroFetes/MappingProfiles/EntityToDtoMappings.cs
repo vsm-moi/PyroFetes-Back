@@ -35,15 +35,22 @@ public class EntityToDtoMappings : Profile
         CreateMap<ProductDelivery, GetProductDeliveryDto>();
 
         CreateMap<PurchaseOrder, GetPurchaseOrderDto>()
+            .ForMember(dest => dest.SupplierName, opt => opt.MapFrom(src => src.Supplier!.Name))
             .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.PurchaseProducts));
 
-        CreateMap<PurchaseProduct, GetPurchaseProductDto>();
+        CreateMap<PurchaseProduct, GetPurchaseProductDto>()
+            .ForMember(dest => dest.ProductPrice,
+                opt => opt.MapFrom(src =>
+                    src.Product!.Prices.Where(x => x.SupplierId == src.PurchaseOrder!.SupplierId && x.ProductId == src.ProductId).Select(x => x.SellingPrice).FirstOrDefault()));
 
         CreateMap<Quotation, GetQuotationDto>()
             .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.QuotationProducts));
 
-        CreateMap<QuotationProduct, GetQuotationProductDto>();
-
+        CreateMap<QuotationProduct, GetQuotationProductDto>()
+            .ForMember(dest => dest.ProductPrice,
+                opt => opt.MapFrom(src =>
+                    src.Product!.Prices.Where(x => x.SupplierId == src.Quotation!.SupplierId && x.ProductId == src.ProductId).Select(x => x.SellingPrice).FirstOrDefault()));
+        
         CreateMap<Setting, GetSettingDto>();
 
         CreateMap<User, GetUserDto>();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PyroFetes;
 
@@ -11,9 +12,11 @@ using PyroFetes;
 namespace PyroFetes.Migrations
 {
     [DbContext(typeof(PyroFetesDbContext))]
-    partial class PyroFetesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260525103910_AddedMissingFieldForSupplierInDocuments")]
+    partial class AddedMissingFieldForSupplierInDocuments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
