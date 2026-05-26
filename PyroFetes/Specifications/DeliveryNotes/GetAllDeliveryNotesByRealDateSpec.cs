@@ -3,15 +3,15 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.DeliveryNotes;
 
-public class GetAllDeliveryNoteSpec : Specification<DeliveryNote>
+public class GetAllDeliveryNotesByRealDateSpec : Specification<DeliveryNote>
 {
-    public GetAllDeliveryNoteSpec()
+    public GetAllDeliveryNotesByRealDateSpec()
     {
         Query
             .Include(x => x.Deliverer)
             .Include(x => x.ProductDeliveries)!
             .ThenInclude(x => x.Product)
-            .Where(x => true)
-            .OrderByDescending(x => x.ExpeditionDate);
+            .Where(x => x.RealDeliveryDate == null)
+            .OrderByDescending(x => x.RealDeliveryDate);
     }
 }
