@@ -42,6 +42,7 @@ public class CreatePurchaseOrder(
                 if (purchaseProduct is not null)
                 {
                     await Send.StringAsync("Le produit est déjà dans le bon de commande", 400, cancellation: ct);
+                    return;
                 }
 
                 PurchaseProduct? productOnPurchase = mapper.Map<PurchaseProduct>(line);
