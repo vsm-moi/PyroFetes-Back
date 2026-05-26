@@ -49,6 +49,7 @@ builder.Services.AddScoped<SuppliersRepository>();
 builder.Services.AddScoped<SettingsRepository>();
 builder.Services.AddScoped<UsersRepository>();
 builder.Services.AddScoped<WarehouseProductsRepository>();
+builder.Services.AddScoped<WareHouseRepository>();
 
 // Ajout des services
 builder.Services.AddScoped<IDeliveryNotePdfService, DeliveryNotePdfService>();
