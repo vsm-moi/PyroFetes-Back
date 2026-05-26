@@ -8,7 +8,7 @@ public sealed class GetProductsUnderLimitSpec : Specification<Product>
     public GetProductsUnderLimitSpec()
     {
         Query
-            .Include(p => p.QuotationProducts)
-            .Where(p => p.QuotationProducts != null && p.QuotationProducts.Any(q => q.Quantity < p.MinimalQuantity));
+            .Include(x => x.WarehouseProducts)
+            .Where(x => x.WarehouseProducts != null && x.WarehouseProducts.Sum(p => p.Quantity) < x.MinimalQuantity);
     }
 }
