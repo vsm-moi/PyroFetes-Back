@@ -11,7 +11,7 @@ public class GetAllDeliveryNoteSpec : Specification<DeliveryNote>
             .Include(x => x.Deliverer)
             .Include(x => x.ProductDeliveries)!
             .ThenInclude(x => x.Product)
-            .Where(x => true)
-            .OrderByDescending(x => x.ExpeditionDate);
+            .OrderBy(x => x.RealDeliveryDate)
+            .ThenByDescending(x => x.ExpeditionDate);
     }
 }

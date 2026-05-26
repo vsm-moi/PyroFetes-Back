@@ -12,6 +12,6 @@ public class GetAllDeliveryNotesByRealDateSpec : Specification<DeliveryNote>
             .Include(x => x.ProductDeliveries)!
             .ThenInclude(x => x.Product)
             .Where(x => x.RealDeliveryDate == null)
-            .OrderByDescending(x => x.RealDeliveryDate);
+            .OrderByDescending(x => x.ExpeditionDate);
     }
 }
