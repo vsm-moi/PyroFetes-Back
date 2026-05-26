@@ -81,8 +81,6 @@ public class DtoToEntityMappings : Profile
         CreateMap<PatchUserPasswordDto, User>()
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
-        CreateMap<PatchWareHouseProductQuantityDto, WarehouseProduct>()
-            .ForMember(dest => dest.ProductId, opt => opt.Ignore())
-            .ForMember(dest => dest.WarehouseId, opt => opt.Ignore());
+        CreateMap<PatchWareHouseProductQuantityDto, WarehouseProduct>();
     }
 }
