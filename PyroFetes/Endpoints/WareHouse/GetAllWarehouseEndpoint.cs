@@ -2,7 +2,7 @@
 using PyroFetes.DTO.WareHouse.Response;
 using PyroFetes.Repositories;
 
-namespace PyroFetes.Endpoints;
+namespace PyroFetes.Endpoints.WareHouse;
 
 public class GetAllWarehouseEndpoint(WareHouseRepository wareHouseRepository, AutoMapper.IMapper mapper) : EndpointWithoutRequest<List<GetWareHouseDto>>
 {

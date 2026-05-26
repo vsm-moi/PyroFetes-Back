@@ -30,7 +30,7 @@ public class PatchWareHouseProductQuantityEndpoint(WarehouseProductsRepository w
         if (wareHouseProduct is null) await warehouseProductsRepository.AddAsync(mapper.Map<WarehouseProduct>(req), ct);
         else
         {
-            wareHouseProduct.Quantity = req.Quantity;
+            wareHouseProduct.Quantity += req.Quantity;
             await warehouseProductsRepository.SaveChangesAsync(ct);   
         }
         
