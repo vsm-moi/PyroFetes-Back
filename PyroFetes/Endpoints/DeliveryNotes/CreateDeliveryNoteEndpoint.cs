@@ -35,8 +35,8 @@ public class CreateDeliveryNoteEndpoint(
         DeliveryNote newDeliveryNote = new()
         {
             TrackingNumber = req.TrackingNumber,
-            EstimateDeliveryDate = req.EstimateDeliveryDate,
-            ExpeditionDate = req.ExpeditionDate,
+            EstimateDeliveryDate = DateOnly.FromDateTime(DateTime.Today).AddMonths(2),
+            ExpeditionDate = DateOnly.FromDateTime(DateTime.Today),
             DelivererId = deliverer.Id,
             Deliverer = deliverer,
             SupplierId = req.SupplierId,
