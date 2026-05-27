@@ -1,4 +1,5 @@
 using AutoMapper;
+using PyroFetes.DTO.Customer.Response;
 using PyroFetes.DTO.Deliverer.Response;
 using PyroFetes.DTO.DeliveryNote.Response;
 using PyroFetes.DTO.Price.Response;
@@ -59,5 +60,7 @@ public class EntityToDtoMappings : Profile
         CreateMap<WarehouseProduct, GetWareHouseProductDto>();
 
         CreateMap<Warehouse, GetWareHouseDto>();
+        
+        CreateMap<Customer, GetCustomerDto>();
     }
 }
