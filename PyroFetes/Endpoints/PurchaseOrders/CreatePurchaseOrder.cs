@@ -1,5 +1,6 @@
 ﻿using FastEndpoints;
 using PyroFetes.DTO.PurchaseOrder.Request;
+using PyroFetes.DTO.PurchaseOrder.Response;
 using PyroFetes.DTO.PurchaseProduct.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
@@ -12,7 +13,7 @@ public class CreatePurchaseOrder(
     PurchaseOrdersRepository purchaseOrdersRepository,
     ProductsRepository productsRepository,
     PurchaseProductsRepository purchaseProductsRepository,
-    AutoMapper.IMapper mapper) : Endpoint<CreatePurchaseOrderDto>
+    AutoMapper.IMapper mapper) : Endpoint<CreatePurchaseOrderDto, GetPurchaseOrderDto>
 {
     public override void Configure()
     {
@@ -51,6 +52,6 @@ public class CreatePurchaseOrder(
                 await purchaseProductsRepository.AddAsync(productOnPurchase, ct);
             }
         }
-        await Send.NoContentAsync(ct);
+        await Send.OkAsync(mapper.Map<GetPurchaseOrderDto>(purchaseOrder), ct);
     }
 }
