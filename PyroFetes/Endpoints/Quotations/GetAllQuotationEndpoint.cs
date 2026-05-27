@@ -1,6 +1,7 @@
 ﻿using FastEndpoints;
 using PyroFetes.DTO.Quotation.Response;
 using PyroFetes.Repositories;
+using PyroFetes.Specifications.Quotations;
 
 namespace PyroFetes.Endpoints.Quotations;
 
@@ -14,6 +15,6 @@ public class GetAllQuotationEndpoint(QuotationsRepository quotationsRepository) 
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        await Send.OkAsync(await quotationsRepository.ProjectToListAsync<GetQuotationDto>(ct), ct);
+        await Send.OkAsync(await quotationsRepository.ProjectToListAsync<GetQuotationDto>(new GetAllQuotationSpec(), ct), ct);
     }
 }
