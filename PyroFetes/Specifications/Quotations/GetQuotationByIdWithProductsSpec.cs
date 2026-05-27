@@ -11,6 +11,8 @@ public class GetQuotationByIdWithProductsSpec : SingleResultSpecification<Quotat
             .Where(x => x.Id == quotationId)
             .Include(x => x.QuotationProducts!)
             .ThenInclude(x => x.Product)
-            .ThenInclude(x => x!.Prices);
+            .ThenInclude(x => x!.Prices)
+            .Include(x => x.Customer)
+            .ThenInclude(x => x!.CustomerType);
     }
 }

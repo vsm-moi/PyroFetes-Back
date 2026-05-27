@@ -23,7 +23,6 @@ public class CreateQuotationEndpoint(
     public override async Task HandleAsync(CreateQuotationDto req, CancellationToken ct)
     {
         Quotation quotation = mapper.Map<Quotation>(req);
-        quotation.CustomerId = 1; // TODO: A changer
         await quotationsRepository.AddAsync(quotation, ct);
 
         if (req.Products != null)

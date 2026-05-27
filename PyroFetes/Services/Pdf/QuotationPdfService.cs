@@ -35,7 +35,8 @@ public class QuotationPdfService : IQuotationPdfService
                         col.Item().Text("");
                         col.Item().Text("");
                         col.Item().Text("Client").SemiBold().FontSize(12);
-                        col.Item().Text($"{quotation.Customer}");
+                        col.Item().Text($"{quotation.Customer?.Note}");
+                        col.Item().Text($"{quotation.Customer?.CustomerType?.Label}");
                     });
 
                     // Logo + société à droite
