@@ -10,7 +10,7 @@ public class GetUserEndpoint(UsersRepository usersRepository, AutoMapper.IMapper
 {
     public override void Configure()
     {
-        Get("/users/");
+        Get("/user/");
         Roles("Admin","Employe");
     }
 
