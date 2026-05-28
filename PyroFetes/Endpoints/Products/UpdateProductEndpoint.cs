@@ -11,7 +11,7 @@ public class UpdateProductEndpoint(ProductsRepository productsRepository, AutoMa
     public override void Configure()
     {
         Put("/products/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(UpdateProductDto req, CancellationToken ct)

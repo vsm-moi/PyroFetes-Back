@@ -15,7 +15,8 @@ public class DeleteQuotationEndpoint(QuotationsRepository quotationsRepository) 
     public override void Configure()
     {
         Delete("/quotations/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin");
+
     }
 
     public override async Task HandleAsync(DeleteQuotationRequest req, CancellationToken ct)

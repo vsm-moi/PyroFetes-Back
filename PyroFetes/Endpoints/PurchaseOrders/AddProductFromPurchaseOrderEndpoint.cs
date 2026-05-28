@@ -11,7 +11,7 @@ public class AddProductFromPurchaseOrderEndpoint(PurchaseProductsRepository purc
     public override void Configure()
     {
         Post("/purchaseOrders/{@PurchaseOrderId}/{@ProductId}", x => new { x.PurchaseOrderId, x.ProductId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CreatePurchaseProductDto req, CancellationToken ct)

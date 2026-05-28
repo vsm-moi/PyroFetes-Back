@@ -10,7 +10,7 @@ public class CreateSupplierEndpoint(SuppliersRepository suppliersRepository, Aut
     public override void Configure()
     {
         Post("/suppliers");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CreateSupplierDto req, CancellationToken ct)

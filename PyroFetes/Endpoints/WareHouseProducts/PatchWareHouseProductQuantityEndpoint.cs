@@ -13,7 +13,7 @@ public class PatchWareHouseProductQuantityEndpoint(WarehouseProductsRepository w
     public override void Configure()
     {
         Patch("/wareHouseProducts/{@ProductId}/{@WareHouseId}/quantity", x => new { x.ProductId, x.WareHouseId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchWareHouseProductQuantityDto req, CancellationToken ct)

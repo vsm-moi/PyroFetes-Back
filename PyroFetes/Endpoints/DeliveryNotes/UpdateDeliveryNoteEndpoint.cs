@@ -11,7 +11,7 @@ public class UpdateDeliveryNoteEndpoint(DeliveryNotesRepository deliveryNotesRep
     public override void Configure()
     {
         Put("/deliveryNotes/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(UpdateDeliveryNoteDto req, CancellationToken ct)

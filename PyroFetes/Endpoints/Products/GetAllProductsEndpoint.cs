@@ -9,7 +9,7 @@ public class GetAllProductsEndpoint(ProductsRepository productsRepository) : End
     public override void Configure()
     {
         Get("/products");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

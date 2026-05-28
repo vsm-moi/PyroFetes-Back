@@ -16,7 +16,7 @@ public class GetDelivererEndpoint(DeliverersRepository deliverersRepository, Aut
     public override void Configure()
     {
         Get("/deliverers/{@Id}", x => new { x.DelivererId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(GetDelivererRequest req, CancellationToken ct)

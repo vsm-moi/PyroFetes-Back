@@ -14,7 +14,7 @@ public class PatchQuotationProductQuantityEndpoint(
     public override void Configure()
     {
         Patch("/quotations/{@ProductId}/{@QuotationId}/Quantity", x => new { x.ProductId, x.QuotationId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchQuotationProductQuantityDto req, CancellationToken ct)

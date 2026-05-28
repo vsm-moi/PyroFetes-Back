@@ -11,7 +11,7 @@ public class CreateDelivererEndpoint(DeliverersRepository deliverersRepository) 
     public override void Configure()
     {
         Post("/deliverers");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CreateDelivererDto req, CancellationToken ct)

@@ -18,7 +18,7 @@ public class CreateDeliveryNoteEndpoint(
     public override void Configure()
     {
         Post("/deliveryNotes");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CreateDeliveryNoteDto req, CancellationToken ct)

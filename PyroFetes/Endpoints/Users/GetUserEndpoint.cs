@@ -10,8 +10,8 @@ public class GetUserEndpoint(UsersRepository usersRepository, AutoMapper.IMapper
 {
     public override void Configure()
     {
-        Get("/user/");
-        AllowAnonymous();
+        Get("/users/");
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

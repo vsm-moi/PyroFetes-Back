@@ -16,7 +16,7 @@ public class DeleteDeliveryNoteEndpoint(
     public override void Configure()
     {
         Delete("/deliveryNotes/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(DeleteDeliveryNoteRequest req, CancellationToken ct)

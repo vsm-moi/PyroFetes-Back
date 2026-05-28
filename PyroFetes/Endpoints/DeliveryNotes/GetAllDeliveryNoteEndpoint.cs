@@ -10,7 +10,7 @@ public class GetAllDeliveryNoteEndpoint(DeliveryNotesRepository deliveryNotesRep
     public override void Configure()
     {
         Get("/deliveryNotes");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

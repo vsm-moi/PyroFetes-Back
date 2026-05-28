@@ -15,7 +15,8 @@ public class DeletePurchaseOrderEndpoint(PurchaseOrdersRepository purchaseOrders
     public override void Configure()
     {
         Delete("/purchaseOrders/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin");
+
     }
 
     public override async Task HandleAsync(DeletePurchaseOrderRequest req, CancellationToken ct)

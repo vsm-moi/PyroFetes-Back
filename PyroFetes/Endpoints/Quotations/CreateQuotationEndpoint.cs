@@ -17,7 +17,7 @@ public class CreateQuotationEndpoint(
     public override void Configure()
     {
         Post("/quotations");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CreateQuotationDto req, CancellationToken ct)

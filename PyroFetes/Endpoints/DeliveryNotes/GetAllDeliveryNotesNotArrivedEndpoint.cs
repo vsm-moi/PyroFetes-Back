@@ -10,7 +10,7 @@ public class GetAllDeliveryNotesNotArrivedEndpoint(DeliveryNotesRepository deliv
     public override void Configure()
     {
         Get("/deliveryNotes/validation");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
     
     public override async Task HandleAsync(CancellationToken ct)

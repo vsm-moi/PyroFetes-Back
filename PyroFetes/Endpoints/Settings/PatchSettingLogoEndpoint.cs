@@ -11,7 +11,7 @@ public class PatchSettingLogoEndpoint(SettingsRepository settingsRepository) : E
     {
         Patch("/settings/logo");
         AllowFormData();
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(PatchSettingLogoDto req, CancellationToken ct)

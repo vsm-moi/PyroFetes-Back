@@ -13,7 +13,7 @@ public class CreateUserEndpoint(UsersRepository usersRepository) : Endpoint<Crea
     public override void Configure()
     {
         Post("/users");
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(CreateUserDto req, CancellationToken ct)

@@ -12,7 +12,8 @@ public class PatchSupplierDeliveryDelayEndpoint(SuppliersRepository suppliersRep
     public override void Configure()
     {
         Patch("/suppliers/{@Id}/deliveryDelay", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
+
     }
 
     public override async Task HandleAsync(PatchSupplierDeliveryDelayDto req, CancellationToken ct)

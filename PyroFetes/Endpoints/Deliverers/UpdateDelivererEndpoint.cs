@@ -12,7 +12,7 @@ public class UpdateDelivererEndpoint(DeliverersRepository deliverersRepository, 
     public override void Configure()
     {
         Put("/deliverers/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(UpdateDelivererDto req, CancellationToken ct)

@@ -13,7 +13,7 @@ public class PatchPurchaseOrderPurchaseConditionsEndpoint(PurchaseOrdersReposito
     public override void Configure()
     {
         Patch("/purchaseOrders/{@Id}/PurchaseConditions", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchPurchaseOrderPurchaseConditionsDto req, CancellationToken ct)

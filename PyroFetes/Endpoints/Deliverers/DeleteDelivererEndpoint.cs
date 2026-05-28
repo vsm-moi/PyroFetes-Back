@@ -15,7 +15,7 @@ public class DeleteDelivererEndpoint(DeliverersRepository deliverersRepository) 
     public override void Configure()
     {
         Delete("/deliverers/{@Id}", x => new { x.DelivererId });
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(DeleteDelivererRequest req, CancellationToken ct)

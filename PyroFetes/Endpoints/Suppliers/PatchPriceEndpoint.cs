@@ -13,7 +13,7 @@ public class PatchPriceEndpoint(
     public override void Configure()
     {
         Patch("/prices/{@ProductId}/{@SupplierId}/SellingPrice", x => new { x.ProductId, x.SupplierId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchPriceSellingPriceDto req, CancellationToken ct)

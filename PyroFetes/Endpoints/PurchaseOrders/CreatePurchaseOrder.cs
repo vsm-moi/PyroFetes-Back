@@ -18,7 +18,7 @@ public class CreatePurchaseOrder(
     public override void Configure()
     {
         Post("/purchaseOrders");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CreatePurchaseOrderDto req, CancellationToken ct)

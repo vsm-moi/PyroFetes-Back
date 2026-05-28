@@ -9,7 +9,7 @@ public class GetAllSuppliersEndpoint(SuppliersRepository suppliersRepository) : 
     public override void Configure()
     {
         Get("/suppliers");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

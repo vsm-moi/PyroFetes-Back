@@ -16,7 +16,7 @@ public class DeleteProductToSupplierEndpoint(PricesRepository pricesRepository) 
     public override void Configure()
     {
         Delete("/suppliers/{@SupplierId}/{@Product}", x => new { x.SupplierId, x.ProductId });
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(DeletePriceRequest req, CancellationToken ct)

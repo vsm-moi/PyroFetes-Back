@@ -9,7 +9,7 @@ public class GetAllCustomersEndpoint(CustomersRepository customersRepository, Au
     public override void Configure()
     {
         Get("/customers");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

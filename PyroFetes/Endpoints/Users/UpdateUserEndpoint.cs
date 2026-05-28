@@ -13,7 +13,7 @@ public class UpdateUserEndpoint(UsersRepository usersRepository) : Endpoint<Upda
     public override void Configure()
     {
         Put("/users/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(UpdateUserDto req, CancellationToken ct)

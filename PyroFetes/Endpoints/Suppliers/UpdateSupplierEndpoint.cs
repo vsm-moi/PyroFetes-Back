@@ -11,7 +11,7 @@ public class UpdateSupplierEndpoint(SuppliersRepository suppliersRepository, Aut
     public override void Configure()
     {
         Put("/suppliers/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(UpdateSupplierDto req, CancellationToken ct)
