@@ -17,7 +17,7 @@ public class GetQuotationPdfEndpoint(
     public override void Configure()
     {
         Get("/quotations/{@Id}/pdf", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
         Description(b => b.Produces<byte[]>(200, MediaTypeNames.Application.Pdf));
     }
 

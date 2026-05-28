@@ -16,7 +16,7 @@ public class GetTotalQuantityEndpoint(
     public override void Configure()
     {
         Get("/wareHouseProducts/{@ProductId}", x => new { x.ProductId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(GetTotalQuantityRequest req, CancellationToken ct)

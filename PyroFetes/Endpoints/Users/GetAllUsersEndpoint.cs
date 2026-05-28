@@ -9,7 +9,7 @@ public class GetAllUsersEndpoint(UsersRepository usersRepository) : EndpointWith
     public override void Configure()
     {
         Get("/users");
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

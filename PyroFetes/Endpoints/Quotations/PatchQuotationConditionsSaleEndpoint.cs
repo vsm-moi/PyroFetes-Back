@@ -14,7 +14,7 @@ public class PatchQuotationConditionsSaleEndpoint(
     public override void Configure()
     {
         Patch("/quotations/{@Id}/saleConditions", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchQuotationConditionsSaleDto req, CancellationToken ct)

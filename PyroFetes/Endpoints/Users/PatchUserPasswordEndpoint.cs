@@ -12,7 +12,7 @@ public class PatchUserPasswordEndpoint(UsersRepository usersRepository, AutoMapp
     public override void Configure()
     {
         Patch("/users/{@Id}/password", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(PatchUserPasswordDto req, CancellationToken ct)

@@ -15,7 +15,7 @@ public class DeleteSupplierEndpoint(SuppliersRepository suppliersRepository) : E
     public override void Configure()
     {
         Delete("/suppliers/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(DeleteSupplierRequest req, CancellationToken ct)

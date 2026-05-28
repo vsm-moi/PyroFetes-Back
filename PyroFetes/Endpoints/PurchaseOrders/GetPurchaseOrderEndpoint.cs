@@ -16,7 +16,7 @@ public class GetPurchaseOrderEndpoint(PurchaseOrdersRepository purchaseOrdersRep
     public override void Configure()
     {
         Get("/purchaseOrders/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(GetPurchaseOrderRequest req, CancellationToken ct)

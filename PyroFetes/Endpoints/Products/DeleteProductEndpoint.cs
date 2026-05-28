@@ -15,7 +15,8 @@ public class DeleteProductEndpoint(ProductsRepository productsRepository) : Endp
     public override void Configure()
     {
         Delete("/products/{@Id}", x => new { x.ProductId });
-        AllowAnonymous();
+        Roles("Admin");
+
     }
 
     public override async Task HandleAsync(DeleteProductsRequest req, CancellationToken ct)

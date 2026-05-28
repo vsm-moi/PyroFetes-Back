@@ -18,7 +18,7 @@ public class GetDeliveryNoteEndpoint(
     public override void Configure()
     {
         Get("/deliveryNotes/{@Id}", x => new { x.DeliveryNoteId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(GetDeliveryNoteRequest req, CancellationToken ct)

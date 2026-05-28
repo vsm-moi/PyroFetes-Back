@@ -10,7 +10,7 @@ public class GetAllPurchaseOrderEndpoint(PurchaseOrdersRepository purchaseOrders
     public override void Configure()
     {
         Get("/purchaseOrders");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

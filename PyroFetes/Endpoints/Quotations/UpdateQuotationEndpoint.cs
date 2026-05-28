@@ -13,7 +13,8 @@ public class UpdateQuotationEndpoint(
     public override void Configure()
     {
         Put("/quotations/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
+
     }
 
     public override async Task HandleAsync(UpdateQuotationDto req, CancellationToken ct)

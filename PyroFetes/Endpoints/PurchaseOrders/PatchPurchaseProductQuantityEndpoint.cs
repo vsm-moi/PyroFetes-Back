@@ -13,7 +13,7 @@ public class PatchPurchaseProductQuantityEndpoint(PurchaseProductsRepository pur
     public override void Configure()
     {
         Patch("/purchaseOrders/{@ProductId}/{@PurchaseOrderId}/Quantity", x => new { x.ProductId, x.PurchaseOrderId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchPurchaseProductQuantityDto req, CancellationToken ct)

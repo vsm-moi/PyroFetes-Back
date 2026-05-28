@@ -14,7 +14,7 @@ public class PatchQuotationMessageEndpoint(
     public override void Configure()
     {
         Patch("/quotations/{@Id}/message", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchQuotationMessageDto req, CancellationToken ct)

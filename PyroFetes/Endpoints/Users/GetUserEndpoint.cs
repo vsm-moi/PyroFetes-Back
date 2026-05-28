@@ -16,7 +16,7 @@ public class GetUserEndpoint(UsersRepository usersRepository, AutoMapper.IMapper
     public override void Configure()
     {
         Get("/users/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(GetUserRequest req, CancellationToken ct)

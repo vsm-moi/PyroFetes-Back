@@ -14,7 +14,7 @@ public class GetDeliveryNotePdfEndpoint(DeliveryNotesRepository deliveryNotesRep
     public override void Configure()
     {
         Get("/deliveryNotes/{@Id}/pdf", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
         Description(b => b.Produces<byte[]>(200, MediaTypeNames.Application.Pdf));
     }
 

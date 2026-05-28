@@ -15,7 +15,7 @@ public class DeleteUserEndpoint(UsersRepository usersRepository) : Endpoint<Dele
     public override void Configure()
     {
         Delete("/users/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin");
     }
 
     public override async Task HandleAsync(DeleteUserRequest req, CancellationToken ct)

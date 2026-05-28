@@ -18,7 +18,8 @@ public class GetProductEndpoint(
     public override void Configure()
     {
         Get("/products/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
+
     }
 
     public override async Task HandleAsync(GetProductRequest req, CancellationToken ct)

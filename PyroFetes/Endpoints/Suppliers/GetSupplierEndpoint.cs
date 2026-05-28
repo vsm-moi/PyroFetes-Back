@@ -16,7 +16,7 @@ public class GetSupplierEndpoint(SuppliersRepository suppliersRepository, AutoMa
     public override void Configure()
     {
         Get("/suppliers/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(GetSupplierRequest req, CancellationToken ct)

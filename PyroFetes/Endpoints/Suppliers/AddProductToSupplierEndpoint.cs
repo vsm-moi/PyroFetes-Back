@@ -17,7 +17,7 @@ public class AddProductToSupplierEndpoint(
     public override void Configure()
     {
         Post("/suppliers/{@SupplierId}/{@ProductId}/", x => new { x.SupplierId, x.ProductId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CreatePriceDto req, CancellationToken ct)

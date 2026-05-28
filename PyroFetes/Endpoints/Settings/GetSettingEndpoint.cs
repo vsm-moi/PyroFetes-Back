@@ -10,7 +10,7 @@ public class GetSettingEndpoint(SettingsRepository settingsRepository, AutoMappe
     public override void Configure()
     {
         Get("/settings/");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

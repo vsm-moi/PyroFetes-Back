@@ -11,7 +11,7 @@ public class PatchProductMinimalStockEndpoint(ProductsRepository productsReposit
     public override void Configure()
     {
         Patch("/products/{@Id}/MinimalStock", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchProductMinimalStockDto req, CancellationToken ct)

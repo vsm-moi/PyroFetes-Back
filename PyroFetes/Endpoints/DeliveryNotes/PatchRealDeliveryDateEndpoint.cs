@@ -13,7 +13,7 @@ public class PatchRealDeliveryDateEndpoint(
     public override void Configure()
     {
         Patch("/deliveryNotes/{@Id}", x => new { x.Id });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchDeliveryNoteRealDeliveryDateDto req, CancellationToken ct)

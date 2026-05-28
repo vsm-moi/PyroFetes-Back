@@ -11,7 +11,8 @@ public class PatchSettingElectronicSignatureEndpoint(SettingsRepository settings
     {
         Patch("/settings/electronicSignature");
         AllowFormData();
-        AllowAnonymous();
+        Roles("Admin");
+
     }
 
     public override async Task HandleAsync(PatchSettingElectronicSignatureDto req, CancellationToken ct)

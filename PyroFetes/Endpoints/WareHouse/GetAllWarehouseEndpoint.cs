@@ -9,7 +9,7 @@ public class GetAllWarehouseEndpoint(WareHouseRepository wareHouseRepository, Au
     public override void Configure()
     {
         Get("/wareHouses/");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

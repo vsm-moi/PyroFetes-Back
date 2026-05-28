@@ -14,7 +14,7 @@ public class AddProductoToQuotationEndpoint(
     public override void Configure()
     {
         Post("/quotations/{@Id}/products", x => new { x.ProductId, x.QuotationId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(AddQuotationProductDto req, CancellationToken ct)
