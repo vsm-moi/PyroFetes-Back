@@ -6,22 +6,18 @@ using PyroFetes.Specifications.Users;
 
 namespace PyroFetes.Endpoints.Users;
 
-public class GetUserRequest
-{
-    public int Id { get; set; }
-}
-
-public class GetUserEndpoint(UsersRepository usersRepository, AutoMapper.IMapper mapper) : Endpoint<GetUserRequest, GetUserDto>
+public class GetUserEndpoint(UsersRepository usersRepository, AutoMapper.IMapper mapper) : EndpointWithoutRequest<GetUserDto>
 {
     public override void Configure()
     {
-        Get("/users/{@Id}", x => new { x.Id });
+        Get("/user/");
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(GetUserRequest req, CancellationToken ct)
+    public override async Task HandleAsync(CancellationToken ct)
     {
-        User? user = await usersRepository.SingleOrDefaultAsync(new GetUserByIdSpec(req.Id), ct);
+        int userId = int.Parse(User.FindFirst("Id")!.Value);
+        User? user = await usersRepository.SingleOrDefaultAsync(new GetUserByIdSpec(userId), ct);
 
         if (user is null)
         {
