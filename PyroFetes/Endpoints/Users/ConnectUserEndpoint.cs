@@ -31,7 +31,7 @@ public class ConnectUserEndpoint(UsersRepository usersRepository) : Endpoint<Con
         {
             string jwtToken = JwtBearer.CreateToken(o =>
             {
-                o.SigningKey = "ThisIsASuperSecretJwtKeyThatIsAtLeast32CharsLong";
+                o.SigningKey = "v9!Qx7#Lk2@pZ8$wR6!tN5%uF3&cD9^mH1*eY4";
                 o.ExpireAt = DateTime.UtcNow.AddMinutes(15);
                 if (user.Fonction is not null) o.User.Roles.Add(user.Fonction);
                 o.User.Claims.Add(("Name", user.Name)!);

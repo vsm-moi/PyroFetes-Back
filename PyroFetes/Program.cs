@@ -17,7 +17,7 @@ QuestPDF.Settings.License = LicenseType.Community;
 
 // On ajoute ici FastEndpoints, un framework REPR et Swagger aux services disponibles dans le projet
 builder.Services
-    .AddAuthenticationJwtBearer(s => s.SigningKey = "ThisIsASuperSecretJwtKeyThatIsAtLeast32CharsLong")
+    .AddAuthenticationJwtBearer(s => s.SigningKey = "v9!Qx7#Lk2@pZ8$wR6!tN5%uF3&cD9^mH1*eY4")
     .AddAuthorization()
     .AddFastEndpoints()
     .SwaggerDocument(options => { options.ShortSchemaNames = true; })
