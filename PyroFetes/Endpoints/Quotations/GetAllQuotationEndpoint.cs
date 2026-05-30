@@ -1,9 +1,7 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Quotation.Response;
-using PyroFetes.DTO.QuotationProduct.Response;
-using PyroFetes.Models;
 using PyroFetes.Repositories;
+using PyroFetes.Specifications.Quotations;
 
 namespace PyroFetes.Endpoints.Quotations;
 
@@ -12,11 +10,11 @@ public class GetAllQuotationEndpoint(QuotationsRepository quotationsRepository) 
     public override void Configure()
     {
         Get("/quotations");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        await Send.OkAsync(await quotationsRepository.ProjectToListAsync<GetQuotationDto>(ct), ct);
+        await Send.OkAsync(await quotationsRepository.ProjectToListAsync<GetQuotationDto>(new GetAllQuotationSpec(), ct), ct);
     }
 }

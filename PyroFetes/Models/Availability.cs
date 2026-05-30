@@ -9,6 +9,6 @@ public class Availability
     [Required] public DateOnly DeliveryDate { get; set; }
     [Required] public DateOnly ExpirationDate { get; set; }
     [Required] public DateOnly RenewallDate { get; set; }
-    
+
     public List<StaffAvailability>? StaffAvailabilities { get; set; }
 }

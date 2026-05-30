@@ -1,36 +1,38 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.SettingDTO.Request;
-using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
-using PyroFetes.Specifications.Settings;
 
 namespace PyroFetes.Endpoints.Settings;
 
-public class PatchSettingElectronicSignatureEndpoint(
-    SettingsRepository settingsRepository,
-    AutoMapper.IMapper mapper) : Endpoint<PatchSettingElectronicSignatureDto, GetSettingDto>
+public class PatchSettingElectronicSignatureEndpoint(SettingsRepository settingsRepository) : Endpoint<PatchSettingElectronicSignatureDto>
 {
     public override void Configure()
     {
-        Patch("/settings/{@Id}/ElectronicSignature", x => new {x.Id});
-        AllowAnonymous();
+        Patch("/settings/electronicSignature");
+        AllowFormData();
+        Roles("Admin");
+
     }
-    
+
     public override async Task HandleAsync(PatchSettingElectronicSignatureDto req, CancellationToken ct)
     {
-        Setting? setting = await settingsRepository.FirstOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
-        
-        if (setting == null)
+        Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
+
+        if (setting is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        setting.ElectronicSignature = req.ElectronicSignature;
-        await settingsRepository.UpdateAsync(setting, ct);
+        // Encodage en base64
+        using MemoryStream memoryStream = new();
+        if (req.ElectronicSignature != null) await req.ElectronicSignature.CopyToAsync(memoryStream, ct);
+        byte[] signatureBytes = memoryStream.ToArray();
 
-        await Send.OkAsync(mapper.Map<GetSettingDto>(setting), ct);
+        setting.ElectronicSignature = Convert.ToBase64String(signatureBytes);
+
+        await settingsRepository.SaveChangesAsync(ct);
+        await Send.NoContentAsync(ct);
     }
 }

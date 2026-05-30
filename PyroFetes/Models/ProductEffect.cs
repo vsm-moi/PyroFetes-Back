@@ -11,5 +11,4 @@ public class ProductEffect
 
     public Effect? Effect { get; set; }
     [Required] public int EffectId { get; set; }
-
 }

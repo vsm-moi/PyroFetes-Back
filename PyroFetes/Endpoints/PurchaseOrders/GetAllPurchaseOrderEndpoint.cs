@@ -1,8 +1,7 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.PurchaseOrder.Response;
-using PyroFetes.DTO.PurchaseProduct.Response;
 using PyroFetes.Repositories;
+using PyroFetes.Specifications.PurchaseOrders;
 
 namespace PyroFetes.Endpoints.PurchaseOrders;
 
@@ -11,11 +10,11 @@ public class GetAllPurchaseOrderEndpoint(PurchaseOrdersRepository purchaseOrders
     public override void Configure()
     {
         Get("/purchaseOrders");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        await Send.OkAsync(await purchaseOrdersRepository.ProjectToListAsync<GetPurchaseOrderDto>(ct), ct);
+        await Send.OkAsync(await purchaseOrdersRepository.ProjectToListAsync<GetPurchaseOrderDto>(new GetAllPurchaseOrderSpec(), ct), ct);
     }
 }

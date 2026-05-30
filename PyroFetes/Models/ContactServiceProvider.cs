@@ -8,7 +8,7 @@ public class ContactServiceProvider
 {
     [Required] public int ContactId { get; set; }
     [Required] public int ServiceProviderId { get; set; }
-    
+
     public Contact? Contact { get; set; }
     public ServiceProvider? ServiceProvider { get; set; }
 }

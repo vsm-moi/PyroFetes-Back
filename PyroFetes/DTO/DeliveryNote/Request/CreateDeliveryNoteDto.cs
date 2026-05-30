@@ -3,10 +3,9 @@ namespace PyroFetes.DTO.DeliveryNote.Request;
 public class CreateDeliveryNoteDto
 {
     public string? TrackingNumber { get; set; }
-    public DateOnly EstimateDeliveryDate { get; set; }
-    public DateOnly ExpeditionDate { get; set; }
-    
+
     public int DelivererId { get; set; }
-    
-    public Dictionary<int,int>? ProductQuantities { get; set; }
+    public int SupplierId { get; set; }
+
+    public Dictionary<int, int>? ProductQuantities { get; set; }
 }

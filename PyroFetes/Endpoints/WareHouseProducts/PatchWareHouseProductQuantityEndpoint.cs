@@ -1,41 +1,39 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.WareHouseProduct.Request;
 using PyroFetes.DTO.WareHouseProduct.Response;
 using PyroFetes.Models;
+using PyroFetes.Repositories;
+using PyroFetes.Specifications.WareHouse;
+using PyroFetes.Specifications.WarehouseProducts;
 
 namespace PyroFetes.Endpoints.WareHouseProducts;
 
-public class PatchWareHouseProductQuantityEndpoint(PyroFetesDbContext database)
-    : Endpoint<PatchWareHouseProductQuantityDto, GetWareHouseProductDto>
+public class PatchWareHouseProductQuantityEndpoint(WarehouseProductsRepository warehouseProductsRepository, WareHouseRepository wareHouseRepository , AutoMapper.IMapper mapper) : Endpoint<PatchWareHouseProductQuantityDto, GetWareHouseProductDto>
 {
     public override void Configure()
     {
         Patch("/wareHouseProducts/{@ProductId}/{@WareHouseId}/quantity", x => new { x.ProductId, x.WareHouseId });
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(PatchWareHouseProductQuantityDto req, CancellationToken ct)
     {
-        WarehouseProduct? wareHouseProduct =
-            await database.WarehouseProducts.SingleOrDefaultAsync(
-                wp => wp.ProductId == req.ProductId && wp.WarehouseId == req.WareHouseId, ct);
-        
-        if (wareHouseProduct == null)
+        WarehouseProduct? wareHouseProduct = await warehouseProductsRepository.FirstOrDefaultAsync(new GetWarehouseProductByProductIdSpec(req.ProductId, req.WareHouseId), ct);
+        Warehouse? warehouse = await wareHouseRepository.SingleOrDefaultAsync(new GetWareHouseByIdSpec(req.WareHouseId), ct);
+
+        if (warehouse is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-
-        wareHouseProduct.Quantity = req.Quantity;
-        await database.SaveChangesAsync(ct);
-
-        GetWareHouseProductDto responseDto = new()
+        
+        if (wareHouseProduct is null) await warehouseProductsRepository.AddAsync(mapper.Map<WarehouseProduct>(req), ct);
+        else
         {
-            ProductId = wareHouseProduct.ProductId,
-            WareHouseId = wareHouseProduct.WarehouseId,
-            Quantity = wareHouseProduct.Quantity
-        };
-        await Send.OkAsync(responseDto, ct);
+            wareHouseProduct.Quantity += req.Quantity;
+            await warehouseProductsRepository.SaveChangesAsync(ct);   
+        }
+        
+        await Send.NoContentAsync(ct);
     }
 }

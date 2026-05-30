@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Quotations;
@@ -11,33 +10,26 @@ public class DeleteQuotationRequest
     public int Id { get; set; }
 }
 
-public class DeleteQuotationEndpoint(
-    QuotationsRepository quotationsRepository,
-    QuotationProductsRepository quotationProductsRepository) : Endpoint<DeleteQuotationRequest>
+public class DeleteQuotationEndpoint(QuotationsRepository quotationsRepository) : Endpoint<DeleteQuotationRequest>
 {
     public override void Configure()
     {
-        Delete("/quotations/{@Id}", x => new {x.Id});
-        AllowAnonymous();
+        Delete("/quotations/{@Id}", x => new { x.Id });
+        Roles("Admin");
+
     }
 
     public override async Task HandleAsync(DeleteQuotationRequest req, CancellationToken ct)
     {
-        Quotation? quotation = await quotationsRepository.FirstOrDefaultAsync(new GetQuotationByIdSpec(req.Id), ct);
+        Quotation? quotation = await quotationsRepository.SingleOrDefaultAsync(new GetQuotationByIdSpec(req.Id), ct);
 
-        if (quotation == null)
+        if (quotation is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
-        if (quotation.QuotationProducts != null && quotation.QuotationProducts.Any())
-        {
-            await quotationProductsRepository.DeleteRangeAsync(quotation.QuotationProducts, ct);
-        }
-        
+
         await quotationsRepository.DeleteAsync(quotation, ct);
-        
         await Send.NoContentAsync(ct);
     }
 }

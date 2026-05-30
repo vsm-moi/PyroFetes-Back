@@ -9,6 +9,5 @@ public sealed class GetProductTotalQuantitySpec : Specification<WarehouseProduct
     {
         Query
             .Where(wp => wp.ProductId == productId);
-        
     }
 }

@@ -1,7 +1,5 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Response;
-using PyroFetes.Models;
 using PyroFetes.Repositories;
 
 namespace PyroFetes.Endpoints.Products;
@@ -11,7 +9,7 @@ public class GetAllProductsEndpoint(ProductsRepository productsRepository) : End
     public override void Configure()
     {
         Get("/products");
-        AllowAnonymous();
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)

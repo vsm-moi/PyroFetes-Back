@@ -63,15 +63,15 @@ public class PyroFetesDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         string connectionString =
-            "Server=romaric-thibault.fr;" + 
-            "Database=PyroFetes;" + 
+            "Server=romaric-thibault.fr;" +
+            "Database=PyroFetes-Sujet2;" +
             "User Id=pyrofetes;" +
             "Password=Crablike8-Fringe-Swimmable;" +
             "TrustServerCertificate=true;";
 
         optionsBuilder.UseSqlServer(connectionString);
     }
-    
+
     // Models customization
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -80,13 +80,13 @@ public class PyroFetesDbContext : DbContext
             .WithMany(w => w.MovementsSource)
             .HasForeignKey(m => m.SourceWarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         modelBuilder.Entity<Movement>()
             .HasOne(m => m.DestinationWarehouse)
             .WithMany(w => w.MovementsDestination)
             .HasForeignKey(m => m.DestinationWarehouseId)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         modelBuilder.Entity<MaterialWarehouse>()
             .HasOne(mw => mw.Material)
             .WithMany(m => m.MaterialWarehouses)

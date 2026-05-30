@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
 using PyroFetes.Specifications.Suppliers;
@@ -15,22 +14,21 @@ public class DeleteSupplierEndpoint(SuppliersRepository suppliersRepository) : E
 {
     public override void Configure()
     {
-        Delete("/suppliers/{@Id}", x => new {x.Id});
-        AllowAnonymous();
+        Delete("/suppliers/{@Id}", x => new { x.Id });
+        Roles("Admin");
     }
-    
+
     public override async Task HandleAsync(DeleteSupplierRequest req, CancellationToken ct)
     {
-        Supplier? supplier = await suppliersRepository.FirstOrDefaultAsync(new GetSupplierByIdSpec(req.Id), ct);
+        Supplier? supplier = await suppliersRepository.SingleOrDefaultAsync(new GetSupplierByIdSpec(req.Id), ct);
 
-        if (supplier == null)
+        if (supplier is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
-        await  suppliersRepository.DeleteAsync(supplier, ct);
-        
+
+        await suppliersRepository.DeleteAsync(supplier, ct);
         await Send.NoContentAsync(ct);
     }
 }

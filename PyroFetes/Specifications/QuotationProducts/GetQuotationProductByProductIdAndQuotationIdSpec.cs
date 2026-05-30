@@ -3,7 +3,7 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.QuotationProducts;
 
-public sealed class GetQuotationProductByProductIdAndQuotationIdSpec : Specification<QuotationProduct>
+public sealed class GetQuotationProductByProductIdAndQuotationIdSpec : SingleResultSpecification<QuotationProduct>
 {
     public GetQuotationProductByProductIdAndQuotationIdSpec(int productId, int quotationId)
     {

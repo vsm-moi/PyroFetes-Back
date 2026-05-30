@@ -1,5 +1,4 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Product.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
@@ -18,20 +17,21 @@ public class GetProductEndpoint(
 {
     public override void Configure()
     {
-        Get("/products/{@Id}", x => new {x.Id});
-        AllowAnonymous();
+        Get("/products/{@Id}", x => new { x.Id });
+        Roles("Admin","Employe");
+
     }
 
     public override async Task HandleAsync(GetProductRequest req, CancellationToken ct)
     {
         Product? product = await productsRepository.FirstOrDefaultAsync(new GetProductByIdSpec(req.Id), ct);
 
-        if (product == null)
+        if (product is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
-        
-        await  Send.OkAsync(mapper.Map<GetProductDto>(product), ct);
+
+        await Send.OkAsync(mapper.Map<GetProductDto>(product), ct);
     }
 }

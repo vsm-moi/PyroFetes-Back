@@ -1,6 +1,4 @@
-using AutoMapper.QueryableExtensions;
 using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Deliverer.Response;
 using PyroFetes.Repositories;
 
@@ -11,13 +9,11 @@ public class GetAllDelivererEndpoint(DeliverersRepository deliverersRepository) 
     public override void Configure()
     {
         Get("/deliverers");
-        AllowAnonymous();
-
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(CancellationToken ct)
     {
         await Send.OkAsync(await deliverersRepository.ProjectToListAsync<GetDelivererDto>(ct), ct);
     }
-
 }

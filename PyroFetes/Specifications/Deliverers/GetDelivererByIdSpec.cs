@@ -3,7 +3,7 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.Deliverers;
 
-public sealed class GetDelivererByIdSpec : Specification<Deliverer>
+public sealed class GetDelivererByIdSpec : SingleResultSpecification<Deliverer>
 {
     public GetDelivererByIdSpec(int delivererId)
     {

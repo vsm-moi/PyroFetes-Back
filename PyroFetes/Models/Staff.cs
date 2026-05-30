@@ -11,7 +11,7 @@ public class Staff
     [Required, MaxLength(120)] public string? Email { get; set; }
     [Required, MaxLength(100)] public string? F4T2NumberApproval { get; set; }
     [Required] public DateOnly F4T2ExpirationDate { get; set; }
-    
+
     public List<ShowStaff>? ShowStaffs { get; set; }
     public List<ExperienceLevel>? ExperienceLevels { get; set; }
     public List<StaffAvailability>? StaffAvailabilities { get; set; }

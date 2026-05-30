@@ -9,9 +9,12 @@ public class Supplier
     [Required, MaxLength(100)] public string? Email { get; set; }
     [Required, MaxLength(30)] public string? Phone { get; set; }
     [Required, MaxLength(100)] public string? Address { get; set; }
-    [Required,Length(5,5)] public string? ZipCode { get; set; }
+    [Required, Length(5, 5)] public string? ZipCode { get; set; }
     [Required, MaxLength(100)] public string? City { get; set; }
     [Required] public int DeliveryDelay { get; set; }
-    
-    public List<Price>? Prices { get; set; }
+
+    public List<Price>? Prices { get; set; } 
+    public List<Quotation>? Quotations { get; set; }
+    public List<DeliveryNote>? DeliveryNotes { get; set; }
+    public List<PurchaseOrder>? PurchaseOrders { get; set; }
 }

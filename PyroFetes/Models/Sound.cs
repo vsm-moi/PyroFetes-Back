@@ -12,9 +12,9 @@ public class Sound
     [Required, MaxLength(40)] public string? Kind { get; set; }
     [Required, MaxLength(40)] public string? Format { get; set; }
     public DateTime? CreationDate { get; set; }
-    
+
     [Required] public int SoundCategoryId { get; set; }
     public SoundCategory? SoundCategory { get; set; }
-    
+
     public List<SoundTimecode>? SoundTimecodes { get; set; }
 }

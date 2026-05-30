@@ -329,6 +329,9 @@ namespace PyroFetes.Migrations
                     b.Property<DateOnly?>("RealDeliveryDate")
                         .HasColumnType("date");
 
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
                     b.Property<string>("TrackingNumber")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -337,6 +340,8 @@ namespace PyroFetes.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DelivererId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("DeliveryNotes");
                 });
@@ -695,7 +700,12 @@ namespace PyroFetes.Migrations
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("PurchaseOrders");
                 });
@@ -739,9 +749,14 @@ namespace PyroFetes.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("SupplierId");
 
                     b.ToTable("Quotations");
                 });
@@ -1343,7 +1358,15 @@ namespace PyroFetes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PyroFetes.Models.Supplier", "Supplier")
+                        .WithMany("DeliveryNotes")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Deliverer");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.ExperienceLevel", b =>
@@ -1545,6 +1568,17 @@ namespace PyroFetes.Migrations
                     b.Navigation("Provider");
                 });
 
+            modelBuilder.Entity("PyroFetes.Models.PurchaseOrder", b =>
+                {
+                    b.HasOne("PyroFetes.Models.Supplier", "Supplier")
+                        .WithMany("PurchaseOrders")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("PyroFetes.Models.PurchaseProduct", b =>
                 {
                     b.HasOne("PyroFetes.Models.Product", "Product")
@@ -1572,7 +1606,15 @@ namespace PyroFetes.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PyroFetes.Models.Supplier", "Supplier")
+                        .WithMany("Quotations")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.QuotationProduct", b =>
@@ -1940,7 +1982,13 @@ namespace PyroFetes.Migrations
 
             modelBuilder.Entity("PyroFetes.Models.Supplier", b =>
                 {
+                    b.Navigation("DeliveryNotes");
+
                     b.Navigation("Prices");
+
+                    b.Navigation("PurchaseOrders");
+
+                    b.Navigation("Quotations");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Truck", b =>

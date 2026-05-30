@@ -9,7 +9,7 @@ public class ProductDelivery
     [Required] public int ProductId { get; set; }
     [Required] public int DeliveryNoteId { get; set; }
     [Required] public int Quantity { get; set; }
-    
+
     public Product? Product { get; set; }
     public DeliveryNote? DeliveryNote { get; set; }
 }

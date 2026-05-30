@@ -9,6 +9,6 @@ public class Truck
     [Required] public double? MaxExplosiveCapacity { get; set; }
     [Required, MaxLength(80)] public string? Sizes { get; set; }
     [Required, MaxLength(40)] public string? Status { get; set; }
-    
+
     public List<ShowTruck>? ShowTrucks { get; set; }
 }

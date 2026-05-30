@@ -3,12 +3,13 @@ using PyroFetes.Models;
 
 namespace PyroFetes.Specifications.PurchaseOrders;
 
-public sealed class GetPurchaseOrderByIdSpec : Specification<PurchaseOrder>
+public sealed class GetPurchaseOrderByIdSpec : SingleResultSpecification<PurchaseOrder>
 {
     public GetPurchaseOrderByIdSpec(int purchaseOrderId)
     {
         Query
-            .Include(po => po.PurchaseProducts)
-            .Where(po => po.Id == purchaseOrderId);
+            .Include(x => x.PurchaseProducts!)
+            .ThenInclude(x => x.Product)
+            .Where(x => x.Id == purchaseOrderId);
     }
 }

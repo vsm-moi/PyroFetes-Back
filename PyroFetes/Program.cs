@@ -4,20 +4,23 @@ using PyroFetes;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using FastEndpoints.Security;
+using Microsoft.Net.Http.Headers;
 using PyroFetes.MappingProfiles;
 using PyroFetes.Repositories;
+using PyroFetes.Services.Pdf;
+using QuestPDF.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
+// Configurer la licence QuestPDF
+QuestPDF.Settings.License = LicenseType.Community;
+
 // On ajoute ici FastEndpoints, un framework REPR et Swagger aux services disponibles dans le projet
 builder.Services
-    .AddAuthenticationJwtBearer(s => s.SigningKey = "ThisIsASuperSecretJwtKeyThatIsAtLeast32CharsLong")
+    .AddAuthenticationJwtBearer(s => s.SigningKey = "v9!Qx7#Lk2@pZ8$wR6!tN5%uF3&cD9^mH1*eY4")
     .AddAuthorization()
     .AddFastEndpoints()
-    .SwaggerDocument(options =>
-    {
-        options.ShortSchemaNames = true;
-    })
+    .SwaggerDocument(options => { options.ShortSchemaNames = true; })
     .AddCors(options =>
     {
         options.AddDefaultPolicy(policyBuilder =>
@@ -25,7 +28,8 @@ builder.Services
             policyBuilder
                 .WithOrigins("http://localhost:4200")
                 .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .WithExposedHeaders(HeaderNames.ContentDisposition);
         });
     });
 
@@ -45,6 +49,13 @@ builder.Services.AddScoped<SuppliersRepository>();
 builder.Services.AddScoped<SettingsRepository>();
 builder.Services.AddScoped<UsersRepository>();
 builder.Services.AddScoped<WarehouseProductsRepository>();
+builder.Services.AddScoped<WareHouseRepository>();
+builder.Services.AddScoped<CustomersRepository>();
+
+// Ajout des services
+builder.Services.AddScoped<IDeliveryNotePdfService, DeliveryNotePdfService>();
+builder.Services.AddScoped<IPurchaseOrderPdfService, PurchaseOrderPdfService>();
+builder.Services.AddScoped<IQuotationPdfService, QuotationPdfService>();
 
 MapperConfiguration mappingConfig = new(mc =>
 {
@@ -68,7 +79,7 @@ app.UseAuthentication()
     })
     .UseSwaggerGen();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseCors();
 

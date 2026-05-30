@@ -1,32 +1,23 @@
 ﻿using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
-using PyroFetes.Specifications.Settings;
 
 namespace PyroFetes.Endpoints.Settings;
 
-public class GetSettingRequest
-{
-    public int Id { get; set; }
-}
-
-public class GetSettingEndpoint(
-    SettingsRepository settingsRepository,
-    AutoMapper.IMapper mapper) : Endpoint<GetSettingRequest, GetSettingDto>
+public class GetSettingEndpoint(SettingsRepository settingsRepository, AutoMapper.IMapper mapper) : EndpointWithoutRequest<GetSettingDto>
 {
     public override void Configure()
     {
-        Get("/settings/{@Id}", x => new {x.Id});
-        AllowAnonymous();
+        Get("/settings/");
+        Roles("Admin","Employe");
     }
-    
-    public override async Task HandleAsync(GetSettingRequest req, CancellationToken ct)
-    {
-        Setting? setting = await settingsRepository.FirstOrDefaultAsync(new GetSettingByIdSpec(req.Id), ct);
 
-        if (setting == null)
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
+
+        if (setting is null)
         {
             await Send.NotFoundAsync(ct);
             return;

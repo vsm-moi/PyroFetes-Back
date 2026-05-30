@@ -1,5 +1,4 @@
 using FastEndpoints;
-using Microsoft.EntityFrameworkCore;
 using PyroFetes.DTO.Deliverer.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
@@ -12,22 +11,19 @@ public class GetDelivererRequest
     public int DelivererId { get; set; }
 }
 
-public class GetDelivererEndpoint(
-    DeliverersRepository deliverersRepository,
-    AutoMapper.IMapper mapper) : Endpoint<GetDelivererRequest, GetDelivererDto>
+public class GetDelivererEndpoint(DeliverersRepository deliverersRepository, AutoMapper.IMapper mapper) : Endpoint<GetDelivererRequest, GetDelivererDto>
 {
     public override void Configure()
     {
-        Get("/deliverers/{@id}", x=>new {x.DelivererId});
-        AllowAnonymous();
-
+        Get("/deliverers/{@Id}", x => new { x.DelivererId });
+        Roles("Admin","Employe");
     }
 
     public override async Task HandleAsync(GetDelivererRequest req, CancellationToken ct)
     {
-        Deliverer? deliverer = await deliverersRepository.FirstOrDefaultAsync(new GetDelivererByIdSpec(req.DelivererId), ct);
+        Deliverer? deliverer = await deliverersRepository.SingleOrDefaultAsync(new GetDelivererByIdSpec(req.DelivererId), ct);
 
-        if (deliverer == null)
+        if (deliverer is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -35,5 +31,4 @@ public class GetDelivererEndpoint(
 
         await Send.OkAsync(mapper.Map<GetDelivererDto>(deliverer), ct);
     }
-
 }

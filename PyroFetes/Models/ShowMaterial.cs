@@ -11,5 +11,4 @@ public class ShowMaterial
 
     public Material? Material { get; set; }
     [Required] public int MaterialId { get; set; }
-
 }
