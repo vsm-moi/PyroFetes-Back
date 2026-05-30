@@ -1,50 +1,79 @@
-# Gestionnaire de Stocks et Commandes
+# PyroFêtes — Système de gestion des stocks et des documents
 
-Cette application web permet de **suivre les stocks**, **automatiser les commandes fournisseurs** et **gérer le cycle complet d’approvisionnement**.  
-Elle est conçue pour simplifier le travail des entreprises en offrant une vue en temps réel sur les produits, leurs fournisseurs et l’état des livraisons.
+> Application web de gestion des stocks, fournisseurs, devis, bons de commande et bons de livraison pour l'entreprise **PyroFêtes**.
 
----
 
-## ✨ Fonctionnalités principales
+## Sommaire
 
-### 1️⃣ Suivi et réapprovisionnement des stocks
-- Définissez un **niveau minimal de stock** pour chaque produit.  
-- Surveillez les **niveaux en temps réel** grâce à une interface claire.  
-- Lorsqu’un produit atteint ou descend sous son seuil minimal, le système **génère automatiquement un bon de commande** pour le réapprovisionner.
+- [Contexte](#contexte)
+- [Fonctionnalités](#fonctionnalités)
+- [Stack technique](#stack-technique)
+- [Équipe](#équipe)
 
-### 2️⃣ Gestion des fournisseurs
-- Enregistrez les informations complètes des fournisseurs : nom, adresse, coordonnées, produits fournis, délais de livraison.  
-- **Associez un ou plusieurs fournisseurs** à chaque produit.  
-- Lorsqu’un bon de commande est créé, le système **propose automatiquement les fournisseurs appropriés**.
 
-### 3️⃣ Devis et bons de commande
-- Créez des **devis personnalisés** : sélection des produits, quantités, prix, ajout d’un logo, message ou conditions de vente.  
-- **Imprimez ou exportez** vos devis au format PDF.  
-- Générez des **bons de commande** en quelques clics, avec personnalisation (logo, conditions d’achat) et exportation en PDF.
+## Contexte
 
-### 4️⃣ Suivi des livraisons
-- **Transformez un bon de commande en bon de livraison** dès l’expédition des produits par le fournisseur.  
-- Enregistrez toutes les informations importantes : date d’expédition, transporteur, numéro de suivi, date prévue et date effective de livraison.  
-- Recevez des **alertes en cas de retard**.  
-- Gérez la **réception des produits** et vérifiez leur conformité.
+PyroFêtes cherchait à remplacer ses processus manuels de gestion des stocks et de génération de documents commerciaux par un outil centralisé. Les objectifs principaux sont :
 
----
+- Automatiser le réapprovisionnement
+- Gérer les fournisseurs et leurs conditions
+- Éditer et exporter les documents commerciaux (devis, bons de commande, bons de livraison)
+- Assurer un suivi fiable des livraisons et des réceptions
 
-## 🗂️ Livrables prévus
-- **Modèle de données** : diagramme de classes commun à tous les groupes.  
-- **Interface utilisateur** : maquettes ou prototypes interactifs.  
-- **Code source commenté** pour une meilleure compréhension.  
-- **Documentation technique** : description des fonctionnalités, architecture de l’application et API.
 
----
+## Fonctionnalités
 
-## 👥 Équipe
-- **Mathys**  
-- **Enzo**  
-- **Cristiano**  
-- **Arsène**
+### Gestion des stocks
+- Définition de seuils minimaux par produit
+- Visualisation en temps réel du stock courant
+- Alertes automatiques en cas de stock sous le seuil
+- Génération automatique de bons de commande
 
----
+### Gestion des fournisseurs
+- Enregistrement des fournisseurs (nom, adresse, coordonnées, conditions)
+- Gestion des délais de livraison par produit
+- Association de plusieurs fournisseurs à un produit (prix + délai)
+- Suggestion automatique du fournisseur le plus pertinent
 
-## 🚀 Objectif
-Fournir un outil complet pour automatiser la gestion des stocks et des commandes, réduisant les erreurs humaines, améliorant le suivi des livraisons et facilitant la communication avec les fournisseurs.
+### Devis & Bons de commande
+- Création de devis et bons de commande (produits, quantités, prix, remises)
+- Personnalisation des documents (logo, message, conditions)
+- Export au format **PDF**
+
+### Bons de livraison & Réceptions
+- Transformation d'un bon de commande validé en bon de livraison
+- Enregistrement des informations de livraison (transporteur, numéro de suivi, dates)
+- Alertes en cas de retard de livraison
+- Gestion des réceptions avec mise à jour automatique des stocks
+
+
+## Stack technique
+
+| Couche | Technologie |
+|---|---|
+| **Front-end** | Angular + NG-ZORRO + Tailwind CSS |
+| **Back-end** | C# / .NET |
+| **API** | REST (C#) |
+| **Base de données** | SQL Server |
+| **Gestion des tâches** | YouTrack |
+| **Versioning** | Gitea |
+| **Communication** | Discord + Présentiel |
+
+
+## Équipe
+
+| Membre | Rôle |
+|---|---|
+| Mathys Sanchez-Vendé | Développeur |
+| Enzo Norguet | Développeur |
+| Cristiano Henrique Gaspar | Développeur |
+| Arsène | Développeur |
+
+**Clients :** Mr Thibault Ferrand, Mr Douguet
+
+
+## Sécurité
+
+- Authentification sécurisée
+- Gestion des accès et des permissions par rôle (Commercial / Administrateur)
+- Protection des données utilisateurs
