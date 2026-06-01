@@ -16,7 +16,7 @@ public class DeleteProductFromQuotationEndpoint(QuotationProductsRepository quot
     public override void Configure()
     {
         Delete("/quotations/{@ProductId}/{@QuotationId}", x => new { x.ProductId, x.QuotationId });
-        Roles("Admin");
+        Roles("Admin", "Employe");
     }
 
     public override async Task HandleAsync(DeleteQuotationProductRequest req, CancellationToken ct)
