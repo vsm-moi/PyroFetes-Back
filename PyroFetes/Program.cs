@@ -1,3 +1,5 @@
+using Amazon.S3;
+using Amazon.S3.Model;
 using AutoMapper;
 using AutoMapper.EquivalencyExpression;
 using PyroFetes;
@@ -7,6 +9,7 @@ using FastEndpoints.Security;
 using Microsoft.Net.Http.Headers;
 using PyroFetes.MappingProfiles;
 using PyroFetes.Repositories;
+using PyroFetes.Services;
 using PyroFetes.Services.Pdf;
 using QuestPDF.Infrastructure;
 
@@ -56,6 +59,7 @@ builder.Services.AddScoped<CustomersRepository>();
 builder.Services.AddScoped<IDeliveryNotePdfService, DeliveryNotePdfService>();
 builder.Services.AddScoped<IPurchaseOrderPdfService, PurchaseOrderPdfService>();
 builder.Services.AddScoped<IQuotationPdfService, QuotationPdfService>();
+builder.Services.AddScoped<StorageService>();
 
 MapperConfiguration mappingConfig = new(mc =>
 {
@@ -67,6 +71,31 @@ MapperConfiguration mappingConfig = new(mc =>
 
 AutoMapper.IMapper mapper = mappingConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
+
+// RUSTFS
+IConfigurationSection config = builder.Configuration.GetSection("RustFS");
+
+AmazonS3Client s3Client = new(
+    config["AccessKey"],
+    config["SecretKey"],
+    new AmazonS3Config
+    {
+        ServiceURL = config["ServiceUrl"],
+        ForcePathStyle = true
+    }
+);
+
+ListBucketsResponse? buckets = await s3Client.ListBucketsAsync();
+bool exist = buckets?.Buckets?.Any(x => x.BucketName == config["BucketName"]) == true;
+if (!exist)
+{
+    await s3Client.PutBucketAsync(new PutBucketRequest
+    {
+        BucketName = config["BucketName"]
+    });
+}
+
+builder.Services.AddSingleton<IAmazonS3>(s3Client);
 
 // On construit l'application en lui donnant vie
 WebApplication app = builder.Build();

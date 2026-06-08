@@ -2,10 +2,11 @@
 using PyroFetes.DTO.SettingDTO.Response;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
+using PyroFetes.Services;
 
 namespace PyroFetes.Endpoints.Settings;
 
-public class GetSettingEndpoint(SettingsRepository settingsRepository, AutoMapper.IMapper mapper) : EndpointWithoutRequest<GetSettingDto>
+public class GetSettingEndpoint(SettingsRepository settingsRepository, StorageService storageService) : EndpointWithoutRequest<GetSettingDto>
 {
     public override void Configure()
     {
@@ -22,7 +23,14 @@ public class GetSettingEndpoint(SettingsRepository settingsRepository, AutoMappe
             await Send.NotFoundAsync(ct);
             return;
         }
+        
+        GetSettingDto settingDto = new()
+        {
+            Id = setting.Id,
+            ElectronicSignature = storageService.GetUrl(setting.ElectronicSignature!),
+            Logo = storageService.GetUrl(setting.Logo!)
+        };
 
-        await Send.OkAsync(mapper.Map<GetSettingDto>(setting), ct);
+        await Send.OkAsync(settingDto, ct);
     }
 }

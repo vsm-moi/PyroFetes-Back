@@ -2,10 +2,11 @@
 using PyroFetes.DTO.SettingDTO.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
+using PyroFetes.Services;
 
 namespace PyroFetes.Endpoints.Settings;
 
-public class PatchSettingLogoEndpoint(SettingsRepository settingsRepository) : Endpoint<PatchSettingLogoDto>
+public class PatchSettingLogoEndpoint(SettingsRepository settingsRepository, StorageService storageService) : Endpoint<PatchSettingLogoDto>
 {
     public override void Configure()
     {
@@ -24,12 +25,9 @@ public class PatchSettingLogoEndpoint(SettingsRepository settingsRepository) : E
             return;
         }
 
-        // Encodage en base64
-        using MemoryStream memoryStream = new();
-        if (req.Logo != null) await req.Logo.CopyToAsync(memoryStream, ct);
-        byte[] logoBytes = memoryStream.ToArray();
+        string key = await storageService.UploadFile(req.Logo!, "logo", ct);
 
-        setting.Logo = Convert.ToBase64String(logoBytes);
+        setting.Logo = key;
 
         await settingsRepository.SaveChangesAsync(ct);
         await Send.NoContentAsync(ct);
