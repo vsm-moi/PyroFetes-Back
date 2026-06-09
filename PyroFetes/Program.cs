@@ -56,9 +56,9 @@ builder.Services.AddScoped<WareHouseRepository>();
 builder.Services.AddScoped<CustomersRepository>();
 
 // Ajout des services
-builder.Services.AddScoped<IDeliveryNotePdfService, DeliveryNotePdfService>();
-builder.Services.AddScoped<IPurchaseOrderPdfService, PurchaseOrderPdfService>();
-builder.Services.AddScoped<IQuotationPdfService, QuotationPdfService>();
+builder.Services.AddScoped<DeliveryNotePdfService>();
+builder.Services.AddScoped<PurchaseOrderPdfService>();
+builder.Services.AddScoped<QuotationPdfService>();
 builder.Services.AddScoped<StorageService>();
 
 MapperConfiguration mappingConfig = new(mc =>

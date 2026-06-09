@@ -3,18 +3,23 @@ using FastEndpoints;
 using PyroFetes.DTO.DeliveryNote.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
+using PyroFetes.Services;
 using PyroFetes.Services.Pdf;
 using PyroFetes.Specifications.DeliveryNotes;
 
 namespace PyroFetes.Endpoints.DeliveryNotes;
 
-public class GetDeliveryNotePdfEndpoint(DeliveryNotesRepository deliveryNotesRepository, IDeliveryNotePdfService deliveryNotePdfService, SettingsRepository settingsRepository)
+public class GetDeliveryNotePdfEndpoint(
+    DeliveryNotesRepository deliveryNotesRepository,
+    DeliveryNotePdfService deliveryNotePdfService,
+    SettingsRepository settingsRepository,
+    StorageService storageService)
     : Endpoint<GetDeliveryNotePdfDto, byte[]>
 {
     public override void Configure()
     {
         Get("/deliveryNotes/{@Id}/pdf", x => new { x.Id });
-        Roles("Admin","Employe");
+        Roles("Admin", "Employe");
         Description(b => b.Produces<byte[]>(200, MediaTypeNames.Application.Pdf));
     }
 
@@ -31,7 +36,7 @@ public class GetDeliveryNotePdfEndpoint(DeliveryNotesRepository deliveryNotesRep
             return;
         }
 
-        byte[] bytes = deliveryNotePdfService.Generate(deliveryNote, deliveryNote.ProductDeliveries!, setting!);
+        byte[] bytes = await deliveryNotePdfService.Generate(deliveryNote, setting!, storageService);
 
         await Send.BytesAsync(
             bytes: bytes,

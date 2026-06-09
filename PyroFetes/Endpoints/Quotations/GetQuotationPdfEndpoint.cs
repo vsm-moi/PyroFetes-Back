@@ -3,6 +3,7 @@ using FastEndpoints;
 using PyroFetes.DTO.Quotation.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
+using PyroFetes.Services;
 using PyroFetes.Services.Pdf;
 using PyroFetes.Specifications.Quotations;
 
@@ -10,8 +11,9 @@ namespace PyroFetes.Endpoints.Quotations;
 
 public class GetQuotationPdfEndpoint(
     QuotationsRepository quotationRepository,
-    IQuotationPdfService quotationPdfService,
-    SettingsRepository settingsRepository)
+    QuotationPdfService quotationPdfService,
+    SettingsRepository settingsRepository,
+    StorageService storageService)
     : Endpoint<GetQuotationPdfDto, byte[]>
 {
     public override void Configure()
@@ -33,7 +35,7 @@ public class GetQuotationPdfEndpoint(
 
         Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
 
-        byte[] bytes = quotationPdfService.Generate(quotation, quotation.QuotationProducts!, setting!);
+        byte[] bytes = await quotationPdfService.Generate(quotation, setting!, storageService);
 
         await Send.BytesAsync(
             bytes: bytes,

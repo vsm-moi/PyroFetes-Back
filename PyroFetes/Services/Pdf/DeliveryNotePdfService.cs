@@ -5,17 +5,14 @@ using QuestPDF.Infrastructure;
 
 namespace PyroFetes.Services.Pdf;
 
-public interface IDeliveryNotePdfService
+public class DeliveryNotePdfService
 {
-    byte[] Generate(DeliveryNote deliveryNote, List<ProductDelivery> lignes, Setting setting);
-}
+    private static readonly HttpClient HttpClient = new();
 
-public class DeliveryNotePdfService : IDeliveryNotePdfService
-{
-    public byte[] Generate(DeliveryNote deliveryNote, List<ProductDelivery> lignes, Setting setting)
+    public async Task<byte[]> Generate(DeliveryNote deliveryNote, Setting setting, StorageService storageService)
     {
-        byte[] logo = Convert.FromBase64String(setting.Logo!);
-        byte[] signature = Convert.FromBase64String(setting.ElectronicSignature!);
+        byte[] logoBytes = await HttpClient.GetByteArrayAsync(storageService.GetUrl(setting.Logo!));
+        byte[] signatureBytes = await HttpClient.GetByteArrayAsync(storageService.GetUrl(setting.ElectronicSignature!));
         decimal total = 0;
         int totalQuantity = 0;
         Document document = Document.Create(container =>
@@ -48,7 +45,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                     // Logo + société à droite
                     row.ConstantItem(200).Column(col =>
                     {
-                        col.Item().AlignRight().Height(70).Image(logo, ImageScaling.FitArea);
+                        col.Item().AlignRight().Height(70).Image(logoBytes, ImageScaling.FitArea);
                         col.Item().Height(20);
                         col.Item().AlignRight().Text("Pyro-Fêtes").SemiBold();
                         col.Item().Height(5);
@@ -93,7 +90,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                             header.Cell().Element(CellHeader).AlignRight().Text("Total");
                         });
 
-                        foreach (ProductDelivery l in lignes)
+                        foreach (ProductDelivery l in deliveryNote.ProductDeliveries!)
                         {
                             decimal price = l.Product!.Prices!
                                 .FirstOrDefault(x => x.SupplierId == l.DeliveryNote!.SupplierId && x.ProductId == l.ProductId)
@@ -125,7 +122,7 @@ public class DeliveryNotePdfService : IDeliveryNotePdfService
                 });
 
                 // Signature en bas à droite
-                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea); });
+                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signatureBytes, ImageScaling.FitArea); });
             });
         });
 

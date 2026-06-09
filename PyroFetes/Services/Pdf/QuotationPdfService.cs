@@ -5,17 +5,14 @@ using QuestPDF.Infrastructure;
 
 namespace PyroFetes.Services.Pdf;
 
-public interface IQuotationPdfService
+public class QuotationPdfService
 {
-    byte[] Generate(Quotation quotation, List<QuotationProduct> lignes, Setting setting);
-}
+    private static readonly HttpClient HttpClient = new();
 
-public class QuotationPdfService : IQuotationPdfService
-{
-    public byte[] Generate(Quotation quotation, List<QuotationProduct> lignes, Setting setting)
+    public async Task<byte[]> Generate(Quotation quotation, Setting setting, StorageService storageService)
     {
-        byte[] logo = Convert.FromBase64String(setting.Logo!);
-        byte[] signature = Convert.FromBase64String(setting.ElectronicSignature!);
+        byte[] logoBytes = await HttpClient.GetByteArrayAsync(storageService.GetUrl(setting.Logo!));
+        byte[] signatureBytes = await HttpClient.GetByteArrayAsync(storageService.GetUrl(setting.ElectronicSignature!));
         decimal total = 0;
         Document document = Document.Create(container =>
         {
@@ -42,7 +39,7 @@ public class QuotationPdfService : IQuotationPdfService
                     // Logo + société à droite
                     row.ConstantItem(200).Column(col =>
                     {
-                        col.Item().AlignRight().Height(70).Image(logo, ImageScaling.FitArea);
+                        col.Item().AlignRight().Height(70).Image(logoBytes, ImageScaling.FitArea);
                         col.Item().Height(20);
                         col.Item().AlignRight().Text("Pyro-Fêtes").SemiBold();
                         col.Item().Height(5);
@@ -90,7 +87,7 @@ public class QuotationPdfService : IQuotationPdfService
                             header.Cell().Element(CellHeader).AlignRight().Text("Total");
                         });
 
-                        foreach (QuotationProduct l in lignes)
+                        foreach (QuotationProduct l in quotation.QuotationProducts!)
                         {
                             decimal price = l.Product!.Prices!
                                 .FirstOrDefault(x => x.SupplierId == l.Quotation!.SupplierId && x.ProductId == l.ProductId)
@@ -134,7 +131,7 @@ public class QuotationPdfService : IQuotationPdfService
                 });
 
                 // Signature en bas à droite
-                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea); });
+                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signatureBytes, ImageScaling.FitArea); });
             });
         });
 

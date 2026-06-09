@@ -3,6 +3,7 @@ using FastEndpoints;
 using PyroFetes.DTO.PurchaseOrder.Request;
 using PyroFetes.Models;
 using PyroFetes.Repositories;
+using PyroFetes.Services;
 using PyroFetes.Services.Pdf;
 using PyroFetes.Specifications.PurchaseOrders;
 
@@ -10,8 +11,9 @@ namespace PyroFetes.Endpoints.PurchaseOrders;
 
 public class GetPurchaseOrderPdfEndpoint(
     PurchaseOrdersRepository purchaseOrdersRepository,
-    IPurchaseOrderPdfService purchaseOrderPdfService,
-    SettingsRepository settingsRepository)
+    PurchaseOrderPdfService purchaseOrderPdfService,
+    SettingsRepository settingsRepository,
+    StorageService storageService)
     : Endpoint<GetPurchaseOrderPdfDto, byte[]>
 {
     public override void Configure()
@@ -33,7 +35,7 @@ public class GetPurchaseOrderPdfEndpoint(
 
         Setting? setting = await settingsRepository.FirstOrDefaultAsync(ct);
 
-        byte[] bytes = purchaseOrderPdfService.Generate(purchaseOrder, purchaseOrder.PurchaseProducts!, setting!);
+        byte[] bytes = await purchaseOrderPdfService.Generate(purchaseOrder, setting!, storageService);
 
         await Send.BytesAsync(
             bytes: bytes,

@@ -5,17 +5,14 @@ using QuestPDF.Infrastructure;
 
 namespace PyroFetes.Services.Pdf;
 
-public interface IPurchaseOrderPdfService
+public class PurchaseOrderPdfService
 {
-    byte[] Generate(PurchaseOrder purchaseOrder, List<PurchaseProduct> lignes, Setting setting);
-}
-
-public class PurchaseOrderPdfService : IPurchaseOrderPdfService
-{
-    public byte[] Generate(PurchaseOrder purchaseOrder, List<PurchaseProduct> lignes, Setting setting)
+    private static readonly HttpClient HttpClient = new();
+    
+    public async Task<byte[]> Generate(PurchaseOrder purchaseOrder, Setting setting, StorageService storageService)
     {
-        byte[] logo = Convert.FromBase64String(setting.Logo!);
-        byte[] signature = Convert.FromBase64String(setting.ElectronicSignature!);
+        byte[] logoBytes = await HttpClient.GetByteArrayAsync(storageService.GetUrl(setting.Logo!));
+        byte[] signatureBytes = await HttpClient.GetByteArrayAsync(storageService.GetUrl(setting.ElectronicSignature!));
         int totalQuantity = 0;
         decimal total = 0;
         Document document = Document.Create(container =>
@@ -45,7 +42,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                     // Logo + société à droite
                     row.ConstantItem(200).Column(col =>
                     {
-                        col.Item().AlignRight().Height(70).Image(logo, ImageScaling.FitArea);
+                        col.Item().AlignRight().Height(70).Image(logoBytes, ImageScaling.FitArea);
                         col.Item().Height(20);
                         col.Item().AlignRight().Text("Pyro-Fêtes").SemiBold();
                         col.Item().Height(5);
@@ -93,7 +90,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                             header.Cell().Element(CellHeader).AlignRight().Text("Total");
                         });
 
-                        foreach (PurchaseProduct l in lignes)
+                        foreach (PurchaseProduct l in purchaseOrder.PurchaseProducts!)
                         {
                             decimal price = l.Product!.Prices!
                                 .FirstOrDefault(x => x.SupplierId == l.PurchaseOrder!.SupplierId && x.ProductId == l.ProductId)
@@ -141,7 +138,7 @@ public class PurchaseOrderPdfService : IPurchaseOrderPdfService
                 });
 
                 // Signature en bas à droite
-                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signature, ImageScaling.FitArea); });
+                page.Footer().AlignRight().Column(col => { col.Item().AlignRight().Height(100).Image(signatureBytes, ImageScaling.FitArea); });
             });
         });
 
