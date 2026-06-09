@@ -64,9 +64,9 @@ public class PyroFetesDbContext : DbContext
     {
         string connectionString =
             "Server=romaric-thibault.fr;" +
-            "Database=PyroFetes-Sujet2;" +
-            "User Id=pyrofetes;" +
-            "Password=Crablike8-Fringe-Swimmable;" +
+            "Database=PyroFetesMathysExam;" +
+            "User Id=mathys;" +
+            "Password=Onto9-Cage-Afflicted;" +
             "TrustServerCertificate=true;";
 
         optionsBuilder.UseSqlServer(connectionString);
