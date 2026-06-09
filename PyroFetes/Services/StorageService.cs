@@ -12,7 +12,7 @@ public class StorageService(IAmazonS3 amazonS3, IConfiguration config)
     {
         if (file.Length == 0) throw new Exception("Fichier vide");
         
-        string key = $"settings/{type}";
+        string key = $"settings/{type}/{Guid.NewGuid()}";
 
         using MemoryStream memoryStream = new();
         await file.CopyToAsync(memoryStream, ct);
