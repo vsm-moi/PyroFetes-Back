@@ -58,6 +58,8 @@ public class PyroFetesDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
     public DbSet<WarehouseProduct> WarehouseProducts { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<InvoiceProduct> InvoiceProducts { get; set; }
 
     // Database configuration
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

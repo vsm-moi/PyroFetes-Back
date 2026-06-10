@@ -1,6 +1,7 @@
 using AutoMapper;
 using PyroFetes.DTO.Deliverer.Request;
 using PyroFetes.DTO.DeliveryNote.Request;
+using PyroFetes.DTO.Invoice.Request;
 using PyroFetes.DTO.Price.Request;
 using PyroFetes.DTO.Product.Request;
 using PyroFetes.DTO.PurchaseOrder.Request;
@@ -82,5 +83,8 @@ public class DtoToEntityMappings : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore());
 
         CreateMap<PatchWareHouseProductQuantityDto, WarehouseProduct>();
+
+        CreateMap<CreateInvoiceDto, Invoice>();
+        CreateMap<CreateProductInvoice, InvoiceProduct>();
     }
 }

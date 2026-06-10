@@ -2,6 +2,7 @@ using AutoMapper;
 using PyroFetes.DTO.Customer.Response;
 using PyroFetes.DTO.Deliverer.Response;
 using PyroFetes.DTO.DeliveryNote.Response;
+using PyroFetes.DTO.Invoice.Response;
 using PyroFetes.DTO.Price.Response;
 using PyroFetes.DTO.Product.Response;
 using PyroFetes.DTO.ProductDelivery.Response;
@@ -46,7 +47,8 @@ public class EntityToDtoMappings : Profile
                     src.Product!.Prices.Where(x => x.SupplierId == src.PurchaseOrder!.SupplierId && x.ProductId == src.ProductId).Select(x => x.SellingPrice).FirstOrDefault()));
 
         CreateMap<Quotation, GetQuotationDto>()
-            .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.QuotationProducts));
+            .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.QuotationProducts))
+            .ForMember(dest => dest.TotalInvoices, opt => opt.MapFrom(src => src.Invoices == null ? 0 : src.Invoices.Count));
 
         CreateMap<QuotationProduct, GetQuotationProductDto>()
             .ForMember(dest => dest.ProductPrice,
@@ -62,5 +64,8 @@ public class EntityToDtoMappings : Profile
         CreateMap<Warehouse, GetWareHouseDto>();
         
         CreateMap<Customer, GetCustomerDto>();
+        
+        CreateMap<Invoice, GetInvoiceDto>()
+            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Quotation!.Customer.Note));
     }
 }

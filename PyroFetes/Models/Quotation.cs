@@ -15,4 +15,5 @@ public class Quotation
     public Supplier? Supplier { get; set; }
 
     public List<QuotationProduct>? QuotationProducts { get; set; }
+    public List<Invoice>? Invoices { get; set; }
 }

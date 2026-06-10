@@ -31,6 +31,7 @@ namespace PyroFetes.Models
         public List<ProductEffect>? ProductEffects { get; set; }
         public List<ProductColor>? ProductColors { get; set; }
         public List<PurchaseProduct>? PurchaseProducts { get; set; }
+        public List<InvoiceProduct>? InvoicesProducts { get; set; }
         public List<Price>? Prices { get; set; }
         public List<QuotationProduct>? QuotationProducts { get; set; }
         public List<WarehouseProduct>? WarehouseProducts { get; set; }

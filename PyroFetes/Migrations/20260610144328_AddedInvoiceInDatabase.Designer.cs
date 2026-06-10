@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PyroFetes;
 
@@ -11,9 +12,11 @@ using PyroFetes;
 namespace PyroFetes.Migrations
 {
     [DbContext(typeof(PyroFetesDbContext))]
-    partial class PyroFetesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260610144328_AddedInvoiceInDatabase")]
+    partial class AddedInvoiceInDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -421,7 +424,7 @@ namespace PyroFetes.Migrations
 
                     b.HasIndex("QuotationId");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoice");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.InvoiceProduct", b =>
@@ -439,7 +442,7 @@ namespace PyroFetes.Migrations
 
                     b.HasIndex("InvoiceId");
 
-                    b.ToTable("InvoiceProducts");
+                    b.ToTable("InvoiceProduct");
                 });
 
             modelBuilder.Entity("PyroFetes.Models.Material", b =>
